@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
+    <string name="connection_succeed">Connection succeed</string>
+    <string name="error_authentication_canceled">Error authentification canceled</string>
+    <string name="error_no_internet">Error no internet</string>
+    <string name="error_unknown_error">Error unknown error</string>
+
+    <string name="facebook_application_id">868316640559357</string>
+    <string name="fb_login_protocol_scheme">fb868316640559357</string>
+    <string name="sign_in">Sign in</string>
+    <string name="workmates">Workmates</string>
+    <string name="list_view">List View</string>
+    <string name="map_view">Map View</string>
 </resources>
