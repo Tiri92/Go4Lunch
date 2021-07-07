@@ -16,7 +16,9 @@ import android.widget.Switch;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.ActivityMainBinding;
+import com.example.go4lunch.ui.userdashboard.ListViewFragment;
 import com.example.go4lunch.ui.userdashboard.MapViewFragment;
+import com.example.go4lunch.ui.userdashboard.WorkmatesFragment;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -50,14 +52,42 @@ public class MainActivity extends AppCompatActivity {
                         displayMapFragment();
                         return true;
                     case R.id.page_2:
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .add(R.id.fragment_container_view_2, ListViewFragment.class, null)
+                                .commit();
                         return true;
                     case R.id.page_3:
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .add(R.id.fragment_container_view_3, WorkmatesFragment.class, null)
+                                .commit();
                         return true;
                     default:
                         return false;
                 }
             }
 
+        });
+
+        binding.bottomNavigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.page_1:
+                        displayMapFragment();
+                    case R.id.page_2:
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .add(R.id.fragment_container_view_2, ListViewFragment.class, null)
+                                .commit();
+                    case R.id.page_3:
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .add(R.id.fragment_container_view_3, WorkmatesFragment.class, null)
+                                .commit();
+                }
+            }
         });
     }
 

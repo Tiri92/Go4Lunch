@@ -17,6 +17,4 @@ public class MapViewFragment extends Fragment {
         super(R.layout.fragment_map_view);
     }
 
-
-
 }
