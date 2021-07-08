@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                         .setTheme(R.style.LoginTheme)
                         .setAvailableProviders(providers)
                         .setIsSmartLockEnabled(false, true)
-                        .setLogo(R.drawable.fui_ic_microsoft_24dp)
+                        .setLogo(R.drawable.go4lunch_sign_in)
                         .build(),
                 RC_SIGN_IN);
     }
