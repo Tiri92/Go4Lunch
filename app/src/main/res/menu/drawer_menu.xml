@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/meeting_filter"
+        android:icon="@drawable/ic_baseline_menu_toolbar24"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/menu_date_filter"
+                android:icon="@drawable/ic_restaurant_menu_white_24dp"
+                android:title="YOUR LUNCH" />
+            <item
+                android:id="@+id/menu_place_filter"
+                android:icon="@drawable/ic_settings_white_24dp"
+                android:title="SETTINGS" />
+            <item
+                android:id="@+id/no_filter"
+                android:icon="@drawable/ic_power_white_24dp"
+                android:title="LOGOUT" />
+        </menu>
+    </item>
+</menu>
