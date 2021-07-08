@@ -10,8 +10,11 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Switch;
 
 import com.example.go4lunch.R;
@@ -28,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         displayMapFragment();
         setupListeners();
+
+        ImageView ToolbarMenu = findViewById(R.id.toolbar_menu);
+        ToolbarMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //display drawer
+            }
+        });
     }
 
     private void setupListeners() {
@@ -54,13 +66,13 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.page_2:
                         getSupportFragmentManager().beginTransaction()
                                 .setReorderingAllowed(true)
-                                .add(R.id.fragment_container_view_2, ListViewFragment.class, null)
+                                .replace(R.id.fragment_container_view, ListViewFragment.class, null)
                                 .commit();
                         return true;
                     case R.id.page_3:
                         getSupportFragmentManager().beginTransaction()
                                 .setReorderingAllowed(true)
-                                .add(R.id.fragment_container_view_3, WorkmatesFragment.class, null)
+                                .replace(R.id.fragment_container_view, WorkmatesFragment.class, null)
                                 .commit();
                         return true;
                     default:
@@ -70,33 +82,35 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        binding.bottomNavigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
-            @Override
-            public void onNavigationItemReselected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.page_1:
-                        displayMapFragment();
-                    case R.id.page_2:
-                        getSupportFragmentManager().beginTransaction()
-                                .setReorderingAllowed(true)
-                                .add(R.id.fragment_container_view_2, ListViewFragment.class, null)
-                                .commit();
-                    case R.id.page_3:
-                        getSupportFragmentManager().beginTransaction()
-                                .setReorderingAllowed(true)
-                                .add(R.id.fragment_container_view_3, WorkmatesFragment.class, null)
-                                .commit();
-                }
-            }
-        });
     }
 
     private void displayMapFragment() {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.fragment_container_view, MapViewFragment.class, null)
+                .replace(R.id.fragment_container_view, MapViewFragment.class, null)
                 .commit();
     }
 
+    /*@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.drawer_menu, menu);
+        return true;
+    }*/
+
+    /*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_date_filter:
+                return true;
+            case R.id.menu_place_filter:
+                return true;
+            case R.id.no_filter:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
 
 }
