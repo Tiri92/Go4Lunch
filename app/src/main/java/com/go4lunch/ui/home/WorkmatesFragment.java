@@ -1,8 +1,8 @@
-package com.example.go4lunch.ui.userdashboard;
+package com.go4lunch.ui.home;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.go4lunch.R;
+import com.go4lunch.R;
 
 public class WorkmatesFragment extends Fragment {
 

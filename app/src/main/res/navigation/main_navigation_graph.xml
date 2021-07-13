@@ -2,24 +2,26 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.go4lunch.ui.drawer.HomeFragment"
+        android:name="com.go4lunch.ui.main.HomeFragment"
         android:label="YOUR LUNCH"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/nav_fragment_home" />
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.example.go4lunch.ui.drawer.SettingsFragment"
+        android:name="com.go4lunch.ui.main.SettingsFragment"
         android:label="SETTINGS"
+        tools:layout="@layout/nav_fragment_settings"
          />
 
     <fragment
         android:id="@+id/nav_logout"
-        android:name="com.example.go4lunch.ui.drawer.LogoutFragment"
+        android:name="com.go4lunch.ui.main.LogoutFragment"
         android:label="LOGOUT"
+        tools:layout="@layout/nav_fragment_logout"
         />
+
 </navigation>

@@ -5,17 +5,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/your_lunch"
+            android:id="@+id/nav_home"
             android:icon="@drawable/ic_restaurant_menu_white_24dp"
             android:title="@string/your_lunch"
             android:enabled="true"/>
         <item
-            android:id="@+id/settings"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_white_24dp"
             android:title="@string/settings"
             android:enabled="true"/>
         <item
-            android:id="@+id/logout"
+            android:id="@+id/nav_logout"
             android:icon="@drawable/ic_power_white_24dp"
             android:title="@string/logout"
             android:enabled="true"/>

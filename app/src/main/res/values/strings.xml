@@ -1,12 +1,13 @@
 <resources>
-    <string name="app_name">Go4Lunch</string>
-    <string name="connection_succeed">Connection succeed</string>
-    <string name="error_authentication_canceled">Error authentification canceled</string>
-    <string name="error_no_internet">Error no internet</string>
-    <string name="error_unknown_error">Error unknown error</string>
-
     <string name="facebook_application_id">868316640559357</string>
     <string name="fb_login_protocol_scheme">fb868316640559357</string>
+    <string name="navigation_header">Navigation header</string>
+    <string name="go4lunch_icon">Go4lunch icon</string>
+    <string name="app_name">Go4Lunch</string>
+
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="subtitle_login">Find a nice restaurant and invite your co-workers for lunch!</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
     <string name="sign_in">Sign in</string>
     <string name="workmates">Workmates</string>
     <string name="list_view">List View</string>
@@ -15,5 +16,9 @@
     <string name="your_lunch">YOUR LUNCH</string>
     <string name="settings">SETTINGS</string>
     <string name="logout">LOGOUT</string>
-    <string name="navigation_header">Navigation header</string>
+    <string name="connection_succeed">Connection succeed</string>
+    <string name="error_authentication_canceled">Error authentication canceled</string>
+    <string name="error_no_internet">Error no internet</string>
+    <string name="error_unknown_error">Error unknown error</string>
+
 </resources>

@@ -8,7 +8,19 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include layout="@layout/activity_main_toolbar"> </include>
+    <include layout="@layout/activity_main_toolbar"/>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/main_nav_host"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/main_navigation_graph"
+        />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -21,7 +33,6 @@
         app:headerLayout="@layout/nav_header_main"
         android:background="@drawable/drawer_pic"
         app:menu="@menu/drawer_menu" />
-
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
