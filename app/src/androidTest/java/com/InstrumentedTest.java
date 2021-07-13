@@ -1,4 +1,4 @@
-package com.example.go4lunch;
+package com;
 
 import android.content.Context;
 
@@ -16,11 +16,11 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class InstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.go4lunch", appContext.getPackageName());
+        assertEquals("com.go4lunch", appContext.getPackageName());
     }
 }
