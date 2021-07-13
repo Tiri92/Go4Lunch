@@ -1,4 +1,4 @@
-package com.example.go4lunch.ui;
+package com.go4lunch.ui;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,7 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.go4lunch.R;
+import com.go4lunch.R;
+import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -40,16 +41,22 @@ public class LoginActivity extends AppCompatActivity {
                 new AuthUI.IdpConfig.FacebookBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
+        AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
+                .Builder(R.layout.activity_login)
+                .setGoogleButtonId(R.id.google_button)
+                .setFacebookButtonId(R.id.facebook_button)
+                .build();
+
         // Launch the activity
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
-                        .setTheme(R.style.LoginTheme)
                         .setAvailableProviders(providers)
+                        .setAuthMethodPickerLayout(customLayout)
+                        .setTheme(R.style.LoginTheme)
                         .setIsSmartLockEnabled(false, true)
-                        .setLogo(R.drawable.go4lunch_sign_in)
-                        .build(),
-                RC_SIGN_IN);
+                        .build(), RC_SIGN_IN
+        );
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

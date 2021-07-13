@@ -41,6 +41,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991071862406:android:727478fe5b570450761b07",
+        "android_client_info": {
+          "package_name": "com.go4lunch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991071862406-d9bcigs1g2l360n3sspp8b7ln8kfujmf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.go4lunch",
+            "certificate_hash": "79bfaec744edb8736ddd287009fddb1caecd92b8"
+          }
+        },
+        {
+          "client_id": "991071862406-gs6iio804hognaqgjsrmado33rg2omdk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHh0xHpYj0w3T78w7dfIO_QnEoewVp78w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991071862406-gs6iio804hognaqgjsrmado33rg2omdk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
