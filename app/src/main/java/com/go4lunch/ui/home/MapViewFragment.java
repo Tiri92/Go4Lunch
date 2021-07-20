@@ -81,10 +81,18 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
+    /**
+     * Here we check if Gps is enabled for geo-location, and if he's we don't need to ask permission to activate geo-location, we just
+     * display a toast in the method checkGpsState() for say to user that GPS is already enabled, if he's not we enter in the "else" of
+     * checkGpsState() method and ask permission to activate geo-location
+     */
     public static boolean isGpsEnabled(LocationManager locationManager) {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
+    /**
+     * In this method we ask the user for permission to activate geo-location to make startLocationRequest() work great
+     */
     private void checkGpsState() {
         LocationManager locationManager = (LocationManager) getSystemService(requireActivity(), LocationManager.class);
 
@@ -139,6 +147,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * In this method we ask the user for location permission and when he accept, we launch a network request for get his last location
+     */
     @RequiresPermission(anyOf = {"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"})
     private void startLocationRequest() {
         ActivityCompat.requestPermissions(
@@ -174,17 +185,27 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    /**
+     * Method called for move the camera to the user position on map after recuperate his location
+     */
     private void moveAndDisplayMyPosition() {
+        mMap.clear();
         mMap.addMarker(new MarkerOptions()
                 .position(myPosition)
                 .title("My position"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
     }
 
+    /**
+     * Method for decide what we do when user accept or refuse permission
+     */
     public boolean hasLocationPermission() {
         return ContextCompat.checkSelfPermission(requireActivity().getApplication(), ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
     }
 
+    /**
+     * Callback called when GoogleMap is ready/created
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
