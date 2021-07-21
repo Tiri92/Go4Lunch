@@ -11,7 +11,6 @@
     <string name="sign_in">Sign in</string>
     <string name="workmates">Workmates</string>
     <string name="list_view">List View</string>
-    <string name="map_view">Map View</string>
     <string name="i_m_hungry">I\'m Hungry!</string>
     <string name="your_lunch">YOUR LUNCH</string>
     <string name="settings">SETTINGS</string>
@@ -20,5 +19,6 @@
     <string name="error_authentication_canceled">Error authentication canceled</string>
     <string name="error_no_internet">Error no internet</string>
     <string name="error_unknown_error">Error unknown error</string>
+    <string name="map_view">Map View</string>
 
 </resources>

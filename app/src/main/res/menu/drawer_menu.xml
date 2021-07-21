@@ -6,6 +6,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
+            android:icon="@drawable/ic_baseline_map_view_24"
+            android:title="@string/map_view"
+            android:enabled="true"/>
+        <item
+            android:id="@+id/nav_your_lunch"
             android:icon="@drawable/ic_restaurant_menu_white_24dp"
             android:title="@string/your_lunch"
             android:enabled="true"/>
