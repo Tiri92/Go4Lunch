@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.go4lunch.ui.main.HomeFragment"
-        android:label="MAP VIEW"
+        android:label="@string/i_m_hungry"
         tools:layout="@layout/nav_fragment_home" />
 
     <fragment
