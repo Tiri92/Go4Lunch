@@ -48,4 +48,14 @@ public class PhotosItem{
 	public int getHeight(){
 		return height;
 	}
+
+	@Override
+	public String toString() {
+		return "PhotosItem{" +
+				"photoReference='" + photoReference + '\'' +
+				", width=" + width +
+				", htmlAttributions=" + htmlAttributions +
+				", height=" + height +
+				'}';
+	}
 }
