@@ -23,7 +23,7 @@ public interface NearbySearchService {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    @GET("nearbysearch/json?radius=1500&type=restaurant&key="+BuildConfig.MAPS_API_KEY)
+    @GET("nearbysearch/json?radius=1500&type=restaurant&key=" + BuildConfig.MAPS_API_KEY)
     Call<NearbySearch> getRestaurants(@Query("location") String position);
 
 }

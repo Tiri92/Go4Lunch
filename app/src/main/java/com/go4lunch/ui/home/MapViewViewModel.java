@@ -9,10 +9,12 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MapViewViewModel extends ViewModel {
 
-public void callNearbySearch(String position) { DI.getGooglePlaceRepository().callRestaurant(position); }
+    public void callNearbySearch(String position) {
+        DI.getGooglePlaceRepository().callRestaurant(position);
+    }
 
-public LiveData<NearbySearch> getNearbySearchResultFromVM() {
-   return DI.getGooglePlaceRepository().getNearbySearchResult();
-}
+    public LiveData<NearbySearch> getNearbySearchResultFromVM() {
+        return DI.getGooglePlaceRepository().getNearbySearchResult();
+    }
 
 }

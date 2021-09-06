@@ -6,6 +6,8 @@ public class DI {
 
     private static final GooglePlaceRepository googlePlaceRepository = new GooglePlaceRepository();
 
-    public static GooglePlaceRepository getGooglePlaceRepository() { return googlePlaceRepository; }
+    public static GooglePlaceRepository getGooglePlaceRepository() {
+        return googlePlaceRepository;
+    }
 
 }

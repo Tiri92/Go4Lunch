@@ -29,8 +29,8 @@ public class GooglePlaceRepository {
         liveDataCall.enqueue(new Callback<NearbySearch>() {
             @Override
             public void onResponse(Call<NearbySearch> call, Response<NearbySearch> response) {
-                if(response.isSuccessful()){
-                nearbySearchResult.setValue(response.body());
+                if (response.isSuccessful()) {
+                    nearbySearchResult.setValue(response.body());
                 }
             }
 
