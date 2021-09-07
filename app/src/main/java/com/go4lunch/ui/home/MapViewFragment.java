@@ -2,7 +2,11 @@ package com.go4lunch.ui.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.IntentSender;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -19,15 +23,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
-import com.go4lunch.di.DI;
-import com.go4lunch.model.NearbySearchService;
 import com.go4lunch.model.nearbysearch.NearbySearch;
-import com.go4lunch.model.nearbysearch.ResultsItem;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,12 +42,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.List;
+import java.util.Objects;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -60,6 +62,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private LocationCallback locationCallback;
     LatLng myPosition;
+    LatLng restaurantPosition;
     public MapViewViewModel mapViewViewModel;
 
     private static final int LOCATION_REQUEST_INTERVAL_MS = 10_000;
@@ -71,12 +74,15 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-         mapViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MapViewViewModel.class);
+        mapViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MapViewViewModel.class);
 
         mapViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
             @Override
             public void onChanged(NearbySearch nearbySearch) {
                 Toast.makeText(requireContext(), "On récupère une liste de" + nearbySearch.getResults().get(0).getPhotos().toString(), Toast.LENGTH_LONG).show();
+                if (myPosition != null) {
+                    displayMarkerOnRestaurantPosition();
+                }
             }
         });
 
@@ -95,6 +101,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
+    private void test() {
+
+    }
+
     /**
      * Here we check if Gps is enabled for geo-location, and if he's we don't need to ask permission to activate geo-location, we just
      * display a toast in the method checkGpsState() for say to user that GPS is already enabled, if he's not we enter in the "else" of
@@ -110,10 +120,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private void checkGpsState() {
         LocationManager locationManager = (LocationManager) getSystemService(requireActivity(), LocationManager.class);
 
-        if(isGpsEnabled(locationManager)) {
+        if (isGpsEnabled(locationManager)) {
             Toast.makeText(getApplicationContext(), "GPS is already Enabled!", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             LocationRequest locationRequest = LocationRequest.create();
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
@@ -124,7 +133,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             Task<LocationSettingsResponse> task =
                     LocationServices.getSettingsClient(requireActivity()).checkLocationSettings(settingsBuilder.build());
 
-             task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+            task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
                 @Override
                 public void onComplete(Task<LocationSettingsResponse> task) {
                     try {
@@ -177,11 +186,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 public void onLocationResult(@NonNull LocationResult locationResult) {
                     Location location = locationResult.getLastLocation();
                     myPosition = new LatLng(location.getLatitude(), location.getLongitude());
-                    //NearbySearchService nearbySearchService = new NearbySearchHttpService();
-                    // List<ResultsItem> restaurants = nearbySearchService.getRestaurants(myPosition);
                     if (mMap != null) {
                         moveAndDisplayMyPosition();
-                        if(myPosition != null) { mapViewViewModel.callNearbySearch(myPosition.latitude + "," + myPosition.longitude);
+                        if (myPosition != null) {
+                            mapViewViewModel.callNearbySearch(myPosition.latitude + "," + myPosition.longitude);
                         }
                     }
                 }
@@ -201,6 +209,43 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 Looper.getMainLooper()
         );
 
+    }
+
+    /**
+     * Method called for display marker on restaurant position
+     */
+
+    private void displayMarkerOnRestaurantPosition() {
+        for (int i = 0; i < 20; i++) {
+            restaurantPosition = new LatLng(Objects.requireNonNull(mapViewViewModel.getNearbySearchResultFromVM().getValue()).getResults().get(i).getGeometry().getLocation().getLat(),
+                    mapViewViewModel.getNearbySearchResultFromVM().getValue().getResults().get(i).getGeometry().getLocation().getLng());
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(restaurantPosition)
+                    .icon(BitmapFromVector(requireContext(), R.drawable.ic_baseline_restaurant_24)));
+        }
+    }
+
+    private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
+        // below line is use to generate a drawable.
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+
+        // below line is use to set bounds to our vector drawable.
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+
+        // below line is use to create a bitmap for our
+        // drawable which we have added.
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+        // below line is use to add bitmap in our canvas.
+        Canvas canvas = new Canvas(bitmap);
+
+        // below line is use to draw our
+        // vector drawable in canvas.
+        vectorDrawable.draw(canvas);
+
+        // after generating our bitmap we are returning our bitmap.
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     /**
