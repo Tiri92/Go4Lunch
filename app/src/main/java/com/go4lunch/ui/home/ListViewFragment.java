@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.go4lunch.R;
 import com.go4lunch.di.DI;
+import com.go4lunch.model.nearbysearch.NearbySearch;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,16 +23,23 @@ import java.util.Objects;
 
 public class ListViewFragment extends Fragment {
 
+    public MapViewViewModel mapViewViewModel;
     private RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_list_view, container, false);
-
-        mAdapter = new ListViewFragmentAdapter(Objects.requireNonNull(DI.getGooglePlaceRepository().getNearbySearchResult().getValue()).getResults());
         mRecyclerView = root.findViewById(R.id.RecyclerView);
-        mRecyclerView.setAdapter(mAdapter);
+
+        mapViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MapViewViewModel.class);
+        mapViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
+            @Override
+            public void onChanged(NearbySearch nearbySearch) {
+                mAdapter = new ListViewFragmentAdapter(nearbySearch.getResults());
+                mRecyclerView.setAdapter(mAdapter);
+            }
+        });
 
         return root;
     }

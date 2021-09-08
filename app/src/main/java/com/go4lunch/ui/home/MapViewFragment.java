@@ -190,6 +190,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                         moveAndDisplayMyPosition();
                         if (myPosition != null) {
                             mapViewViewModel.callNearbySearch(myPosition.latitude + "," + myPosition.longitude);
+                            mapViewViewModel.savePosition(myPosition.latitude + "," + myPosition.longitude);
                         }
                     }
                 }

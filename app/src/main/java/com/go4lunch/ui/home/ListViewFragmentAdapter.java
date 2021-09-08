@@ -3,27 +3,24 @@ package com.go4lunch.ui.home;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.go4lunch.R;
-import com.go4lunch.databinding.FragmentListViewItemBinding;
-import com.go4lunch.di.DI;
-import com.go4lunch.model.nearbysearch.NearbySearch;
 import com.go4lunch.model.nearbysearch.ResultsItem;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragmentAdapter.ViewHolder> {
 
-    private FragmentListViewItemBinding binding;
-    private List<ResultsItem> listOfRestaurants;
     View itemView;
+    private List<ResultsItem> listOfRestaurants;
+    private TextView nameOfRestaurant;
+    private TextView openingHour;
 
     public ListViewFragmentAdapter(List<ResultsItem> listOfRestaurants) {
         this.listOfRestaurants = listOfRestaurants;
@@ -39,8 +36,8 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ListViewFragmentAdapter.ViewHolder holder, int position) {
-        listOfRestaurants = Objects.requireNonNull(DI.getGooglePlaceRepository().getNearbySearchResult().getValue()).getResults();
-        binding.restaurantName.setText(listOfRestaurants.get(0).getName());
+        nameOfRestaurant = itemView.findViewById(R.id.restaurant_name);
+        nameOfRestaurant.setText(listOfRestaurants.get(position).getName());
     }
 
     @Override
