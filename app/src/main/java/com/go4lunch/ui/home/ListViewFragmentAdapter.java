@@ -26,6 +26,7 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
     private List<ResultsItem> listOfRestaurants;
     private TextView nameOfRestaurant;
     private ImageView restaurantPic;
+    private TextView restaurantAddress;
     private TextView openingHour;
 
     public ListViewFragmentAdapter(List<ResultsItem> listOfRestaurants) {
@@ -44,6 +45,19 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
     public void onBindViewHolder(@NonNull @NotNull ListViewFragmentAdapter.ViewHolder holder, int position) {
         nameOfRestaurant = itemView.findViewById(R.id.restaurant_name);
         nameOfRestaurant.setText(listOfRestaurants.get(position).getName());
+
+        restaurantAddress = itemView.findViewById(R.id.restaurant_address);
+        restaurantAddress.setText(listOfRestaurants.get(position).getVicinity());
+
+        /*openingHour = itemView.findViewById(R.id.restaurant_opening_hours);
+        switch (listOfRestaurants.get(position).getOpeningHours().) {
+            case "true":
+                openingHour.setText("OPEN");
+            case "false":
+                openingHour.setText("CLOSE");
+            default:
+                openingHour.setText("WE DON'T KNOW");
+        }*/
 
         restaurantPic = itemView.findViewById(R.id.restaurant_pic);
         try {
