@@ -1,6 +1,7 @@
 package com.go4lunch.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +44,14 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ListViewFragmentAdapter.ViewHolder holder, int position) {
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
+                ActivityCompat.startActivity(v.getContext(), intent, null);
+            }
+        });
 
         TextView nameOfRestaurant = itemView.findViewById(R.id.restaurant_name);
         nameOfRestaurant.setText(listOfRestaurants.get(position).getName());
