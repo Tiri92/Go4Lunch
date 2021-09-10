@@ -3,7 +3,8 @@ package com.go4lunch.repositories;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.go4lunch.model.NearbySearchService;
+import com.go4lunch.model.GooglePlaceService;
+import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.nearbysearch.NearbySearch;
 
 import retrofit2.Call;
@@ -18,12 +19,18 @@ public class GooglePlaceRepository {
         return nearbySearchResult;
     }
 
+    private MutableLiveData<DetailSearch> detailResult = new MutableLiveData<>();
+
+    public LiveData<DetailSearch> getDetailSearchResult() {
+        return detailResult;
+    }
+
     // Get a Retrofit instance and the related endpoints
-    NearbySearchService nearbySearchService = NearbySearchService.retrofit.create(NearbySearchService.class);
+    GooglePlaceService googlePlaceService = GooglePlaceService.retrofit.create(GooglePlaceService.class);
 
     // Create the call on GooglePlace API
     public void callRestaurant(String position) {
-        Call<NearbySearch> liveDataCall = nearbySearchService.getRestaurants(position);
+        Call<NearbySearch> liveDataCall = googlePlaceService.getRestaurants(position);
         liveDataCall.enqueue(new Callback<NearbySearch>() {
             @Override
             public void onResponse(Call<NearbySearch> call, Response<NearbySearch> response) {
@@ -34,6 +41,23 @@ public class GooglePlaceRepository {
 
             @Override
             public void onFailure(Call<NearbySearch> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void callDetailRestaurant(String placeId) {
+        Call<DetailSearch> liveDataCall = googlePlaceService.getRestaurantsDetails(placeId);
+        liveDataCall.enqueue(new Callback<DetailSearch>() {
+            @Override
+            public void onResponse(Call<DetailSearch> call, Response<DetailSearch> response) {
+                if (response.isSuccessful()) {
+                    detailResult.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DetailSearch> call, Throwable t) {
 
             }
         });
