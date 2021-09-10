@@ -3,7 +3,7 @@ package com.go4lunch.model.details;
 import com.go4lunch.model.details.OpeningHours;
 import com.google.gson.annotations.SerializedName;
 
-public class Result{
+public class DetailRestaurantResult {
 
 	@SerializedName("website")
 	private String website;
