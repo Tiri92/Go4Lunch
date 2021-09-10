@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DetailSearch {
+public class SearchDetail {
 
 	@SerializedName("result")
-	private DetailRestaurantResult result;
+	private RestaurantDetailResult result;
 
 	@SerializedName("html_attributions")
 	private List<Object> htmlAttributions;
@@ -15,7 +15,7 @@ public class DetailSearch {
 	@SerializedName("status")
 	private String status;
 
-	public DetailRestaurantResult getResult(){
+	public RestaurantDetailResult getResult(){
 		return result;
 	}
 

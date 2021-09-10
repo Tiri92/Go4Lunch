@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.go4lunch.model.GooglePlaceService;
-import com.go4lunch.model.details.DetailSearch;
+import com.go4lunch.model.details.SearchDetail;
 import com.go4lunch.model.nearbysearch.NearbySearch;
 
 import retrofit2.Call;
@@ -19,9 +19,9 @@ public class GooglePlaceRepository {
         return nearbySearchResult;
     }
 
-    private MutableLiveData<DetailSearch> detailResult = new MutableLiveData<>();
+    private MutableLiveData<SearchDetail> detailResult = new MutableLiveData<>();
 
-    public LiveData<DetailSearch> getDetailSearchResult() {
+    public LiveData<SearchDetail> getDetailSearchResult() {
         return detailResult;
     }
 
@@ -47,17 +47,17 @@ public class GooglePlaceRepository {
     }
 
     public void callDetailRestaurant(String placeId) {
-        Call<DetailSearch> liveDataCall = googlePlaceService.getRestaurantsDetails(placeId);
-        liveDataCall.enqueue(new Callback<DetailSearch>() {
+        Call<SearchDetail> liveDataCall = googlePlaceService.getRestaurantsDetails(placeId);
+        liveDataCall.enqueue(new Callback<SearchDetail>() {
             @Override
-            public void onResponse(Call<DetailSearch> call, Response<DetailSearch> response) {
+            public void onResponse(Call<SearchDetail> call, Response<SearchDetail> response) {
                 if (response.isSuccessful()) {
                     detailResult.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<DetailSearch> call, Throwable t) {
+            public void onFailure(Call<SearchDetail> call, Throwable t) {
 
             }
         });

@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
 import com.go4lunch.model.nearbysearch.NearbySearch;
+import com.go4lunch.model.nearbysearch.ResultsItem;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -49,6 +50,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.List;
 import java.util.Objects;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -62,7 +64,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private LocationCallback locationCallback;
     LatLng myPosition;
-    LatLng restaurantPosition;
     public MapViewViewModel mapViewViewModel;
 
     private static final int LOCATION_REQUEST_INTERVAL_MS = 10_000;
@@ -75,16 +76,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         mapViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MapViewViewModel.class);
-
-        mapViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
-            @Override
-            public void onChanged(NearbySearch nearbySearch) {
-                Toast.makeText(requireContext(), "On récupère une liste de" + nearbySearch.getResults().get(0).getPhotos().toString(), Toast.LENGTH_LONG).show();
-                if (myPosition != null) {
-                    displayMarkerOnRestaurantPosition();
-                }
-            }
-        });
 
         View root = inflater.inflate(R.layout.fragment_map_view, container, false);
 
@@ -213,12 +204,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     /**
      * Method called for display marker on restaurant position
+     *
+     * @param results
      */
 
-    private void displayMarkerOnRestaurantPosition() {
-        for (int i = 0; i < 20; i++) {
-            restaurantPosition = new LatLng(Objects.requireNonNull(mapViewViewModel.getNearbySearchResultFromVM().getValue()).getResults().get(i).getGeometry().getLocation().getLat(),
-                    mapViewViewModel.getNearbySearchResultFromVM().getValue().getResults().get(i).getGeometry().getLocation().getLng());
+    private void displayMarkerOnRestaurantPosition(List<ResultsItem> results) {
+        for (int i = 0; i < results.size(); i++) {
+            LatLng restaurantPosition = new LatLng(results.get(i).getGeometry().getLocation().getLat(),
+                    results.get(i).getGeometry().getLocation().getLng());
 
             mMap.addMarker(new MarkerOptions()
                     .position(restaurantPosition)
@@ -281,6 +274,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         } else {
             moveAndDisplayMyPosition();
         }
+        mapViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
+            @Override
+            public void onChanged(NearbySearch nearbySearch) {
+                //Toast.makeText(requireContext(), "On récupère une liste de" + nearbySearch.getResults().get(0).getPhotos().toString(), Toast.LENGTH_LONG).show();
+                displayMarkerOnRestaurantPosition(nearbySearch.getResults());
+
+            }
+        });
     }
 
 }
