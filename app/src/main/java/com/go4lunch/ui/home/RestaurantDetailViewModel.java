@@ -8,7 +8,7 @@ import com.go4lunch.model.details.SearchDetail;
 
 public class RestaurantDetailViewModel extends ViewModel {
 
-    public void callSearchDetail(String placeId) {
+    public void callRestaurantDetail(String placeId) {
         DI.getGooglePlaceRepository().callRestaurantDetail(placeId);
     }
 
