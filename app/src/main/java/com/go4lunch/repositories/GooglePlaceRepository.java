@@ -19,10 +19,10 @@ public class GooglePlaceRepository {
         return nearbySearchResult;
     }
 
-    private MutableLiveData<SearchDetail> detailResult = new MutableLiveData<>();
+    private MutableLiveData<SearchDetail> searchDetailResult = new MutableLiveData<>();
 
-    public LiveData<SearchDetail> getDetailSearchResult() {
-        return detailResult;
+    public LiveData<SearchDetail> getSearchDetailResult() {
+        return searchDetailResult;
     }
 
     // Get a Retrofit instance and the related endpoints
@@ -46,13 +46,13 @@ public class GooglePlaceRepository {
         });
     }
 
-    public void callDetailRestaurant(String placeId) {
+    public void callRestaurantDetail(String placeId) {
         Call<SearchDetail> liveDataCall = googlePlaceService.getRestaurantsDetails(placeId);
         liveDataCall.enqueue(new Callback<SearchDetail>() {
             @Override
             public void onResponse(Call<SearchDetail> call, Response<SearchDetail> response) {
                 if (response.isSuccessful()) {
-                    detailResult.setValue(response.body());
+                    searchDetailResult.setValue(response.body());
                 }
             }
 
