@@ -1,5 +1,6 @@
 package com.go4lunch.ui.home;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,10 +27,6 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
 
     View itemView;
     private List<ResultsItem> listOfRestaurants;
-    private TextView nameOfRestaurant;
-    private ImageView restaurantPic;
-    private TextView restaurantAddress;
-    private TextView openingHour;
 
     public ListViewFragmentAdapter(List<ResultsItem> listOfRestaurants) {
         this.listOfRestaurants = listOfRestaurants;
@@ -43,23 +42,25 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ListViewFragmentAdapter.ViewHolder holder, int position) {
-        nameOfRestaurant = itemView.findViewById(R.id.restaurant_name);
+
+        TextView nameOfRestaurant = itemView.findViewById(R.id.restaurant_name);
         nameOfRestaurant.setText(listOfRestaurants.get(position).getName());
 
-        restaurantAddress = itemView.findViewById(R.id.restaurant_address);
+        TextView restaurantAddress = itemView.findViewById(R.id.restaurant_address);
         restaurantAddress.setText(listOfRestaurants.get(position).getVicinity());
 
-        /*openingHour = itemView.findViewById(R.id.restaurant_opening_hours);
-        switch (listOfRestaurants.get(position).getOpeningHours().) {
-            case "true":
-                openingHour.setText("OPEN");
-            case "false":
-                openingHour.setText("CLOSE");
-            default:
-                openingHour.setText("WE DON'T KNOW");
-        }*/
+        TextView openingHour = itemView.findViewById(R.id.restaurant_opening_hours);
+        if (listOfRestaurants.get(position).getOpeningHours() != null) {
+            if (listOfRestaurants.get(position).getOpeningHours().isOpenNow()) {
+                openingHour.setText(R.string.Open_now);
+            } else {
+                openingHour.setText(R.string.Close_now);
+            }
+        } else {
+            openingHour.setText(R.string.We_Dont_Know);
+        }
 
-        restaurantPic = itemView.findViewById(R.id.restaurant_pic);
+        ImageView restaurantPic = itemView.findViewById(R.id.restaurant_pic);
         try {
             String base = "https://maps.googleapis.com/maps/api/place/photo?";
             String key = "key=" + BuildConfig.MAPS_API_KEY;
