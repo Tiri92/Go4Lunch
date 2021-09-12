@@ -44,7 +44,7 @@
     <style name="Theme.Go4Lunch.NoActionBar2">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorPrimaryVariant">@color/colorTransparent</item>
+        <item name="colorPrimaryVariant">@color/dark_orange</item>
     </style>
 
     <style name="Theme.Go4Lunch.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
