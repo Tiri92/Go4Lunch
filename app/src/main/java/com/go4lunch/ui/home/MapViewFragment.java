@@ -51,7 +51,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.List;
-import java.util.Objects;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -90,10 +89,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         startLocationRequest();
 
         return root;
-    }
-
-    private void test() {
-
     }
 
     /**
@@ -215,7 +210,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
             mMap.addMarker(new MarkerOptions()
                     .position(restaurantPosition)
-                    .icon(BitmapFromVector(requireContext(), R.drawable.ic_baseline_restaurant_24)));
+                    .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24)));
         }
     }
 
