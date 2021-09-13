@@ -22,7 +22,7 @@ public interface GooglePlaceService {
     Call<NearbySearch> getRestaurants(@Query("location") String position);
 
     //For Restaurants details search
-    @GET("details/json?fields=formatted_phone_number,url,rating,opening_hours,website" + BuildConfig.MAPS_API_KEY)
+    @GET("details/json?fields=formatted_phone_number,url,rating,website,photo,vicinity,name&key=" + BuildConfig.MAPS_API_KEY)
     Call<SearchDetail> getRestaurantsDetails(@Query("place_id") String placeId);
 
 }
