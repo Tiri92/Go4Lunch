@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/call_details"
+        android:enabled="true"
+        android:icon="@drawable/detail_menu_call_24"
+        android:title="@string/call"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/like_details"
+        android:enabled="true"
+        android:icon="@drawable/detail_menu_star_24"
+        android:title="@string/like"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/website_details"
+        android:enabled="true"
+        android:icon="@drawable/detail_menu_website_24"
+        android:title="@string/website"
+        app:showAsAction="ifRoom" />
+</menu>
