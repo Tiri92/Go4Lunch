@@ -11,6 +11,7 @@
     <color name="dark_orange">#df4930</color>
     <color name="colorTransparent">#00000000</color>
     <color name="grayTransparent">#E6595c5d</color>
+    <color name="colorAccentLight">#ff8a50</color>
     <color name="Yellow">#FFEB3B</color>
     <color name="gray">#595c5d</color>
 </resources>
