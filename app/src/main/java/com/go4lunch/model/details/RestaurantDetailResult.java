@@ -1,7 +1,8 @@
 package com.go4lunch.model.details;
 
-import com.go4lunch.model.details.OpeningHours;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class RestaurantDetailResult {
 
@@ -10,6 +11,15 @@ public class RestaurantDetailResult {
 
 	@SerializedName("opening_hours")
 	private OpeningHours openingHours;
+
+	@SerializedName("photos")
+	private List<PhotosItem> photos;
+
+	@SerializedName("name")
+	private String name;
+
+	@SerializedName("vicinity")
+	private String vicinity;
 
 	@SerializedName("rating")
 	private double rating;
@@ -30,6 +40,18 @@ public class RestaurantDetailResult {
 
 	public double getRating(){
 		return rating;
+	}
+
+	public List<PhotosItem> getPhotos(){
+		return photos;
+	}
+
+	public String getVicinity(){
+		return vicinity;
+	}
+
+	public String getName(){
+		return name;
 	}
 
 	public String getFormattedPhoneNumber(){
