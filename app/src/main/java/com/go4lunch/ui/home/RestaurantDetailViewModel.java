@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.go4lunch.di.DI;
 import com.go4lunch.model.details.SearchDetail;
+import com.go4lunch.model.nearbysearch.NearbySearch;
 
 public class RestaurantDetailViewModel extends ViewModel {
 
