@@ -3,6 +3,7 @@ package com.go4lunch.ui.home;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -46,9 +47,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -204,13 +208,28 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
      */
 
     private void displayMarkerOnRestaurantPosition(List<ResultsItem> results) {
+        Marker restaurantMarker;
+        MarkerOptions restaurantMarkerOptions;
         for (int i = 0; i < results.size(); i++) {
             LatLng restaurantPosition = new LatLng(results.get(i).getGeometry().getLocation().getLat(),
                     results.get(i).getGeometry().getLocation().getLng());
 
-            mMap.addMarker(new MarkerOptions()
+            restaurantMarkerOptions = new MarkerOptions()
                     .position(restaurantPosition)
-                    .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24)));
+                    .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
+
+            restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
+            restaurantMarker.setTag(results.get(i).getPlaceId());
+
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
+                    Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
+                    intent.putExtra("placeId", marker.getTag().toString());
+                    ActivityCompat.startActivity(getContext(), intent, null);
+                    return false;
+                }
+            });
         }
     }
 

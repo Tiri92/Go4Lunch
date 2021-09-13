@@ -49,6 +49,7 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
+                intent.putExtra("placeId", listOfRestaurants.get(position).getPlaceId());
                 ActivityCompat.startActivity(v.getContext(), intent, null);
             }
         });
