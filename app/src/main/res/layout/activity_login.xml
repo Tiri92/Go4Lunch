@@ -45,11 +45,33 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/email_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="70dp"
+        android:background="@drawable/background_button_google"
+        android:drawableStart="@drawable/ic_baseline_email_24"
+        android:drawablePadding="-40dp"
+        android:paddingStart="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="@string/sign_in_with_email"
+        android:textSize="14sp"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view2"
+        tools:ignore="RtlSymmetry" />
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/facebook_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="70dp"
         android:background="@drawable/background_button_facebook"
         android:drawableStart="@drawable/logo_facebook"
@@ -63,7 +85,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view2"
+        app:layout_constraintTop_toBottomOf="@+id/email_button"
         tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -71,7 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="70dp"
         android:background="@drawable/background_button_google"
         android:drawableStart="@drawable/logo_google"

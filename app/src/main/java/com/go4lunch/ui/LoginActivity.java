@@ -39,12 +39,14 @@ public class LoginActivity extends AppCompatActivity {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.FacebookBuilder().build(),
+                new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
         AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
                 .Builder(R.layout.activity_login)
                 .setGoogleButtonId(R.id.google_button)
                 .setFacebookButtonId(R.id.facebook_button)
+                .setEmailButtonId(R.id.email_button)
                 .build();
 
         // Launch the activity

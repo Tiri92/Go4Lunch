@@ -26,5 +26,6 @@
     <string name="website">WEBSITE</string>
     <string name="like">LIKE</string>
     <string name="call">CALL</string>
+    <string name="sign_in_with_email">Sign in with Email</string>
 
 </resources>
