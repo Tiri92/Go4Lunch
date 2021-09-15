@@ -7,18 +7,24 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.go4lunch.ui.home.RestaurantDetailViewModel;
+import com.go4lunch.ui.main.SettingsFragmentViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
+
+    public SettingsFragmentViewModel settingsFragmentViewModel;
 
     private static final int RC_SIGN_IN = 123;
 
@@ -28,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setTheme(R.style.Theme_AppCompat_NoActionBar);
+        settingsFragmentViewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
         view = new ConstraintLayout(this);
         view.setBackgroundColor(Color.WHITE);
         setContentView(view);
@@ -79,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             // SUCCESS
             if (resultCode == RESULT_OK) {
+                settingsFragmentViewModel.createUser();
                 showSnackBar(getString(R.string.connection_succeed));
                 startActivity(new Intent(this, MainActivity.class));
             } else {
