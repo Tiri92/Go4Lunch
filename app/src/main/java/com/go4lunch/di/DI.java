@@ -1,5 +1,6 @@
 package com.go4lunch.di;
 
+import com.go4lunch.repositories.FirestoreRepository;
 import com.go4lunch.repositories.GooglePlaceRepository;
 
 public class DI {
@@ -9,5 +10,9 @@ public class DI {
     public static GooglePlaceRepository getGooglePlaceRepository() {
         return googlePlaceRepository;
     }
+
+    private static final FirestoreRepository firestoreRepository = new FirestoreRepository();
+
+    public static FirestoreRepository getFirestoreRepository() { return firestoreRepository; }
 
 }
