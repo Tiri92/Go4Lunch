@@ -27,5 +27,8 @@
     <string name="like">LIKE</string>
     <string name="call">CALL</string>
     <string name="sign_in_with_email">Sign in with Email</string>
+    <string name="no_email_found">No email found</string>
+    <string name="no_username_found">No username found</string>
+    <string name="none">none</string>
 
 </resources>
