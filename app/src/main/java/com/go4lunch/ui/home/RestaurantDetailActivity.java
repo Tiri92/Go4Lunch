@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.go4lunch.BuildConfig;
@@ -23,11 +24,15 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     public RestaurantDetailViewModel restaurantDetailViewModel;
     String placeId;
 
+    private RecyclerView mRecyclerView;
+    RecyclerView.Adapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRestaurantDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        mRecyclerView = binding.restaurantDetailsRecyclerView;
 
         Intent intent = getIntent();
         placeId = intent.getStringExtra("placeId");
