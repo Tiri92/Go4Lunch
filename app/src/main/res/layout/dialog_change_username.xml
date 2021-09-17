@@ -12,7 +12,7 @@
         android:id="@+id/edittext_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Choose a new username"
+        android:hint="@string/write_your_new_username_here"
         android:importantForAutofill="no"
         android:inputType="textAutoComplete"
         tools:ignore="UnusedAttribute" />

@@ -51,7 +51,7 @@
         tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/sign_out_button"
+        android:id="@+id/logout_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="70dp"
@@ -63,7 +63,7 @@
         android:paddingStart="20dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:text="Sign out"
+        android:text="Logout"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="14sp"

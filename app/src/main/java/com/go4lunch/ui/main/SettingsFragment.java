@@ -2,13 +2,11 @@ package com.go4lunch.ui.main;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,7 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
-import com.google.firebase.auth.FirebaseUser;
+
+import java.util.regex.Pattern;
 
 public class SettingsFragment extends Fragment {
 
@@ -28,6 +27,12 @@ public class SettingsFragment extends Fragment {
     @Nullable
     public AlertDialog dialog = null;
     public SettingsFragmentViewModel settingsFragmentViewModel;
+
+    private static final Pattern upperCaseLetter = //TODO Correct upperCaseLetter and maximumLetter Regex
+            Pattern.compile("^[A-Z]{1,}+[a-z]{1,}");
+
+    private static final Pattern maximumLetter =
+            Pattern.compile("[a-zA-Z]{0,13}");
 
     @Nullable
     @Override
@@ -42,27 +47,29 @@ public class SettingsFragment extends Fragment {
     private void updateName(String uid, String username) {
         if (!username.isEmpty()) {
             settingsFragmentViewModel.updateUsername(username);
-            Toast.makeText(requireContext(), getString(R.string.Open_now), Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.username_updated), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(requireContext(), getString(R.string.no_username_found), Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.username_not_updated), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void setupListeners() {
-        // Sign out button
-        AppCompatButton signOutButton = view.findViewById(R.id.sign_out_button);
-        signOutButton.setOnClickListener(view -> {
+        // Logout button
+        AppCompatButton logoutButton = view.findViewById(R.id.logout_button);
+        logoutButton.setOnClickListener(view -> {
 
             new AlertDialog.Builder(requireContext())
-                    .setMessage("Are you sure you want to sign out ?")
+                    .setMessage("Are you sure you want to logout ?")
                     .setPositiveButton("Yes", (dialogInterface, i) ->
-                            settingsFragmentViewModel.signOut(requireContext())
+                            settingsFragmentViewModel.logout(requireContext())
                                     .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(requireContext(), getString(R.string.successful_disconnection), Toast.LENGTH_SHORT).show();
+                                                //TODO Must come back to LoginActivity
                                                 ///requireActivity().getSupportFragmentManager().popBackStack(); // ferme le fragment et renvoie a l'activité derrière
                                                 //requireActivity().moveTaskToBack(true); // envoie l'appli en arrière plan
                                                 //requireActivity().finish();
                                                 //Objects.requireNonNull(requireActivity()).getSupportFragmentManager().beginTransaction().remove(this).commit();
-                                                //onStop(); //TODO Must come back to LoginActivity
+                                                //onStop();
                                             }
                                     )
                     )
@@ -80,7 +87,7 @@ public class SettingsFragment extends Fragment {
                     .setPositiveButton("Yes", (dialogInterface, i) ->
                             settingsFragmentViewModel.deleteUser(requireContext())
                                     .addOnSuccessListener(aVoid -> {
-                                                //onStop(); //TODO Must come back to LoginActivity
+                                                Toast.makeText(requireContext(), getString(R.string.account_deleted), Toast.LENGTH_SHORT).show();
                                             }
                                     )
                     )
@@ -115,9 +122,24 @@ public class SettingsFragment extends Fragment {
         if (dialogEditText != null) {
             // Get the new username
             String newUserName = dialogEditText.getText().toString();
-            updateName(settingsFragmentViewModel.getCurrentUser().getUid(), newUserName);
-            dialogInterface.dismiss();
 
+            // If the text field is empty
+            if (newUserName.trim().isEmpty()) {
+                dialogEditText.setError(getString(R.string.cannot_be_empty));
+            }
+            // If it doesn't start with one upper case characters
+            else if (!upperCaseLetter.matcher(newUserName).matches()) {
+                dialogEditText.setError(getString(R.string.upper_case_letter));
+            }
+            // If the name is too long
+            else if (!maximumLetter.matcher(newUserName).matches()) {
+                dialogEditText.setError(getString(R.string.maximum_letters));
+            }
+            // If all is okay
+            else {
+                updateName(settingsFragmentViewModel.getCurrentUser().getUid(), dialogEditText.getText().toString());
+                dialogInterface.dismiss();
+            }
 
         } else {
             dialogInterface.dismiss();

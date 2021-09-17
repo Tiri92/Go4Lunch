@@ -34,5 +34,9 @@
     <string name="username_not_updated">Your username has not been updated</string>
     <string name="account_deleted">Your account has been deleted</string>
     <string name="successful_disconnection">Successful disconnection</string>
+    <string name="write_your_new_username_here">Write your new username here</string>
+    <string name="cannot_be_empty">The field cannot be empty</string>
+    <string name="upper_case_letter">Start with one upper case letter</string>
+    <string name="maximum_letters">Don\'t use more than 13 characters</string>
 
 </resources>
