@@ -18,7 +18,7 @@ import com.go4lunch.model.nearbysearch.NearbySearch;
 
 public class ListViewFragment extends Fragment {
 
-    public MapViewViewModel mapViewViewModel;
+    public ListViewViewModel listViewViewModel;
     private RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
 
@@ -27,8 +27,8 @@ public class ListViewFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_list_view, container, false);
         mRecyclerView = root.findViewById(R.id.RecyclerView);
 
-        mapViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(MapViewViewModel.class);
-        mapViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
+        listViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(ListViewViewModel.class);
+        listViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
             @Override
             public void onChanged(NearbySearch nearbySearch) {
                 mAdapter = new ListViewFragmentAdapter(nearbySearch.getResults());
