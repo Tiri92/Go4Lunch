@@ -19,7 +19,7 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
     @NotNull
     @Override
     public WorkmatesFragmentAdapter.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_restaurant_detail_and_workmates_fragment_item, parent, false);
+        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
         return new WorkmatesFragmentAdapter.ViewHolder(itemView);
     }
 

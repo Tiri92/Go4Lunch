@@ -8,25 +8,30 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.go4lunch.R;
+import com.go4lunch.ui.main.SettingsFragmentViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 public class WorkmatesFragment extends Fragment {
 
+    View view;
     private RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
+    public WorkmatesFragmentViewModel workmatesFragmentViewModel;
 
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_workmates, container, false);
+        view = inflater.inflate(R.layout.fragment_workmates, container, false);
+        workmatesFragmentViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(WorkmatesFragmentViewModel.class);
+        mRecyclerView = view.findViewById(R.id.workmates_fragment_recycler_view);
 
-        mRecyclerView = root.findViewById(R.id.workmates_fragment_recycler_view);
-
-        return root;
+        return view;
     }
 }
