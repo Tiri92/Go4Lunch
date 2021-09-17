@@ -46,7 +46,7 @@ public class FirestoreRepository {
      * Firestore Request, CRUD action
      **/
 
-    // Create User in Firestore TODO To understand
+    // Create User in Firestore
     public void createUser() {
         FirebaseUser user = getCurrentUser();
         if (user != null) {
