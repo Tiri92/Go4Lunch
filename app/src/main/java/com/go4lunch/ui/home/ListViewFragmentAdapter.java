@@ -1,6 +1,5 @@
 package com.go4lunch.ui.home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,12 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.go4lunch.BuildConfig;
 import com.go4lunch.R;
 import com.go4lunch.model.nearbysearch.ResultsItem;
@@ -68,7 +64,7 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
                 openingHour.setText(R.string.Close_now);
             }
         } else {
-            openingHour.setText(R.string.We_Dont_Know);
+            openingHour.setText(R.string.We_dont_know);
         }
 
         ImageView restaurantPic = itemView.findViewById(R.id.restaurant_pic);
