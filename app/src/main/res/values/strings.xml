@@ -22,7 +22,7 @@
     <string name="map_view">Map View</string>
     <string name="Open_now">Open now</string>
     <string name="Close_now">Close now</string>
-    <string name="We_Dont_Know">We don\'t know, check on the restaurant website</string>
+    <string name="We_dont_know">We don\'t know, check on the restaurant website</string>
     <string name="website">WEBSITE</string>
     <string name="like">LIKE</string>
     <string name="call">CALL</string>
@@ -30,5 +30,9 @@
     <string name="no_email_found">No email found</string>
     <string name="no_username_found">No username found</string>
     <string name="none">none</string>
+    <string name="username_updated">Your username has been updated</string>
+    <string name="username_not_updated">Your username has not been updated</string>
+    <string name="account_deleted">Your account has been deleted</string>
+    <string name="successful_disconnection">Successful disconnection</string>
 
 </resources>
