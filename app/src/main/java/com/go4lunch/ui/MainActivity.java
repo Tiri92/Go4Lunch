@@ -25,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class MainActivity extends AppCompatActivity {
 
-    public SettingsFragmentViewModel settingsFragmentViewModel;
+    public MainActivityViewModel mainActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +49,23 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Set HeaderView text fields
          **/
-        settingsFragmentViewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
-        if (settingsFragmentViewModel.isCurrentUserLogged()) {
-            settingsFragmentViewModel.getUserData().addOnSuccessListener(user -> {
+        mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        if (mainActivityViewModel.isCurrentUserLogged()) {
+            mainActivityViewModel.getUserData().addOnSuccessListener(user -> {
                 // Set the data with the user information
 
-                FirebaseUser firebaseUser = settingsFragmentViewModel.getCurrentUser();
-                String userEmail = TextUtils.isEmpty(firebaseUser.getEmail()) ? getString(R.string.no_username_found) : firebaseUser.getEmail(); //TODO Understand and change R.string
+                FirebaseUser firebaseUser = mainActivityViewModel.getCurrentUser();
+                String userEmail = TextUtils.isEmpty(firebaseUser.getEmail()) ? getString(R.string.no_email_found) : firebaseUser.getEmail(); // Condition ternaire
                 TextView userEmailTextView = binding.navView.getHeaderView(0).findViewById(R.id.user_email_field);
                 userEmailTextView.setText(userEmail);
             });
-            settingsFragmentViewModel.getUserDataForUpdate().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            mainActivityViewModel.getUserDataForUpdate().addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable @org.jetbrains.annotations.Nullable DocumentSnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
 
                     User user = value.toObject(User.class);
                     if (user != null) {
-                        String username = TextUtils.isEmpty(user.getUsername()) ? getString(R.string.no_username_found) : user.getUsername(); //TODO Understand and change R.string
+                        String username = TextUtils.isEmpty(user.getUsername()) ? getString(R.string.no_username_found) : user.getUsername(); // Condition ternaire
                         TextView usernameTextView = binding.navView.getHeaderView(0).findViewById(R.id.username_field);
                         usernameTextView.setText(username);
                     }
