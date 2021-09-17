@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,9 +15,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.go4lunch.R;
 import com.go4lunch.databinding.ActivityMainBinding;
-import com.go4lunch.ui.home.RestaurantDetailViewModel;
+import com.go4lunch.model.User;
 import com.go4lunch.ui.main.SettingsFragmentViewModel;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,20 +46,30 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
 
-
+        /**
+         * Set HeaderView text fields
+         **/
         settingsFragmentViewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
         if (settingsFragmentViewModel.isCurrentUserLogged()) {
             settingsFragmentViewModel.getUserData().addOnSuccessListener(user -> {
                 // Set the data with the user information
 
-                String username = TextUtils.isEmpty(user.getUsername()) ? getString(R.string.no_username_found) : user.getUsername();
-                TextView usernameTextView = binding.navView.getHeaderView(0).findViewById(R.id.username_field);
-                usernameTextView.setText(username);
-
                 FirebaseUser firebaseUser = settingsFragmentViewModel.getCurrentUser();
-                String userEmail = TextUtils.isEmpty(firebaseUser.getEmail()) ? getString(R.string.no_username_found) : firebaseUser.getEmail();
+                String userEmail = TextUtils.isEmpty(firebaseUser.getEmail()) ? getString(R.string.no_username_found) : firebaseUser.getEmail(); //TODO Understand and change R.string
                 TextView userEmailTextView = binding.navView.getHeaderView(0).findViewById(R.id.user_email_field);
                 userEmailTextView.setText(userEmail);
+            });
+            settingsFragmentViewModel.getUserDataForUpdate().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable @org.jetbrains.annotations.Nullable DocumentSnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+
+                    User user = value.toObject(User.class);
+                    if (user != null) {
+                        String username = TextUtils.isEmpty(user.getUsername()) ? getString(R.string.no_username_found) : user.getUsername(); //TODO Understand and change R.string
+                        TextView usernameTextView = binding.navView.getHeaderView(0).findViewById(R.id.username_field);
+                        usernameTextView.setText(username);
+                    }
+                }
             });
         }
 
