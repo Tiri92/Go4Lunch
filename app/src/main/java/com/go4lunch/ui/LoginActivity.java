@@ -24,7 +24,7 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public SettingsFragmentViewModel settingsFragmentViewModel;
+    public LoginActivityViewModel loginActivityViewModel;
 
     private static final int RC_SIGN_IN = 123;
 
@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setTheme(R.style.Theme_AppCompat_NoActionBar);
-        settingsFragmentViewModel = new ViewModelProvider(this).get(SettingsFragmentViewModel.class);
+        loginActivityViewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
         view = new ConstraintLayout(this);
         view.setBackgroundColor(Color.WHITE);
         setContentView(view);
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             // SUCCESS
             if (resultCode == RESULT_OK) {
-                settingsFragmentViewModel.createUser();
+                loginActivityViewModel.createUser();
                 showSnackBar(getString(R.string.connection_succeed));
                 startActivity(new Intent(this, MainActivity.class));
             } else {
