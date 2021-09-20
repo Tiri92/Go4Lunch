@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             mainActivityViewModel.getUserDataForUpdate().addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable @org.jetbrains.annotations.Nullable DocumentSnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-
+                    //if (value == null)  return; Verify if value return information about the current user
                     User user = value.toObject(User.class);
                     if (user != null) {
                         String username = TextUtils.isEmpty(user.getUsername()) ? getString(R.string.no_username_found) : user.getUsername(); // Condition ternaire
