@@ -19,7 +19,7 @@ import java.util.List;
 public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFragmentAdapter.ViewHolder> {
 
     View itemView;
-    private List<User> listOfUsers;
+    private final List<User> listOfUsers;
 
     public WorkmatesFragmentAdapter(List<User> listOfUsers) {
         this.listOfUsers = listOfUsers;
