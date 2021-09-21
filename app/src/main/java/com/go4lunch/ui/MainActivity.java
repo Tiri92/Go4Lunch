@@ -2,6 +2,7 @@ package com.go4lunch.ui;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,7 +17,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.go4lunch.R;
 import com.go4lunch.databinding.ActivityMainBinding;
 import com.go4lunch.model.User;
-import com.go4lunch.ui.main.SettingsFragmentViewModel;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main_nav_host);
+        assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
 
         AppBarConfiguration appBarConfiguration =
@@ -58,11 +59,15 @@ public class MainActivity extends AppCompatActivity {
                 String userEmail = TextUtils.isEmpty(firebaseUser.getEmail()) ? getString(R.string.no_email_found) : firebaseUser.getEmail(); // Condition ternaire
                 TextView userEmailTextView = binding.navView.getHeaderView(0).findViewById(R.id.user_email_field);
                 userEmailTextView.setText(userEmail);
+
+                ImageView userPic = binding.navView.getHeaderView(0).findViewById(R.id.nav_header_imageview); //TODO
             });
             mainActivityViewModel.getUserDataForUpdate().addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable @org.jetbrains.annotations.Nullable DocumentSnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-                    //if (value == null)  return; Verify if value return information about the current user
+                    //Verify if value return information about the current user
+                    if (value == null)
+                        return;
                     User user = value.toObject(User.class);
                     if (user != null) {
                         String username = TextUtils.isEmpty(user.getUsername()) ? getString(R.string.no_username_found) : user.getUsername(); // Condition ternaire
@@ -72,9 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
-
 }
 
 
