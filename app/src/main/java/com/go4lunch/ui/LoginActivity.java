@@ -1,5 +1,6 @@
 package com.go4lunch.ui;
 
+import android.app.Application;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -90,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                 showSnackBar(getString(R.string.connection_succeed));
                 startActivity(new Intent(this, MainActivity.class));
             } else {
-                // ERRORS
+                // ERRORS TODO Put toast for error
                 if (response == null) {
                     showSnackBar(getString(R.string.error_authentication_canceled));
                 } else if (response.getError() != null) {
@@ -102,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }
+        finish();
     }
 
 }

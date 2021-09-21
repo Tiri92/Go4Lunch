@@ -1,13 +1,16 @@
 package com.go4lunch.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -17,15 +20,19 @@ import androidx.navigation.ui.NavigationUI;
 import com.go4lunch.R;
 import com.go4lunch.databinding.ActivityMainBinding;
 import com.go4lunch.model.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public class MainActivity extends AppCompatActivity {
 
     public MainActivityViewModel mainActivityViewModel;
+    public FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +84,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull @NotNull FirebaseAuth firebaseAuth) {
+                if (!mainActivityViewModel.isCurrentUserLogged()) {
+                    comeBackToLoginActivity();
+                }
+            }
+        };
+        FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
+    }
+
+    public void comeBackToLoginActivity() {
+        FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
+        Intent intent = new Intent(this, LoginActivity.class);
+        ActivityCompat.startActivity(this, intent, null);
+        finish();
     }
 }
 
