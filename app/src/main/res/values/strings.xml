@@ -38,5 +38,14 @@
     <string name="cannot_be_empty">The field cannot be empty</string>
     <string name="upper_case_letter">Start with one upper case letter</string>
     <string name="maximum_letters">Don\'t use more than 13 characters</string>
+    <string name="Logout">LOGOUT</string>
+    <string name="delete_my_account">Delete my account</string>
+    <string name="update_username">Update username</string>
+    <string name="want_logout">Are you sure you want to logout ?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="want_delete">Are you sure you want to delete your account ?</string>
+    <string name="save">Save</string>
+    <string name="change_username">Choose a new username</string>
 
 </resources>

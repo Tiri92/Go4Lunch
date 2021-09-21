@@ -58,42 +58,21 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setupListeners() {
-        // Logout button
-        AppCompatButton logoutButton = view.findViewById(R.id.logout_button);
-        logoutButton.setOnClickListener(view -> {
-
-            new AlertDialog.Builder(requireContext())
-                    .setMessage("Are you sure you want to logout ?")
-                    .setPositiveButton("Yes", (dialogInterface, i) ->
-                            settingsFragmentViewModel.logout(requireContext())
-                                    .addOnSuccessListener(aVoid -> {
-                                                Toast.makeText(requireContext(), getString(R.string.successful_disconnection), Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(requireContext(), LoginActivity.class);
-                                                ActivityCompat.startActivity(requireContext(), intent, null);
-                                            }
-                                    )
-                    )
-                    .setNegativeButton("Cancel", null)
-                    .show();
-
-        });
 
         // Delete button
         AppCompatButton deleteAccountButton = view.findViewById(R.id.delete_account_button);
         deleteAccountButton.setOnClickListener(view -> {
 
             new AlertDialog.Builder(requireContext())
-                    .setMessage("Are you sure you want to delete your account ?")
-                    .setPositiveButton("Yes", (dialogInterface, i) ->
+                    .setMessage(R.string.want_delete)
+                    .setPositiveButton(R.string.yes, (dialogInterface, i) ->
                             settingsFragmentViewModel.deleteUser(requireContext())
                                     .addOnSuccessListener(aVoid -> {
                                                 Toast.makeText(requireContext(), getString(R.string.account_deleted), Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(requireContext(), LoginActivity.class);
-                                                ActivityCompat.startActivity(requireContext(), intent, null);
                                             }
                                     )
                     )
-                    .setNegativeButton("Cancel", null)
+                    .setNegativeButton(R.string.cancel, null)
                     .show();
 
         });
@@ -119,6 +98,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void onPositiveButtonClick(DialogInterface dialogInterface) {
+        assert dialog != null;
         EditText dialogEditText = dialog.findViewById(R.id.edittext_username);
         // If dialog is open
         if (dialogEditText != null) {
@@ -153,10 +133,10 @@ public class SettingsFragment extends Fragment {
     private AlertDialog getChangeUserNameDialog() {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(requireContext());
 
-        alertBuilder.setTitle("Choose a new username");
+        alertBuilder.setTitle(R.string.change_username);
         alertBuilder.setView(R.layout.dialog_change_username);
-        alertBuilder.setPositiveButton("Save", null);
-        alertBuilder.setNegativeButton("Cancel", null);
+        alertBuilder.setPositiveButton(R.string.save, null);
+        alertBuilder.setNegativeButton(R.string.cancel, null);
         alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
