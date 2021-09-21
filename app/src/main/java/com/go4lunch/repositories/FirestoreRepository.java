@@ -33,7 +33,7 @@ public class FirestoreRepository {
 
     private static final String COLLECTION_NAME = "users";
     private static final String USERNAME_FIELD = "username";
-    private MutableLiveData<List<User>> listOfUsers = new MediatorLiveData<>();
+    private final MutableLiveData<List<User>> listOfUsers = new MutableLiveData<>();
 
     public FirestoreRepository() {
         getAllUsers();
