@@ -91,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                 showSnackBar(getString(R.string.connection_succeed));
                 startActivity(new Intent(this, MainActivity.class));
             } else {
-                // ERRORS TODO Put toast for error
                 if (response == null) {
                     showSnackBar(getString(R.string.error_authentication_canceled));
                 } else if (response.getError() != null) {

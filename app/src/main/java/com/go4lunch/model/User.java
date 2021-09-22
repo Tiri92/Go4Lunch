@@ -19,8 +19,8 @@ public class User {
         this.username = username;
         this.email = email;
         this.urlPicture = urlPicture;
-        this.eatingPlace = "none";
-        this.eatingPlaceId = "none";
+        this.eatingPlace = null;
+        this.eatingPlaceId = null;
     }
 
 
@@ -53,16 +53,18 @@ public class User {
         return eatingPlace;
     }
 
-    public void setEatingPlace(String eatingPlace) {
+    public String setEatingPlace(String eatingPlace) {
         this.eatingPlace = eatingPlace;
+        return eatingPlace;
     }
 
     public String getEatingPlaceId() {
         return eatingPlaceId;
     }
 
-    public void setEatingPlaceId(String eatingPlaceId) {
+    public String setEatingPlaceId(String eatingPlaceId) {
         this.eatingPlaceId = eatingPlaceId;
+        return eatingPlaceId;
     }
 
     public String getEmail() {
