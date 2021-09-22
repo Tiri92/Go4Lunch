@@ -1,7 +1,6 @@
 package com.go4lunch.ui.main;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
-import com.go4lunch.ui.LoginActivity;
-import com.go4lunch.ui.home.RestaurantDetailActivity;
 
 import java.util.regex.Pattern;
 
@@ -80,7 +76,7 @@ public class SettingsFragment extends Fragment {
         /**
          * Update username button, DialogChangeUserName
          **/
-        AppCompatButton updateUsernameButton = view.findViewById(R.id.update_button);
+        AppCompatButton updateUsernameButton = view.findViewById(R.id.update_username_button);
         updateUsernameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

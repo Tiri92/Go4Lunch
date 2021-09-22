@@ -47,5 +47,6 @@
     <string name="want_delete">Are you sure you want to delete your account ?</string>
     <string name="save">Save</string>
     <string name="change_username">Choose a new username</string>
+    <string name="update_profile_picture">Update profile picture</string>
 
 </resources>
