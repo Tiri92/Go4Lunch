@@ -1,13 +1,16 @@
 package com.go4lunch.ui.home;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.go4lunch.R;
 import com.go4lunch.model.User;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +40,19 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
     public void onBindViewHolder(@NonNull @NotNull WorkmatesFragmentAdapter.ViewHolder holder, int position) {
         TextView username = itemView.findViewById(R.id.user_name);
         username.setText(listOfUsers.get(position).getUsername());
+
+        ImageView userPic = itemView.findViewById(R.id.user_pic);
+        try {
+            String query = listOfUsers.get(position).getUrlPicture();
+
+            Glide.with(userPic)
+                    .load(query)
+                    .circleCrop()
+                    .into(userPic);
+
+        } catch (Exception e) {
+            Log.i("[THIERRY]", "Exception : " + e.getMessage());
+        }
     }
 
     @Override
