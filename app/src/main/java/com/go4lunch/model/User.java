@@ -14,13 +14,13 @@ public class User {
     public User() {
     }
 
-    public User(String uid, String username, String email, @Nullable String urlPicture) {
+    public User(String uid, String username, String email, @Nullable String urlPicture, String eatingPlace, String eatingPlaceId) {
         this.uid = uid;
         this.username = username;
         this.email = email;
         this.urlPicture = urlPicture;
-        this.eatingPlace = null;
-        this.eatingPlaceId = null;
+        this.eatingPlace = eatingPlace;
+        this.eatingPlaceId = eatingPlaceId;
     }
 
 

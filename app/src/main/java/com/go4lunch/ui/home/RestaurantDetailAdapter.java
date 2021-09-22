@@ -3,17 +3,26 @@ package com.go4lunch.ui.home;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.go4lunch.R;
+import com.go4lunch.model.User;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDetailAdapter.ViewHolder> {
 
     View itemView;
+    private final List<User> listOfUsersWhoChoseRestaurant;
+
+    public RestaurantDetailAdapter(List<User> listOfUsersWhoChoseRestaurant) {
+        this.listOfUsersWhoChoseRestaurant = listOfUsersWhoChoseRestaurant;
+    }
 
     @NonNull
     @NotNull
@@ -26,11 +35,14 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
     @Override
     public void onBindViewHolder(@NonNull @NotNull RestaurantDetailAdapter.ViewHolder holder, int position) {
 
+        TextView username = itemView.findViewById(R.id.user_name);
+        username.setText(listOfUsersWhoChoseRestaurant.get(position).getUsername());
+
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return listOfUsersWhoChoseRestaurant.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
