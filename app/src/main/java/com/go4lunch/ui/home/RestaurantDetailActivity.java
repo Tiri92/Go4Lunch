@@ -34,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
@@ -61,7 +62,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         restaurantDetailViewModel.getListOfUsersWhoChoseRestaurant().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
-                mAdapter = new RestaurantDetailAdapter(users);
+                List<User> sortedUserList = new ArrayList<>();
+                for (int i = 0; i < users.size(); i++) {
+                    if (users.get(i).getEatingPlaceId().equals(placeId)) {
+                        sortedUserList.add(users.get(i));
+                    }
+                }
+                mAdapter = new RestaurantDetailAdapter(sortedUserList);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
                 mRecyclerView.setAdapter(mAdapter);
             }
