@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.go4lunch.di.DI;
-import com.go4lunch.model.User;
+import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.details.SearchDetail;
-import com.go4lunch.model.nearbysearch.NearbySearch;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;

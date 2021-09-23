@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.go4lunch.di.DI;
-import com.go4lunch.model.User;
+import com.go4lunch.model.firestore.User;
 
 import java.util.List;
 

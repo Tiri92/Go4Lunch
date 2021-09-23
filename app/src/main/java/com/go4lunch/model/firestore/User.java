@@ -1,4 +1,4 @@
-package com.go4lunch.model;
+package com.go4lunch.model.firestore;
 
 import androidx.annotation.Nullable;
 

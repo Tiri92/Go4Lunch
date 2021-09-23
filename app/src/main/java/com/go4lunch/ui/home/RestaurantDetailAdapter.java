@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.go4lunch.R;
-import com.go4lunch.model.User;
+import com.go4lunch.model.firestore.User;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -15,8 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.go4lunch.R;
-import com.go4lunch.model.User;
-import com.go4lunch.ui.main.SettingsFragmentViewModel;
+import com.go4lunch.model.firestore.User;
 
 import org.jetbrains.annotations.NotNull;
 
