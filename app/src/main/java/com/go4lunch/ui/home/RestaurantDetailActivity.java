@@ -1,14 +1,18 @@
 package com.go4lunch.ui.home;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +26,7 @@ import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.details.SearchDetail;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,6 +34,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CALL_PHONE;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
 
@@ -115,6 +124,39 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                         showSnackBar(getString(R.string.error_chosen_restaurant));
                     }
                 });
+            }
+        });
+
+        BottomNavigationView bottomNavigationView = binding.restaurantDetailsNavigation;
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.call_details:
+                        String tel = "tel:";
+                        if (restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getFormattedPhoneNumber() != null) {
+                            Intent startPhoneCall = new Intent(Intent.ACTION_DIAL);
+                            startPhoneCall.setData(Uri.parse(tel + restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getFormattedPhoneNumber()));
+                            startActivity(startPhoneCall);
+                        } else {
+                            showSnackBar(getString(R.string.no_phone_number_available));
+                        }
+                        return true;
+                    case R.id.like_details:
+                        Log.e("nothing for now", "todo");
+                        return true;
+                    case R.id.website_details:
+                        if (restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getWebsite() != null) {
+                            Intent openWebsite = new Intent(Intent.ACTION_VIEW);
+                            openWebsite.setData(Uri.parse(restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getWebsite()));
+                            startActivity(openWebsite);
+                        } else {
+                            showSnackBar(getString(R.string.no_website_available));
+                        }
+                        return true;
+                }
+                return false;
             }
         });
 
