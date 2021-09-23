@@ -1,5 +1,7 @@
 package com.go4lunch.ui.home;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,8 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
         String space = " ";
         if (listOfUsers.get(position).getEatingPlaceId().equals(" ")) {
             String notDecided = "hasn't decided yet";
+            username.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+            username.setTextColor(Color.parseColor("#C6C6C6"));
             username.setText(MessageFormat.format("{0}{1}{2}", listOfUsers.get(position).getUsername(), space, notDecided));
         } else {
             String isEating = "is eating in";
