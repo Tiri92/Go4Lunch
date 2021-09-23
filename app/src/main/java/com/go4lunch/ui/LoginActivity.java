@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -88,16 +89,15 @@ public class LoginActivity extends AppCompatActivity {
             // SUCCESS
             if (resultCode == RESULT_OK) {
                 loginActivityViewModel.createUser();
-                showSnackBar(getString(R.string.connection_succeed));
                 startActivity(new Intent(this, MainActivity.class));
             } else {
                 if (response == null) {
-                    showSnackBar(getString(R.string.error_authentication_canceled));
+                    Toast.makeText(getBaseContext(), getString(R.string.error_authentication_canceled), Toast.LENGTH_SHORT).show();
                 } else if (response.getError() != null) {
                     if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
                         showSnackBar(getString(R.string.error_no_internet));
                     } else if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                        showSnackBar(getString(R.string.error_unknown_error));
+                        Toast.makeText(getBaseContext(), getString(R.string.error_unknown_error), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
