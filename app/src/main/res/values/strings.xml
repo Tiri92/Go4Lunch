@@ -50,5 +50,6 @@
     <string name="update_profile_picture">Update profile picture</string>
     <string name="error_chosen_restaurant">Impossible to choose this restaurant for lunch, sorry !</string>
     <string name="success_chosen_restaurant">Congratulations, you have chosen a restaurant for lunch !</string>
+    <string name="is_joining">is joining!</string>
 
 </resources>

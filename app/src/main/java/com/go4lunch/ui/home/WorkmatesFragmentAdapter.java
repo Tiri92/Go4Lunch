@@ -16,6 +16,7 @@ import com.go4lunch.model.firestore.User;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFragmentAdapter.ViewHolder> {
@@ -38,7 +39,14 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
     @Override
     public void onBindViewHolder(@NonNull @NotNull WorkmatesFragmentAdapter.ViewHolder holder, int position) {
         TextView username = itemView.findViewById(R.id.user_name);
-        username.setText(listOfUsers.get(position).getUsername());
+        String space = " ";
+        if (listOfUsers.get(position).getEatingPlaceId().equals(" ")) {
+            String notDecided = "hasn't decided yet";
+            username.setText(MessageFormat.format("{0}{1}{2}", listOfUsers.get(position).getUsername(), space, notDecided));
+        } else {
+            String isEating = "is eating in";
+            username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(position).getUsername(), space, isEating, space, listOfUsers.get(position).getEatingPlace()));
+        }
 
         ImageView userPic = itemView.findViewById(R.id.user_pic);
         try {
