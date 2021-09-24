@@ -2,7 +2,7 @@ package com.go4lunch.model.firestore;
 
 import androidx.annotation.Nullable;
 
-public class User {
+public class User implements Comparable<User> {
     private String uid;
     private String username;
     @Nullable
@@ -74,4 +74,10 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public int compareTo(User user) {
+        return user.getEatingPlace().compareTo(this.eatingPlace);
+    }
+
 }

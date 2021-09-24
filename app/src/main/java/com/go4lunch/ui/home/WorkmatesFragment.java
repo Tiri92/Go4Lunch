@@ -19,13 +19,15 @@ import com.go4lunch.model.firestore.User;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class WorkmatesFragment extends Fragment {
 
     View view;
     private RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
+    RecyclerView.Adapter<WorkmatesFragmentAdapter.ViewHolder> mAdapter;
     public WorkmatesFragmentViewModel workmatesFragmentViewModel;
 
     @Nullable
@@ -39,6 +41,7 @@ public class WorkmatesFragment extends Fragment {
         workmatesFragmentViewModel.getListOfUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
+                Collections.sort(users);
                 mAdapter = new WorkmatesFragmentAdapter(users);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                 mRecyclerView.setAdapter(mAdapter);
