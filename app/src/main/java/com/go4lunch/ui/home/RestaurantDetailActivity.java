@@ -47,7 +47,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     String nameOfCurrentRestaurant;
 
     private RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
+    RecyclerView.Adapter<RestaurantDetailAdapter.ViewHolder> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +114,15 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                 restaurantDetailViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
                     @Override
                     public void onSuccess(User user) {
-                        restaurantDetailViewModel.updateEatingPlaceId(user.setEatingPlaceId(placeId));
-                        restaurantDetailViewModel.updateEatingPlace(user.setEatingPlace(nameOfCurrentRestaurant));
-                        showSnackBar(getString(R.string.success_chosen_restaurant));
+                        if (placeId.equals(user.getEatingPlaceId())) {
+                            restaurantDetailViewModel.updateEatingPlaceId(" ");
+                            restaurantDetailViewModel.updateEatingPlace(" ");
+                            showSnackBar(getString(R.string.choice_canceled));
+                        } else {
+                            restaurantDetailViewModel.updateEatingPlaceId(user.setEatingPlaceId(placeId));
+                            restaurantDetailViewModel.updateEatingPlace(user.setEatingPlace(nameOfCurrentRestaurant));
+                            showSnackBar(getString(R.string.success_chosen_restaurant));
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

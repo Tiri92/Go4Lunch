@@ -53,5 +53,6 @@
     <string name="is_joining">is joining!</string>
     <string name="no_website_available">Sorry, no website available</string>
     <string name="no_phone_number_available">Sorry, no phone number available</string>
+    <string name="choice_canceled">Your choice has been canceled !</string>
 
 </resources>
