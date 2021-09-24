@@ -118,10 +118,16 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                             restaurantDetailViewModel.updateEatingPlaceId(" ");
                             restaurantDetailViewModel.updateEatingPlace(" ");
                             showSnackBar(getString(R.string.choice_canceled));
-                        } else {
+                        }
+                        if (user.getEatingPlaceId().equals(" ")) {
                             restaurantDetailViewModel.updateEatingPlaceId(user.setEatingPlaceId(placeId));
                             restaurantDetailViewModel.updateEatingPlace(user.setEatingPlace(nameOfCurrentRestaurant));
                             showSnackBar(getString(R.string.success_chosen_restaurant));
+                        }
+                        if (!user.getEatingPlaceId().equals(placeId)) {
+                            restaurantDetailViewModel.updateEatingPlaceId(user.setEatingPlaceId(placeId));
+                            restaurantDetailViewModel.updateEatingPlace(user.setEatingPlace(nameOfCurrentRestaurant));
+                            showSnackBar(getString(R.string.choice_updated));
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
