@@ -19,6 +19,7 @@ import com.go4lunch.BuildConfig;
 import com.go4lunch.R;
 import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.ResultsItem;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -98,14 +99,22 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
         }
 
         TextView numberOfCoworker = itemView.findViewById(R.id.number_of_coworker);
+        ImageView coworkerIcon = itemView.findViewById(R.id.coworker_icon);
+        int n = 0;
         if (listOfUserWhoChoseWhereLunch != null) {
-            //if (listOfUserWhoChoseWhereLunch.get(position).getEatingPlaceId().equals(listOfRestaurants.get(position).getPlaceId())) {} //TODO
-
-            String numberOfCoworkerWhoLunchHere = String.valueOf(listOfUserWhoChoseWhereLunch.size());
-            String start = "(";
-            String end = ")";
-            numberOfCoworker.setText(MessageFormat.format("{0}{1}{2}", start, numberOfCoworkerWhoLunchHere, end));
+            for (int i = 0; i < listOfUserWhoChoseWhereLunch.size(); i++) {
+                if (listOfUserWhoChoseWhereLunch.get(i).getEatingPlaceId().equals(listOfRestaurants.get(position).getPlaceId())) {
+                    n = n + 1;
+                    String start = "(";
+                    String end = ")";
+                    numberOfCoworker.setText(MessageFormat.format("{0}{1}{2}", start, n, end));
+                }
+            }
+            if (numberOfCoworker.getText() == "") {
+                coworkerIcon.setVisibility(View.INVISIBLE);
+            }
         }
+
     }
 
     @Override

@@ -156,7 +156,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                         }
                         return true;
                     case R.id.like_details:
-                        Log.e("nothing for now", "todo");
+                        showSnackBar("Restaurant liked !");
                         return true;
                     case R.id.website_details:
                         if (restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getWebsite() != null) {
