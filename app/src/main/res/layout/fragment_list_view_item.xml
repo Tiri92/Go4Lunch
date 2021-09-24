@@ -29,10 +29,10 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:scaleType="fitXY"
+                android:src="@drawable/ic_baseline_no_photography_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ic_baseline_no_photography_24"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/restaurant_name"
@@ -42,8 +42,8 @@
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:textSize="14sp"
                 android:textColor="@color/black"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/restaurant_distance"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -87,22 +87,19 @@
 
             <TextView
                 android:id="@+id/number_of_coworker"
-                android:layout_width="wrap_content"
+                android:layout_width="24dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:textSize="12sp"
-                android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/restaurant_pic"
                 app:layout_constraintTop_toBottomOf="@+id/restaurant_distance" />
 
             <ImageView
                 android:id="@+id/coworker_icon"
-                android:layout_width="37dp"
-                android:layout_height="27dp"
+                android:layout_width="32dp"
+                android:layout_height="22dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="2dp"
-                android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/number_of_coworker"
                 app:layout_constraintTop_toBottomOf="@+id/restaurant_distance"
                 app:srcCompat="@drawable/baseline_coworker_black_24dp" />

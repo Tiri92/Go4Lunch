@@ -1,11 +1,13 @@
 package com.go4lunch.ui.home;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,19 +17,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.go4lunch.BuildConfig;
 import com.go4lunch.R;
+import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.ResultsItem;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragmentAdapter.ViewHolder> {
 
     View itemView;
-    private List<ResultsItem> listOfRestaurants;
+    private final List<ResultsItem> listOfRestaurants;
+    private final List<User> listOfUserWhoChoseWhereLunch;
 
-    public ListViewFragmentAdapter(List<ResultsItem> listOfRestaurants) {
+    public ListViewFragmentAdapter(List<ResultsItem> listOfRestaurants, List<User> listOfUserWhoChoseWhereLunch) {
         this.listOfRestaurants = listOfRestaurants;
+        this.listOfUserWhoChoseWhereLunch = listOfUserWhoChoseWhereLunch;
     }
 
     @NonNull
@@ -38,6 +44,7 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
         return new ViewHolder(itemView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull @NotNull ListViewFragmentAdapter.ViewHolder holder, int position) {
 
@@ -56,6 +63,10 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
 
         TextView restaurantAddress = itemView.findViewById(R.id.restaurant_address);
         restaurantAddress.setText(listOfRestaurants.get(position).getVicinity());
+
+        RatingBar ratingBar = itemView.findViewById(R.id.restaurant_rating);
+        float getRatingOnThree = (float) (listOfRestaurants.get(position).getRating() / 1.66);
+        ratingBar.setRating(getRatingOnThree);
 
         TextView openingHour = itemView.findViewById(R.id.restaurant_opening_hours);
         if (listOfRestaurants.get(position).getOpeningHours() != null) {
@@ -84,6 +95,16 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
 
         } catch (Exception e) {
             Log.i("[THIERRY]", "Exception : " + e.getMessage());
+        }
+
+        TextView numberOfCoworker = itemView.findViewById(R.id.number_of_coworker);
+        if (listOfUserWhoChoseWhereLunch != null) {
+            //if (listOfUserWhoChoseWhereLunch.get(position).getEatingPlaceId().equals(listOfRestaurants.get(position).getPlaceId())) {} //TODO
+
+            String numberOfCoworkerWhoLunchHere = String.valueOf(listOfUserWhoChoseWhereLunch.size());
+            String start = "(";
+            String end = ")";
+            numberOfCoworker.setText(MessageFormat.format("{0}{1}{2}", start, numberOfCoworkerWhoLunchHere, end));
         }
     }
 

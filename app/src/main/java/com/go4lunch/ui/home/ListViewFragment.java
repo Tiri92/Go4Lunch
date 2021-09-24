@@ -14,25 +14,35 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.go4lunch.R;
+import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.NearbySearch;
+
+import java.util.List;
 
 public class ListViewFragment extends Fragment {
 
     public ListViewViewModel listViewViewModel;
     private RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
+    RecyclerView.Adapter<ListViewFragmentAdapter.ViewHolder> mAdapter;
+    public List<User> listOfUserWhoChose;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_list_view, container, false);
         mRecyclerView = root.findViewById(R.id.RecyclerView);
-
         listViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(ListViewViewModel.class);
         listViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
             @Override
             public void onChanged(NearbySearch nearbySearch) {
-                mAdapter = new ListViewFragmentAdapter(nearbySearch.getResults());
-                mRecyclerView.setAdapter(mAdapter);
+                listViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+                    @Override
+                    public void onChanged(List<User> users) {
+                        mAdapter = new ListViewFragmentAdapter(nearbySearch.getResults(), listOfUserWhoChose);
+                        mRecyclerView.setAdapter(mAdapter);
+                        listOfUserWhoChose = users;
+                        mAdapter.notifyDataSetChanged(); // TODO don't work
+                    }
+                });
             }
         });
 
