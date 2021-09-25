@@ -100,6 +100,7 @@
                 android:layout_width="32dp"
                 android:layout_height="22dp"
                 android:layout_marginTop="4dp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toStartOf="@+id/number_of_coworker"
                 app:layout_constraintTop_toBottomOf="@+id/restaurant_distance"
                 app:srcCompat="@drawable/baseline_coworker_black_24dp" />

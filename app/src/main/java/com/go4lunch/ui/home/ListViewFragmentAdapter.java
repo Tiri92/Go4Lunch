@@ -108,10 +108,8 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
                     String start = "(";
                     String end = ")";
                     numberOfCoworker.setText(MessageFormat.format("{0}{1}{2}", start, n, end));
+                    coworkerIcon.setVisibility(View.VISIBLE);
                 }
-            }
-            if (numberOfCoworker.getText() == "") {
-                coworkerIcon.setVisibility(View.INVISIBLE);
             }
         }
 
