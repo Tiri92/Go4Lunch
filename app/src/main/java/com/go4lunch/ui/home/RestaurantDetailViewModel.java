@@ -39,12 +39,12 @@ public class RestaurantDetailViewModel extends ViewModel {
         return DI.getFirestoreRepository().updateEatingPlace(eatingPlace);
     }
 
-    public LiveData<List<User>> getListOfUsersWhoChoseRestaurant() {
-        return DI.getFirestoreRepository().getListOfUsersWhoChoseRestaurant();
+    public Task<Void> updateListOfRestaurantsLiked(List<String> listOfRestaurantsLiked) {
+        return DI.getFirestoreRepository().updateListOfRestaurantsLiked(listOfRestaurantsLiked);
     }
 
-    public FirebaseUser getCurrentUser() {
-        return DI.getFirestoreRepository().getCurrentUser();
+    public LiveData<List<User>> getListOfUsersWhoChoseRestaurant() {
+        return DI.getFirestoreRepository().getListOfUsersWhoChoseRestaurant();
     }
 
 }

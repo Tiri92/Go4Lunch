@@ -43,6 +43,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private ActivityRestaurantDetailBinding binding;
     public RestaurantDetailViewModel restaurantDetailViewModel;
+    List<String> listOfRestaurantsLiked;
     String placeId;
     String nameOfCurrentRestaurant;
 
@@ -56,11 +57,18 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         mRecyclerView = binding.restaurantDetailsRecyclerView;
 
+        restaurantDetailViewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
+        restaurantDetailViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                listOfRestaurantsLiked = user.getListOfRestaurantsLiked();
+            }
+        });
+
         Intent intent = getIntent();
         placeId = intent.getStringExtra("placeId");
         nameOfCurrentRestaurant = intent.getStringExtra("name");
 
-        restaurantDetailViewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
         restaurantDetailViewModel.getListOfUsersWhoChoseRestaurant().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
@@ -118,13 +126,11 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                             restaurantDetailViewModel.updateEatingPlaceId(" ");
                             restaurantDetailViewModel.updateEatingPlace(" ");
                             showSnackBar(getString(R.string.choice_canceled));
-                        }
-                        if (user.getEatingPlaceId().equals(" ")) {
+                        } else if (user.getEatingPlaceId().equals(" ")) {
                             restaurantDetailViewModel.updateEatingPlaceId(user.setEatingPlaceId(placeId));
                             restaurantDetailViewModel.updateEatingPlace(user.setEatingPlace(nameOfCurrentRestaurant));
                             showSnackBar(getString(R.string.success_chosen_restaurant));
-                        }
-                        if (!user.getEatingPlaceId().equals(placeId)) {
+                        } else if (!user.getEatingPlaceId().equals(placeId)) {
                             restaurantDetailViewModel.updateEatingPlaceId(user.setEatingPlaceId(placeId));
                             restaurantDetailViewModel.updateEatingPlace(user.setEatingPlace(nameOfCurrentRestaurant));
                             showSnackBar(getString(R.string.choice_updated));
@@ -156,7 +162,35 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                         }
                         return true;
                     case R.id.like_details:
-                        showSnackBar("Restaurant liked !");
+                        if (listOfRestaurantsLiked.contains(nameOfCurrentRestaurant)) {
+                            listOfRestaurantsLiked.remove(nameOfCurrentRestaurant);
+                            restaurantDetailViewModel.updateListOfRestaurantsLiked(listOfRestaurantsLiked).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    showSnackBar(getString(R.string.restaurant_unliked));
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull @NotNull Exception e) {
+                                    showSnackBar(getString(R.string.error_unlike));
+                                }
+                            });
+
+                        } else if (!listOfRestaurantsLiked.contains(nameOfCurrentRestaurant)) {
+                            listOfRestaurantsLiked.add(nameOfCurrentRestaurant);
+                            restaurantDetailViewModel.updateListOfRestaurantsLiked(listOfRestaurantsLiked).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    showSnackBar(getString(R.string.restaurant_liked));
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull @NotNull Exception e) {
+                                    showSnackBar(getString(R.string.error_like));
+                                }
+                            });
+
+                        }
                         return true;
                     case R.id.website_details:
                         if (restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getWebsite() != null) {

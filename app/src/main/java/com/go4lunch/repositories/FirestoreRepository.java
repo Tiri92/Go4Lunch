@@ -33,6 +33,7 @@ public class FirestoreRepository {
     private static final String USERNAME_FIELD = "username";
     private static final String EATING_PLACE_ID = "eatingPlaceId";
     private static final String EATING_PLACE = "eatingPlace";
+    private static final String LIST_OF_RESTAURANTS_LIKED = "listOfRestaurantsLiked";
     private final MutableLiveData<List<User>> listOfUsers = new MutableLiveData<>();
     private final MutableLiveData<List<User>> listOfUsersWhoChoseRestaurant = new MutableLiveData<>();
 
@@ -81,8 +82,9 @@ public class FirestoreRepository {
             String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
             String eatingPlace = " ";
             String eatingPlaceId = " ";
+            List<String> listOfRestaurantsLiked = new ArrayList<>();
 
-            User userToCreate = new User(uid, username, email, urlPicture, eatingPlace, eatingPlaceId);
+            User userToCreate = new User(uid, username, email, urlPicture, eatingPlace, eatingPlaceId, listOfRestaurantsLiked);
 
             Task<DocumentSnapshot> userData = getUserData();
 
@@ -189,11 +191,21 @@ public class FirestoreRepository {
         }
     }
 
-    //Update EatingPlace
+    // Update EatingPlace
     public Task<Void> updateEatingPlace(String eatingPlace) {
         String uid = this.getCurrentUserId();
         if (uid != null) {
             return this.getUsersCollection().document(uid).update(EATING_PLACE, eatingPlace);
+        } else {
+            return null;
+        }
+    }
+
+    // Update ListOfRestaurantsLiked
+    public Task<Void> updateListOfRestaurantsLiked(List<String> listOfRestaurantsLiked) {
+        String uid = this.getCurrentUserId();
+        if (uid != null) {
+            return this.getUsersCollection().document(uid).update(LIST_OF_RESTAURANTS_LIKED, listOfRestaurantsLiked);
         } else {
             return null;
         }

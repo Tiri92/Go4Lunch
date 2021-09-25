@@ -55,5 +55,9 @@
     <string name="no_phone_number_available">Sorry, no phone number available</string>
     <string name="choice_canceled">Your choice has been canceled !</string>
     <string name="choice_updated">Your choice has been updated !</string>
+    <string name="restaurant_liked">Restaurant liked !</string>
+    <string name="restaurant_unliked">Restaurant unliked !</string>
+    <string name="error_unlike">\"Error, impossible to unlike \"</string>
+    <string name="error_like">Error, impossible to like</string>
 
 </resources>

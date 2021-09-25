@@ -2,6 +2,8 @@ package com.go4lunch.model.firestore;
 
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
 public class User implements Comparable<User> {
     private String uid;
     private String username;
@@ -10,17 +12,19 @@ public class User implements Comparable<User> {
     private String eatingPlace;
     private String eatingPlaceId;
     private String email;
+    private List<String> listOfRestaurantsLiked;
 
     public User() {
     }
 
-    public User(String uid, String username, String email, @Nullable String urlPicture, String eatingPlace, String eatingPlaceId) {
+    public User(String uid, String username, String email, @Nullable String urlPicture, String eatingPlace, String eatingPlaceId, List<String> listOfRestaurantsLiked) {
         this.uid = uid;
         this.username = username;
         this.email = email;
         this.urlPicture = urlPicture;
         this.eatingPlace = eatingPlace;
         this.eatingPlaceId = eatingPlaceId;
+        this.listOfRestaurantsLiked = listOfRestaurantsLiked;
     }
 
 
@@ -80,4 +84,11 @@ public class User implements Comparable<User> {
         return user.getEatingPlace().compareTo(this.eatingPlace);
     }
 
+    public List<String> getListOfRestaurantsLiked() {
+        return listOfRestaurantsLiked;
+    }
+
+    public void setListOfRestaurantsLiked(List<String> listOfRestaurantsLiked) {
+        this.listOfRestaurantsLiked = listOfRestaurantsLiked;
+    }
 }
