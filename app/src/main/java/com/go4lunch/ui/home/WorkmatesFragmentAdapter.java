@@ -1,5 +1,6 @@
 package com.go4lunch.ui.home;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -50,6 +52,14 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
         } else {
             String isEating = "is eating in";
             username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(position).getUsername(), space, isEating, space, listOfUsers.get(position).getEatingPlace()));
+            username.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
+                    intent.putExtra("placeId", listOfUsers.get(position).getEatingPlaceId());
+                    ActivityCompat.startActivity(v.getContext(), intent, null);
+                }
+            });
         }
 
         ImageView userPic = itemView.findViewById(R.id.user_pic);
