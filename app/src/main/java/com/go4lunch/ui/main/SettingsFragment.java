@@ -22,6 +22,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -50,9 +54,9 @@ public class SettingsFragment extends Fragment {
     private void updateName(String uid, String username) {
         if (!username.isEmpty()) {
             settingsFragmentViewModel.updateUsername(username);
-            Toast.makeText(requireContext(), getString(R.string.username_updated), Toast.LENGTH_SHORT).show();
+            showSnackBar(getString(R.string.username_updated));
         } else {
-            Toast.makeText(requireContext(), getString(R.string.username_not_updated), Toast.LENGTH_SHORT).show();
+            showSnackBar(getString(R.string.username_not_updated));
         }
     }
 
@@ -63,10 +67,10 @@ public class SettingsFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
                 settingsFragmentViewModel.updateUrlPicture(imageUri);
-                Toast.makeText(requireActivity(), "Your profile picture has been updated", Toast.LENGTH_SHORT).show();
+                showSnackBar(getString(R.string.profile_picture_updated));
             }
         } else {
-            Toast.makeText(requireActivity(), "Error, fail", Toast.LENGTH_SHORT).show();
+            showSnackBar(getString(R.string.error_profile_picture_updated));
         }
     }
 
@@ -83,7 +87,12 @@ public class SettingsFragment extends Fragment {
                                     .addOnSuccessListener(aVoid -> {
                                                 Toast.makeText(requireContext(), getString(R.string.account_deleted), Toast.LENGTH_SHORT).show();
                                             }
-                                    )
+                                    ).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull @NotNull Exception e) {
+                                    Toast.makeText(requireContext(), getString(R.string.error_delete_account), Toast.LENGTH_SHORT).show();
+                                }
+                            })
                     )
                     .setNegativeButton(R.string.cancel, null)
                     .show();
@@ -195,6 +204,11 @@ public class SettingsFragment extends Fragment {
         });
 
         return dialog;
+    }
+
+    // Show Snack Bar with a message
+    private void showSnackBar(String message) {
+        Snackbar.make(view.getRootView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
 }
