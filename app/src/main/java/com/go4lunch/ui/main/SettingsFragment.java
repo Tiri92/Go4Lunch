@@ -1,7 +1,11 @@
 package com.go4lunch.ui.main;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,13 +47,26 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
-
     private void updateName(String uid, String username) {
         if (!username.isEmpty()) {
             settingsFragmentViewModel.updateUsername(username);
             Toast.makeText(requireContext(), getString(R.string.username_updated), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(requireContext(), getString(R.string.username_not_updated), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri imageUri = data.getData();
+                settingsFragmentViewModel.updateUrlPicture(imageUri);
+                Toast.makeText(requireActivity(), "Your profile picture has been updated", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(requireActivity(), "Error, fail", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -71,6 +88,16 @@ public class SettingsFragment extends Fragment {
                     .setNegativeButton(R.string.cancel, null)
                     .show();
 
+        });
+
+        // Update profile picture button
+        AppCompatButton updateProfilePictureButton = view.findViewById(R.id.update_profile_picture_button);
+        updateProfilePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGalleryIntent, 1000);
+            }
         });
 
         /**

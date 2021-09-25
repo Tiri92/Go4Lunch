@@ -1,6 +1,7 @@
 package com.go4lunch.repositories;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -21,11 +22,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class FirestoreRepository {
 
@@ -34,6 +41,7 @@ public class FirestoreRepository {
     private static final String EATING_PLACE_ID = "eatingPlaceId";
     private static final String EATING_PLACE = "eatingPlace";
     private static final String LIST_OF_RESTAURANTS_LIKED = "listOfRestaurantsLiked";
+    private static final String URL_PICTURE = "urlPicture";
     private final MutableLiveData<List<User>> listOfUsers = new MutableLiveData<>();
     private final MutableLiveData<List<User>> listOfUsersWhoChoseRestaurant = new MutableLiveData<>();
 
@@ -179,6 +187,34 @@ public class FirestoreRepository {
         } else {
             return null;
         }
+    }
+
+    // Update UrlPicture
+    public Task<Void> updateUrlPicture(String urlPicture) {
+        String uid = this.getCurrentUserId();
+        if (uid != null) {
+            return this.getUsersCollection().document(uid).update(URL_PICTURE, urlPicture);
+        } else {
+            return null;
+        }
+    }
+
+    // Upload UrlPicture TODO Understand, ask in email to Denis
+    public void uploadPhotoInFirebaseAndUpdateUrlPicture(Uri uri) {
+        String uuid = UUID.randomUUID().toString();
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(uuid);
+        UploadTask uploadTask = mImageRef.putFile(uri);
+        uploadTask.continueWithTask(task -> {
+            if (!task.isSuccessful()) {
+                throw Objects.requireNonNull(task.getException());
+            }
+            return mImageRef.getDownloadUrl();
+        }).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Uri downloadUri = task.getResult();
+                updateUrlPicture(downloadUri.toString());
+            }
+        });
     }
 
     // Update EatingPlaceId

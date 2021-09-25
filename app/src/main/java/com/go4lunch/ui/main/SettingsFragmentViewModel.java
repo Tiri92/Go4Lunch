@@ -1,6 +1,7 @@
 package com.go4lunch.ui.main;
 
 import android.content.Context;
+import android.net.Uri;
 
 import androidx.lifecycle.ViewModel;
 
@@ -44,6 +45,10 @@ public class SettingsFragmentViewModel extends ViewModel {
 
     public Task<Void> updateUsername(String username) {
         return DI.getFirestoreRepository().updateUsername(username);
+    }
+
+    public void updateUrlPicture(Uri urlPicture) {
+        DI.getFirestoreRepository().uploadPhotoInFirebaseAndUpdateUrlPicture(urlPicture);
     }
 
     public Task<Void> deleteUser(Context context) {
