@@ -83,11 +83,12 @@ public class FirestoreRepository {
     */
     public void createUser() {
         FirebaseUser user = getCurrentUser();
+        String urlDefaultPicture = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
         if (user != null) {
             String uid = user.getUid();
             String username = user.getDisplayName();
             String email = (this.getCurrentUser().getEmail());
-            String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
+            String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : urlDefaultPicture;
             String eatingPlace = " ";
             String eatingPlaceId = " ";
             List<String> listOfRestaurantsLiked = new ArrayList<>();

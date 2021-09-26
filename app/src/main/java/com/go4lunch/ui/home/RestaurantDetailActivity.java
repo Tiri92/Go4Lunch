@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,8 +21,8 @@ import com.bumptech.glide.Glide;
 import com.go4lunch.BuildConfig;
 import com.go4lunch.R;
 import com.go4lunch.databinding.ActivityRestaurantDetailBinding;
-import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.details.SearchDetail;
+import com.go4lunch.model.firestore.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -34,10 +33,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.CALL_PHONE;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
 
@@ -168,6 +163,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     showSnackBar(getString(R.string.restaurant_unliked));
+                                    MenuItem menuItem = bottomNavigationView.getMenu().findItem(R.id.like_details);
+                                    menuItem.setIcon(R.drawable.detail_menu_star_24); //TODO Not working
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -182,6 +179,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     showSnackBar(getString(R.string.restaurant_liked));
+                                    MenuItem menuItem = bottomNavigationView.getMenu().findItem(R.id.like_details);
+                                    menuItem.setIcon(R.drawable.detail_menu_yellow_star_24); //TODO Not working
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
