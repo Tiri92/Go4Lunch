@@ -1,6 +1,7 @@
 package com.go4lunch.model;
 
 import com.go4lunch.BuildConfig;
+import com.go4lunch.model.autocomplete.AutocompleteSearch;
 import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.nearbysearch.NearbySearch;
 
@@ -21,8 +22,12 @@ public interface GooglePlaceService {
     @GET("nearbysearch/json?radius=1500&type=restaurant&key=" + BuildConfig.MAPS_API_KEY)
     Call<NearbySearch> getRestaurants(@Query("location") String position);
 
-    //For Restaurants details search
+    // For Restaurants details search
     @GET("details/json?fields=formatted_phone_number,url,rating,website,photo,vicinity,name&key=" + BuildConfig.MAPS_API_KEY)
     Call<DetailSearch> getRestaurantsDetails(@Query("place_id") String placeId);
+
+    // For Autocomplete search
+    @GET("autocomplete/json?types=establishment&radius=1500&language=fr&key=" + BuildConfig.MAPS_API_KEY)
+    Call<AutocompleteSearch> getAutocompleteResult(@Query("location") String position, @Query("input") String input);
 
 }
