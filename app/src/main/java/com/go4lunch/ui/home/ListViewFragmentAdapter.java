@@ -2,6 +2,7 @@ package com.go4lunch.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +20,14 @@ import com.go4lunch.BuildConfig;
 import com.go4lunch.R;
 import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.ResultsItem;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.maps.android.SphericalUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 
 public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragmentAdapter.ViewHolder> {
@@ -97,6 +101,14 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
         } catch (Exception e) {
             Log.i("[THIERRY]", "Exception : " + e.getMessage());
         }
+
+        TextView restaurantDistance = itemView.findViewById(R.id.restaurant_distance);
+        LatLng startLatLng = new LatLng(listOfRestaurants.get(position).getGeometry().getLocation().getLat(), listOfRestaurants.get(position).getGeometry().getLocation().getLng());
+        LatLng endLatLng = new LatLng(MapViewFragment.myPosition.latitude, MapViewFragment.myPosition.longitude);
+        int distance = (int) SphericalUtil.computeDistanceBetween(startLatLng, endLatLng);
+        String theDistance = String.valueOf(distance);
+        String m = "m";
+        restaurantDistance.setText(theDistance + m);
 
         TextView numberOfCoworker = itemView.findViewById(R.id.number_of_coworker);
         ImageView coworkerIcon = itemView.findViewById(R.id.coworker_icon);

@@ -66,7 +66,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private LocationCallback locationCallback;
-    LatLng myPosition;
+    public static LatLng myPosition;
     public MapViewViewModel mapViewViewModel;
 
     private static final int LOCATION_REQUEST_INTERVAL_MS = 10_000;
