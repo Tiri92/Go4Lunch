@@ -5,9 +5,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.go4lunch.di.DI;
 import com.go4lunch.model.firestore.User;
-import com.go4lunch.model.details.SearchDetail;
+import com.go4lunch.model.details.DetailSearch;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class RestaurantDetailViewModel extends ViewModel {
         DI.getGooglePlaceRepository().callRestaurantDetail(placeId);
     }
 
-    public LiveData<SearchDetail> getSearchDetailResultFromVM() {
+    public LiveData<DetailSearch> getSearchDetailResultFromVM() {
         return DI.getGooglePlaceRepository().getSearchDetailResult();
     }
 

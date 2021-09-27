@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide;
 import com.go4lunch.BuildConfig;
 import com.go4lunch.R;
 import com.go4lunch.databinding.ActivityRestaurantDetailBinding;
-import com.go4lunch.model.details.SearchDetail;
+import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.firestore.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -80,21 +80,21 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         });
 
         restaurantDetailViewModel.callRestaurantDetail(placeId);
-        restaurantDetailViewModel.getSearchDetailResultFromVM().observe(this, new Observer<SearchDetail>() {
+        restaurantDetailViewModel.getSearchDetailResultFromVM().observe(this, new Observer<DetailSearch>() {
             @Override
-            public void onChanged(SearchDetail searchDetail) {
+            public void onChanged(DetailSearch detailSearch) {
 
                 TextView restaurantName = binding.restaurantDetailsName;
-                restaurantName.setText(searchDetail.getResult().getName());
+                restaurantName.setText(detailSearch.getResult().getName());
 
                 TextView restaurantAddress = binding.restaurantDetailsAddress;
-                restaurantAddress.setText(searchDetail.getResult().getVicinity());
+                restaurantAddress.setText(detailSearch.getResult().getVicinity());
 
                 ImageView restaurantPic = binding.restaurantDetailPic;
                 try {
                     String base = "https://maps.googleapis.com/maps/api/place/photo?";
                     String key = "key=" + BuildConfig.MAPS_API_KEY;
-                    String reference = "&photoreference=" + searchDetail.getResult().getPhotos().get(0).getPhotoReference();
+                    String reference = "&photoreference=" + detailSearch.getResult().getPhotos().get(0).getPhotoReference();
                     String maxH = "&maxheight=157";
                     String maxW = "&maxwidth=157";
                     String query = base + key + reference + maxH + maxW;

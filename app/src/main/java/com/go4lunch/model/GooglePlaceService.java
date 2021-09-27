@@ -1,7 +1,7 @@
 package com.go4lunch.model;
 
 import com.go4lunch.BuildConfig;
-import com.go4lunch.model.details.SearchDetail;
+import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.nearbysearch.NearbySearch;
 
 import retrofit2.Call;
@@ -23,6 +23,6 @@ public interface GooglePlaceService {
 
     //For Restaurants details search
     @GET("details/json?fields=formatted_phone_number,url,rating,website,photo,vicinity,name&key=" + BuildConfig.MAPS_API_KEY)
-    Call<SearchDetail> getRestaurantsDetails(@Query("place_id") String placeId);
+    Call<DetailSearch> getRestaurantsDetails(@Query("place_id") String placeId);
 
 }
