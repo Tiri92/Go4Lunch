@@ -18,7 +18,7 @@ public class RestaurantDetailViewModel extends ViewModel {
     }
 
     public LiveData<DetailSearch> getSearchDetailResultFromVM() {
-        return DI.getGooglePlaceRepository().getSearchDetailResult();
+        return DI.getGooglePlaceRepository().getDetailSearchResult();
     }
 
     public Task<User> getUserData() {

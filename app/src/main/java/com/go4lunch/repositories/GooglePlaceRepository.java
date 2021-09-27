@@ -13,16 +13,16 @@ import retrofit2.Response;
 
 public class GooglePlaceRepository {
 
-    private MutableLiveData<NearbySearch> nearbySearchResult = new MutableLiveData<>();
+    private final MutableLiveData<NearbySearch> nearbySearchResult = new MutableLiveData<>();
 
     public LiveData<NearbySearch> getNearbySearchResult() {
         return nearbySearchResult;
     }
 
-    private MutableLiveData<DetailSearch> searchDetailResult = new MutableLiveData<>();
+    private final MutableLiveData<DetailSearch> detailSearchResult = new MutableLiveData<>();
 
-    public LiveData<DetailSearch> getSearchDetailResult() {
-        return searchDetailResult;
+    public LiveData<DetailSearch> getDetailSearchResult() {
+        return detailSearchResult;
     }
 
     // Get a Retrofit instance and the related endpoints
@@ -52,7 +52,7 @@ public class GooglePlaceRepository {
             @Override
             public void onResponse(Call<DetailSearch> call, Response<DetailSearch> response) {
                 if (response.isSuccessful()) {
-                    searchDetailResult.setValue(response.body());
+                    detailSearchResult.setValue(response.body());
                 }
             }
 
