@@ -51,7 +51,7 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull @NotNull ListViewFragmentAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull ListViewFragmentAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
