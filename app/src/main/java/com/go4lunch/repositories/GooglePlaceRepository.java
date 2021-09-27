@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.go4lunch.model.GooglePlaceService;
+import com.go4lunch.model.autocomplete.AutocompleteSearch;
 import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.nearbysearch.NearbySearch;
 
@@ -23,6 +24,12 @@ public class GooglePlaceRepository {
 
     public LiveData<DetailSearch> getDetailSearchResult() {
         return detailSearchResult;
+    }
+
+    private final MutableLiveData<AutocompleteSearch> autocompleteSearchResult = new MutableLiveData<>();
+
+    public LiveData<AutocompleteSearch> getAutocompleteSearchResult() {
+        return autocompleteSearchResult;
     }
 
     // Get a Retrofit instance and the related endpoints
@@ -58,6 +65,23 @@ public class GooglePlaceRepository {
 
             @Override
             public void onFailure(Call<DetailSearch> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void callAutocompleteResult(String position, String input) {
+        Call<AutocompleteSearch> liveDataCall = googlePlaceService.getAutocompleteResult(position, input);
+        liveDataCall.enqueue(new Callback<AutocompleteSearch>() {
+            @Override
+            public void onResponse(Call<AutocompleteSearch> call, Response<AutocompleteSearch> response) {
+                if (response.isSuccessful()) {
+                    autocompleteSearchResult.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AutocompleteSearch> call, Throwable t) {
 
             }
         });
