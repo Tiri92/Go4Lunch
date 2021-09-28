@@ -11,10 +11,12 @@ android {
 
     defaultConfig {
         applicationId "com.go4lunch"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,6 +48,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
 
     //FIREBASE
     implementation platform('com.google.firebase:firebase-bom:28.2.0')
