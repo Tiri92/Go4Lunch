@@ -1,17 +1,18 @@
 package com.go4lunch.ui.home;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +26,7 @@ import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.firestore.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -57,6 +58,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 listOfRestaurantsLiked = user.getListOfRestaurantsLiked();
+                setLikeButtonChecked(listOfRestaurantsLiked.contains(nameOfCurrentRestaurant));
             }
         });
 
@@ -140,71 +142,82 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             }
         });
 
-        BottomNavigationView bottomNavigationView = binding.restaurantDetailsNavigation;
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
+        Button callButton = binding.callButton;
+        callButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.call_details:
-                        String tel = "tel:";
-                        if (restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getFormattedPhoneNumber() != null) {
-                            Intent startPhoneCall = new Intent(Intent.ACTION_DIAL);
-                            startPhoneCall.setData(Uri.parse(tel + restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getFormattedPhoneNumber()));
-                            startActivity(startPhoneCall);
-                        } else {
-                            showSnackBar(getString(R.string.no_phone_number_available));
-                        }
-                        return true;
-                    case R.id.like_details:
-                        if (listOfRestaurantsLiked.contains(nameOfCurrentRestaurant)) {
-                            listOfRestaurantsLiked.remove(nameOfCurrentRestaurant);
-                            restaurantDetailViewModel.updateListOfRestaurantsLiked(listOfRestaurantsLiked).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    showSnackBar(getString(R.string.restaurant_unliked));
-                                    MenuItem menuItem = bottomNavigationView.getMenu().findItem(R.id.like_details);
-                                    menuItem.setIcon(R.drawable.detail_menu_star_24); //TODO Not working
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull @NotNull Exception e) {
-                                    showSnackBar(getString(R.string.error_unlike));
-                                }
-                            });
-
-                        } else if (!listOfRestaurantsLiked.contains(nameOfCurrentRestaurant)) {
-                            listOfRestaurantsLiked.add(nameOfCurrentRestaurant);
-                            restaurantDetailViewModel.updateListOfRestaurantsLiked(listOfRestaurantsLiked).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    showSnackBar(getString(R.string.restaurant_liked));
-                                    MenuItem menuItem = bottomNavigationView.getMenu().findItem(R.id.like_details);
-                                    menuItem.setIcon(R.drawable.detail_menu_yellow_star_24); //TODO Not working
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull @NotNull Exception e) {
-                                    showSnackBar(getString(R.string.error_like));
-                                }
-                            });
-
-                        }
-                        return true;
-                    case R.id.website_details:
-                        if (restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getWebsite() != null) {
-                            Intent openWebsite = new Intent(Intent.ACTION_VIEW);
-                            openWebsite.setData(Uri.parse(restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getWebsite()));
-                            startActivity(openWebsite);
-                        } else {
-                            showSnackBar(getString(R.string.no_website_available));
-                        }
-                        return true;
+            public void onClick(View v) {
+                String tel = "tel:";
+                if (restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getFormattedPhoneNumber() != null) {
+                    Intent startPhoneCall = new Intent(Intent.ACTION_DIAL);
+                    startPhoneCall.setData(Uri.parse(tel + restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getFormattedPhoneNumber()));
+                    startActivity(startPhoneCall);
+                } else {
+                    showSnackBar(getString(R.string.no_phone_number_available));
                 }
-                return false;
             }
         });
 
+        MaterialButton likeButton = binding.likeButton;
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listOfRestaurantsLiked.contains(nameOfCurrentRestaurant)) {
+                    listOfRestaurantsLiked.remove(nameOfCurrentRestaurant);
+                    restaurantDetailViewModel.updateListOfRestaurantsLiked(listOfRestaurantsLiked).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            showSnackBar(getString(R.string.restaurant_unliked));
+                            setLikeButtonChecked(false);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull @NotNull Exception e) {
+                            showSnackBar(getString(R.string.error_unlike));
+                        }
+                    });
+
+                } else if (!listOfRestaurantsLiked.contains(nameOfCurrentRestaurant)) {
+                    listOfRestaurantsLiked.add(nameOfCurrentRestaurant);
+                    restaurantDetailViewModel.updateListOfRestaurantsLiked(listOfRestaurantsLiked).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            showSnackBar(getString(R.string.restaurant_liked));
+                            setLikeButtonChecked(true);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull @NotNull Exception e) {
+                            showSnackBar(getString(R.string.error_like));
+                        }
+                    });
+
+                }
+            }
+        });
+
+        Button websiteButton = binding.websiteButton;
+        websiteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getWebsite() != null) {
+                    Intent openWebsite = new Intent(Intent.ACTION_VIEW);
+                    openWebsite.setData(Uri.parse(restaurantDetailViewModel.getSearchDetailResultFromVM().getValue().getResult().getWebsite()));
+                    startActivity(openWebsite);
+                } else {
+                    showSnackBar(getString(R.string.no_website_available));
+                }
+            }
+        });
+
+    }
+
+    private void setLikeButtonChecked(Boolean checked) {
+        Drawable likeButtonDrawable = binding.likeButton.getCompoundDrawables()[1];
+        if (checked) {
+            likeButtonDrawable.setTint(ContextCompat.getColor(RestaurantDetailActivity.this, R.color.Yellow));
+        } else {
+            likeButtonDrawable.setTint(ContextCompat.getColor(RestaurantDetailActivity.this, R.color.orange));
+        }
     }
 
     // Show Snack Bar with a message
