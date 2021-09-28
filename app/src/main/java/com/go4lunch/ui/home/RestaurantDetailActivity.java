@@ -1,6 +1,7 @@
 package com.go4lunch.ui.home;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -214,9 +215,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private void setLikeButtonChecked(Boolean checked) {
         Drawable likeButtonDrawable = binding.likeButton.getCompoundDrawables()[1];
         if (checked) {
-            likeButtonDrawable.setTint(ContextCompat.getColor(RestaurantDetailActivity.this, R.color.Yellow));
+            likeButtonDrawable.setColorFilter(ContextCompat.getColor(this, R.color.Yellow), PorterDuff.Mode.SRC_IN);
         } else {
-            likeButtonDrawable.setTint(ContextCompat.getColor(RestaurantDetailActivity.this, R.color.orange));
+            likeButtonDrawable.setColorFilter(ContextCompat.getColor(this, R.color.orange), PorterDuff.Mode.SRC_IN);
         }
     }
 

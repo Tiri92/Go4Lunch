@@ -1,7 +1,6 @@
 package com.go4lunch.ui.home;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.go4lunch.di.DI;
@@ -18,7 +17,7 @@ public class MapViewViewModel extends ViewModel {
         return DI.getGooglePlaceRepository().getNearbySearchResult();
     }
 
-    public void callAutocompleteSearch( String position, String input) {
+    public void callAutocompleteSearch(String position, String input) {
         DI.getGooglePlaceRepository().callAutocompleteResult(position, input);
     }
 

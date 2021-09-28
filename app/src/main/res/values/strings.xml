@@ -62,5 +62,6 @@
     <string name="error_delete_account">Error, impossible to delete your account</string>
     <string name="profile_picture_updated">Your profile picture has been updated</string>
     <string name="error_profile_picture_updated">Error, impossible to update your profile picture</string>
+    <string name="search_a_restaurant">Search a restaurant</string>
 
 </resources>

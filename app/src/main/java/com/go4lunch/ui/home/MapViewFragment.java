@@ -18,7 +18,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
+
+import androidx.appcompat.widget.SearchView;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,13 +28,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
+import com.go4lunch.model.autocomplete.AutocompleteSearch;
 import com.go4lunch.model.nearbysearch.NearbySearch;
 import com.go4lunch.model.nearbysearch.ResultsItem;
 import com.google.android.gms.common.api.ApiException;
@@ -93,7 +95,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             mapFragment.getMapAsync(this);
         }
 
-        setHasOptionsMenu(true); //TODO
+        setHasOptionsMenu(true);
 
         checkGpsState();
 
@@ -103,15 +105,26 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) { //TODO
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.search_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.search);
-        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Search");
+        MenuItem searchItem = menu.findItem(R.id.search);
+
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_a_restaurant));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(String query) { //TODO
+                if (myPosition != null) {
+                    mapViewViewModel.callAutocompleteSearch(myPosition.latitude + "," + myPosition.longitude, query);
+                    mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<AutocompleteSearch>() {
+                        @Override
+                        public void onChanged(AutocompleteSearch autocompleteSearch) {
+                            for (int i = 0; i < autocompleteSearch.getPredictions().size(); i++) {
+                                String placeId = autocompleteSearch.getPredictions().get(i).getPlaceId();
+                            }
+                        }
+                    });
+                }
                 return false;
             }
 
