@@ -44,19 +44,19 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
     public void onBindViewHolder(@NonNull @NotNull WorkmatesFragmentAdapter.ViewHolder holder, int position) {
         TextView username = itemView.findViewById(R.id.user_name);
         String space = " ";
-        if (listOfUsers.get(position).getEatingPlaceId().equals(" ")) {
+        if (listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId().equals(" ")) {
             String notDecided = "hasn't decided yet";
             username.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
             username.setTextColor(Color.parseColor("#C6C6C6"));
-            username.setText(MessageFormat.format("{0}{1}{2}", listOfUsers.get(position).getUsername(), space, notDecided));
+            username.setText(MessageFormat.format("{0}{1}{2}", listOfUsers.get(holder.getAdapterPosition()).getUsername(), space, notDecided));
         } else {
             String isEating = "is eating in";
-            username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(position).getUsername(), space, isEating, space, listOfUsers.get(position).getEatingPlace()));
+            username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(holder.getAdapterPosition()).getUsername(), space, isEating, space, listOfUsers.get(position).getEatingPlace()));
             username.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
-                    intent.putExtra("placeId", listOfUsers.get(position).getEatingPlaceId());
+                    intent.putExtra("placeId", listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId());
                     ActivityCompat.startActivity(v.getContext(), intent, null);
                 }
             });
@@ -64,7 +64,7 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
 
         ImageView userPic = itemView.findViewById(R.id.user_pic);
         try {
-            String query = listOfUsers.get(position).getUrlPicture();
+            String query = listOfUsers.get(holder.getAdapterPosition()).getUrlPicture();
 
             Glide.with(userPic)
                     .load(query)

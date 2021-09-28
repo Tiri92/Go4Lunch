@@ -208,7 +208,7 @@ public class SettingsFragment extends Fragment {
 
     // Show Snack Bar with a message
     private void showSnackBar(String message) {
-        Snackbar.make(view.getRootView(), message, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
 }
