@@ -54,6 +54,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -343,7 +344,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mMap.addMarker(new MarkerOptions()
                 .position(myPosition)
                 .title("My position"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
+        CameraPosition cameraPosition = new CameraPosition.Builder().
+                target(myPosition).
+                zoom(14).
+                tilt(30).
+                bearing(0).
+                build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     /**
