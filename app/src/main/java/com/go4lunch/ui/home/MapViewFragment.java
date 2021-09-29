@@ -35,6 +35,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
 import com.go4lunch.model.autocomplete.AutocompleteSearch;
+import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.nearbysearch.NearbySearch;
 import com.go4lunch.model.nearbysearch.ResultsItem;
 import com.google.android.gms.common.api.ApiException;
@@ -113,14 +114,42 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         searchView.setQueryHint(getString(R.string.search_a_restaurant));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) { //TODO
+            public boolean onQueryTextSubmit(String query) {
                 if (myPosition != null) {
                     mapViewViewModel.callAutocompleteSearch(myPosition.latitude + "," + myPosition.longitude, query);
                     mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<AutocompleteSearch>() {
                         @Override
                         public void onChanged(AutocompleteSearch autocompleteSearch) {
-                            for (int i = 0; i < autocompleteSearch.getPredictions().size(); i++) {
+                            for (int i = 0; i < autocompleteSearch.getPredictions().size(); i++) { //TODO Not working correctly
                                 String placeId = autocompleteSearch.getPredictions().get(i).getPlaceId();
+                                mapViewViewModel.callRestaurantDetail(placeId);
+                                mapViewViewModel.getSearchDetailResultFromVM().observe(getViewLifecycleOwner(), new Observer<DetailSearch>() {
+                                    @Override
+                                    public void onChanged(DetailSearch detailSearch) {
+                                        Marker restaurantMarker;
+                                        MarkerOptions restaurantMarkerOptions;
+
+                                        LatLng restaurantPosition = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
+                                                detailSearch.getResult().getGeometry().getLocation().getLng());
+
+                                        restaurantMarkerOptions = new MarkerOptions()
+                                                .position(restaurantPosition)
+                                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
+
+                                        restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
+                                        restaurantMarker.setTag(placeId);
+
+                                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                            @Override
+                                            public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
+                                                Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
+                                                intent.putExtra("placeId", marker.getTag().toString());
+                                                ActivityCompat.startActivity(getContext(), intent, null);
+                                                return false;
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         }
                     });

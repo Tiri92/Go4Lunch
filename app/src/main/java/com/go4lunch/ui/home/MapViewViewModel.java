@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.go4lunch.di.DI;
 import com.go4lunch.model.autocomplete.AutocompleteSearch;
+import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.nearbysearch.NearbySearch;
 
 public class MapViewViewModel extends ViewModel {
@@ -23,6 +24,14 @@ public class MapViewViewModel extends ViewModel {
 
     public LiveData<AutocompleteSearch> getAutocompleteSearchResultFromVM() {
         return DI.getGooglePlaceRepository().getAutocompleteSearchResult();
+    }
+
+    public void callRestaurantDetail(String placeId) {
+        DI.getGooglePlaceRepository().callRestaurantDetail(placeId);
+    }
+
+    public LiveData<DetailSearch> getSearchDetailResultFromVM() {
+        return DI.getGooglePlaceRepository().getDetailSearchResult();
     }
 
 }

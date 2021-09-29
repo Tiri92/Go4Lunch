@@ -18,6 +18,9 @@ public class RestaurantDetailResult {
 	@SerializedName("name")
 	private String name;
 
+	@SerializedName("geometry")
+	private Geometry geometry;
+
 	@SerializedName("vicinity")
 	private String vicinity;
 
@@ -52,6 +55,10 @@ public class RestaurantDetailResult {
 
 	public String getName(){
 		return name;
+	}
+
+	public Geometry getGeometry(){
+		return geometry;
 	}
 
 	public String getFormattedPhoneNumber(){
