@@ -12,6 +12,9 @@ public class RestaurantDetailResult {
 	@SerializedName("opening_hours")
 	private OpeningHours openingHours;
 
+	@SerializedName("place_id")
+	private String placeId;
+
 	@SerializedName("photos")
 	private List<PhotosItem> photos;
 
@@ -39,6 +42,10 @@ public class RestaurantDetailResult {
 
 	public OpeningHours getOpeningHours(){
 		return openingHours;
+	}
+
+	public String getPlaceId(){
+		return placeId;
 	}
 
 	public double getRating(){

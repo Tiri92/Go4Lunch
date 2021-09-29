@@ -102,7 +102,52 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         startLocationRequest();
 
+        setupObservers();
+
         return root;
+    }
+
+    private void setupObservers() {
+
+        mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<AutocompleteSearch>() {
+            @Override
+            public void onChanged(AutocompleteSearch autocompleteSearch) {
+                for (int i = 0; i < autocompleteSearch.getPredictions().size(); i++) { //TODO Not working correctly
+                    String placeId = autocompleteSearch.getPredictions().get(i).getPlaceId();
+                    mapViewViewModel.callRestaurantDetail(placeId);
+                }
+            }
+        });
+
+        mapViewViewModel.getSearchDetailResultFromVM().observe(getViewLifecycleOwner(), new Observer<DetailSearch>() {
+            @Override
+            public void onChanged(DetailSearch detailSearch) {
+                String placeId = detailSearch.getResult().getPlaceId();
+                Marker restaurantMarker;
+                MarkerOptions restaurantMarkerOptions;
+
+                LatLng restaurantPosition = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
+                        detailSearch.getResult().getGeometry().getLocation().getLng());
+
+                restaurantMarkerOptions = new MarkerOptions()
+                        .position(restaurantPosition)
+                        .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
+
+                restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
+                restaurantMarker.setTag(placeId);
+
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
+                        Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
+                        intent.putExtra("placeId", marker.getTag().toString());
+                        ActivityCompat.startActivity(getContext(), intent, null);
+                        return false;
+                    }
+                });
+            }
+        });
+
     }
 
     @Override
@@ -117,42 +162,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             public boolean onQueryTextSubmit(String query) {
                 if (myPosition != null) {
                     mapViewViewModel.callAutocompleteSearch(myPosition.latitude + "," + myPosition.longitude, query);
-                    mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<AutocompleteSearch>() {
-                        @Override
-                        public void onChanged(AutocompleteSearch autocompleteSearch) {
-                            for (int i = 0; i < autocompleteSearch.getPredictions().size(); i++) { //TODO Not working correctly
-                                String placeId = autocompleteSearch.getPredictions().get(i).getPlaceId();
-                                mapViewViewModel.callRestaurantDetail(placeId);
-                                mapViewViewModel.getSearchDetailResultFromVM().observe(getViewLifecycleOwner(), new Observer<DetailSearch>() {
-                                    @Override
-                                    public void onChanged(DetailSearch detailSearch) {
-                                        Marker restaurantMarker;
-                                        MarkerOptions restaurantMarkerOptions;
-
-                                        LatLng restaurantPosition = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
-                                                detailSearch.getResult().getGeometry().getLocation().getLng());
-
-                                        restaurantMarkerOptions = new MarkerOptions()
-                                                .position(restaurantPosition)
-                                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
-
-                                        restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
-                                        restaurantMarker.setTag(placeId);
-
-                                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                                            @Override
-                                            public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
-                                                Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
-                                                intent.putExtra("placeId", marker.getTag().toString());
-                                                ActivityCompat.startActivity(getContext(), intent, null);
-                                                return false;
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }
-                    });
                 }
                 return false;
             }
@@ -362,7 +371,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mapViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
             @Override
             public void onChanged(NearbySearch nearbySearch) {
-                //Toast.makeText(requireContext(), "On récupère une liste de" + nearbySearch.getResults().get(0).getPhotos().toString(), Toast.LENGTH_LONG).show();
                 displayMarkerOnRestaurantPosition(nearbySearch.getResults());
 
             }
