@@ -60,6 +60,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -393,7 +394,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 LocationManager locationManager = (LocationManager) getSystemService(requireActivity(), LocationManager.class);
-                if (isGpsEnabled(locationManager)) {
+                if (isGpsEnabled(locationManager) & myPosition != null) {
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
                 } else {
                     LocationRequest locationRequest = LocationRequest.create();
