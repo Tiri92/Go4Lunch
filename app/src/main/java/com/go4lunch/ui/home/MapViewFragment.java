@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +37,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import com.go4lunch.R;
 import com.go4lunch.model.autocomplete.AutocompleteSearch;
 import com.go4lunch.model.details.DetailSearch;
+import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.NearbySearch;
 import com.go4lunch.model.nearbysearch.ResultsItem;
 import com.google.android.gms.common.api.ApiException;
@@ -169,6 +171,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        /*searchView.setOnCloseListener(new SearchView.OnCloseListener() { //TODO Not working
+            @Override
+            public boolean onClose() {
+                mMap.clear();
+                return false;
+            }
+        });*/
+
         super.onCreateOptionsMenu(menu, menuInflater);
     }
 
@@ -284,30 +294,49 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
      * @param results
      */
 
+    int isBooked = 0;
+    Marker restaurantMarker;
+    MarkerOptions restaurantMarkerOptions;
     private void displayMarkerOnRestaurantPosition(List<ResultsItem> results) {
-        Marker restaurantMarker;
-        MarkerOptions restaurantMarkerOptions;
-        for (int i = 0; i < results.size(); i++) {
-            LatLng restaurantPosition = new LatLng(results.get(i).getGeometry().getLocation().getLat(),
-                    results.get(i).getGeometry().getLocation().getLng());
-
-            restaurantMarkerOptions = new MarkerOptions()
-                    .position(restaurantPosition)
-                    .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
-
-            restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
-            restaurantMarker.setTag(results.get(i).getPlaceId());
-
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
-                    Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
-                    intent.putExtra("placeId", marker.getTag().toString());
-                    ActivityCompat.startActivity(getContext(), intent, null);
-                    return false;
+        mapViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                for (ResultsItem myRestaurant : results) {
+                    LatLng restaurantPosition = new LatLng(myRestaurant.getGeometry().getLocation().getLat(),
+                            myRestaurant.getGeometry().getLocation().getLng());
+                    isBooked = 0;
+                    for (User myUser : users) {
+                        if (myRestaurant.getPlaceId().equals(myUser.getEatingPlaceId())) {
+                            isBooked++;
+                        } else {
+                            Log.e("Nothing", "Nothing");
+                        }
+                    }
+                    if (isBooked != 0) {
+                        restaurantMarkerOptions = new MarkerOptions()
+                                .position(restaurantPosition)
+                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
+                    } else {
+                        restaurantMarkerOptions = new MarkerOptions()
+                                .position(restaurantPosition)
+                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
+                    }
+                    restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
+                    restaurantMarker.setTag(myRestaurant.getPlaceId());
+                    restaurantMarker.setTitle(myRestaurant.getName());
                 }
-            });
-        }
+            }
+        });
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
+                Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
+                intent.putExtra("placeId", marker.getTag().toString());
+                intent.putExtra("name", marker.getTitle());
+                ActivityCompat.startActivity(getContext(), intent, null);
+                return false;
+            }
+        });
     }
 
     private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
@@ -335,7 +364,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Method called for move the camera to the user position on map after recuperate his location
      */
-    private void moveAndDisplayMyPosition() {
+    private void moveAndDisplayMyPosition() { //TODO make this marker non clickable
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
                 .position(myPosition)
