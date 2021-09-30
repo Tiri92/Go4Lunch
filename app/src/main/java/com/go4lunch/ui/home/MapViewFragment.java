@@ -103,6 +103,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         startLocationRequest();
 
+        FloatingActionButton positionButton = root.findViewById(R.id.position_button);
+        positionButtonListener(positionButton);
+
         setupObservers();
 
         return root;
@@ -381,6 +384,63 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             public void onChanged(NearbySearch nearbySearch) {
                 displayMarkerOnRestaurantPosition(nearbySearch.getResults());
 
+            }
+        });
+    }
+
+    private void positionButtonListener(FloatingActionButton positionButton) {
+        positionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocationManager locationManager = (LocationManager) getSystemService(requireActivity(), LocationManager.class);
+                if (isGpsEnabled(locationManager)) {
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
+                } else {
+                    LocationRequest locationRequest = LocationRequest.create();
+                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+                    LocationSettingsRequest.Builder settingsBuilder = new LocationSettingsRequest.Builder()
+                            .addLocationRequest(locationRequest);
+                    settingsBuilder.setAlwaysShow(true); //this displays dialog box like Google Maps with two buttons - OK and NO,THANKS
+
+                    Task<LocationSettingsResponse> task =
+                            LocationServices.getSettingsClient(requireActivity()).checkLocationSettings(settingsBuilder.build());
+
+                    task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+                        @Override
+                        public void onComplete(Task<LocationSettingsResponse> task) {
+                            try {
+                                LocationSettingsResponse response = task.getResult(ApiException.class);
+                                // All location settings are satisfied. The client can initialize location
+                                // requests here.
+                            } catch (ApiException exception) {
+                                switch (exception.getStatusCode()) {
+                                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                        // Location settings are not satisfied. But could be fixed by showing the
+                                        // user a dialog.
+                                        try {
+                                            // Cast to a resolvable exception.
+                                            ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                            // Show the dialog by calling startResolutionForResult(),
+                                            // and check the result in onActivityResult().
+                                            resolvable.startResolutionForResult(
+                                                    requireActivity(),
+                                                    REQUEST_CHECK_SETTINGS);
+                                        } catch (IntentSender.SendIntentException e) {
+                                            // Ignore the error.
+                                        } catch (ClassCastException e) {
+                                            // Ignore, should be an impossible error.
+                                        }
+                                        break;
+                                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                        // Location settings are not satisfied. However, we have no way to fix the
+                                        // settings so we won't show the dialog.
+                                        break;
+                                }
+                            }
+                        }
+                    });
+                }
             }
         });
     }
