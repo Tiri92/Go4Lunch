@@ -32,15 +32,17 @@ public class ListViewFragment extends Fragment {
         mRecyclerView = root.findViewById(R.id.RecyclerView);
         listViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(ListViewViewModel.class);
         listViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
-            @Override
+            @Override                                    //TODO Set adapter twice ? No problem ?
             public void onChanged(NearbySearch nearbySearch) {
+                mAdapter = new ListViewFragmentAdapter(nearbySearch.getResults(), listOfUserWhoChose);
+                mRecyclerView.setAdapter(mAdapter);
                 listViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
                     @Override
                     public void onChanged(List<User> users) {
+                        listOfUserWhoChose = users;
                         mAdapter = new ListViewFragmentAdapter(nearbySearch.getResults(), listOfUserWhoChose);
                         mRecyclerView.setAdapter(mAdapter);
-                        listOfUserWhoChose = users;
-                        mAdapter.notifyDataSetChanged(); // TODO don't work
+                        mAdapter.notifyDataSetChanged(); // TODO don't work for update number of coworker when someone change eatingPlace
                     }
                 });
             }

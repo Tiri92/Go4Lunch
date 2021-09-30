@@ -107,8 +107,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         FloatingActionButton positionButton = root.findViewById(R.id.position_button);
         positionButtonListener(positionButton);
 
-        setupObservers();
-
         return root;
     }
 
@@ -117,39 +115,32 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<AutocompleteSearch>() {
             @Override
             public void onChanged(AutocompleteSearch autocompleteSearch) {
-                for (int i = 0; i < autocompleteSearch.getPredictions().size(); i++) { //TODO Not working correctly
+                for (int i = 0; i < autocompleteSearch.getPredictions().size(); i++) {
                     String placeId = autocompleteSearch.getPredictions().get(i).getPlaceId();
                     mapViewViewModel.callRestaurantDetail(placeId);
                 }
             }
         });
 
+        mMap.clear();
         mapViewViewModel.getSearchDetailResultFromVM().observe(getViewLifecycleOwner(), new Observer<DetailSearch>() {
             @Override
             public void onChanged(DetailSearch detailSearch) {
                 String placeId = detailSearch.getResult().getPlaceId();
-                Marker restaurantMarker;
-                MarkerOptions restaurantMarkerOptions;
+                Marker restaurantMarkerVac;
+                MarkerOptions restaurantMarkerOptionsVac;
 
-                LatLng restaurantPosition = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
+                LatLng restaurantPositionVac = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
                         detailSearch.getResult().getGeometry().getLocation().getLng());
 
-                restaurantMarkerOptions = new MarkerOptions()
-                        .position(restaurantPosition)
+                restaurantMarkerOptionsVac = new MarkerOptions()
+                        .position(restaurantPositionVac)
                         .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
 
-                restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
-                restaurantMarker.setTag(placeId);
-
-                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
-                        Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
-                        intent.putExtra("placeId", marker.getTag().toString());
-                        ActivityCompat.startActivity(getContext(), intent, null);
-                        return false;
-                    }
-                });
+                if (myPosition != null & placeId != null & restaurantPositionVac != null) {
+                    restaurantMarkerVac = mMap.addMarker(restaurantMarkerOptionsVac);
+                    restaurantMarkerVac.setTag(placeId);
+                }
             }
         });
 
@@ -167,6 +158,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             public boolean onQueryTextSubmit(String query) {
                 if (myPosition != null) {
                     mapViewViewModel.callAutocompleteSearch(myPosition.latitude + "," + myPosition.longitude, query);
+                    setupObservers();
                 }
                 return false;
             }
