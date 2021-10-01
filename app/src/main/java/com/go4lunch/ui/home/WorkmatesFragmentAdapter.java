@@ -51,7 +51,7 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
         } else {
             String isEating = "is eating in";
             holder.username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(position).getUsername(), space, isEating, space, listOfUsers.get(position).getEatingPlace()));
-            holder.username.setTextColor(Color.parseColor("#000000")); //TODO put same color and style than xlm and try without this line too
+            holder.username.setTextColor(Color.parseColor("#FF000000")); //TODO put same color and style than xlm and try without this line too
             holder.username.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
