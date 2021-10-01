@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.go4lunch.R;
 import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.NearbySearch;
+import com.go4lunch.model.nearbysearch.ResultsItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListViewFragment extends Fragment {
@@ -24,24 +26,28 @@ public class ListViewFragment extends Fragment {
     public ListViewViewModel listViewViewModel;
     private RecyclerView mRecyclerView;
     RecyclerView.Adapter<ListViewFragmentAdapter.ViewHolder> mAdapter;
-    public List<User> listOfUserWhoChose;
+    public List<User> listOfUserWhoChose = new ArrayList<>();
+    private List<ResultsItem> listOfRestaurant = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_list_view, container, false);
         mRecyclerView = root.findViewById(R.id.RecyclerView);
         listViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(ListViewViewModel.class);
+
+        mAdapter = new ListViewFragmentAdapter(listOfRestaurant, listOfUserWhoChose);
+        mRecyclerView.setAdapter(mAdapter);
         listViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
             @Override                                    //TODO Set adapter twice ? No problem ?
             public void onChanged(NearbySearch nearbySearch) {
-                mAdapter = new ListViewFragmentAdapter(nearbySearch.getResults(), listOfUserWhoChose);
-                mRecyclerView.setAdapter(mAdapter);
+                listOfRestaurant.clear();
+                listOfRestaurant.addAll(nearbySearch.getResults());
+                mAdapter.notifyDataSetChanged();
                 listViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
                     @Override
                     public void onChanged(List<User> users) {
-                        listOfUserWhoChose = users;
-                        mAdapter = new ListViewFragmentAdapter(nearbySearch.getResults(), listOfUserWhoChose);
-                        mRecyclerView.setAdapter(mAdapter);
+                        listOfUserWhoChose.clear();
+                        listOfUserWhoChose.addAll(users);
                         mAdapter.notifyDataSetChanged(); // TODO don't work for update number of coworker when someone change eatingPlace
                     }
                 });

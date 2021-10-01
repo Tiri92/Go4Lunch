@@ -57,34 +57,29 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
-                intent.putExtra("placeId", listOfRestaurants.get(position).getPlaceId());
-                intent.putExtra("name", listOfRestaurants.get(position).getName());
+                intent.putExtra("placeId", listOfRestaurants.get(holder.getAdapterPosition()).getPlaceId());
+                intent.putExtra("name", listOfRestaurants.get(holder.getAdapterPosition()).getName());
                 ActivityCompat.startActivity(v.getContext(), intent, null);
             }
         });
 
-        TextView nameOfRestaurant = itemView.findViewById(R.id.restaurant_name);
-        nameOfRestaurant.setText(listOfRestaurants.get(position).getName());
+        holder.nameOfRestaurant.setText(listOfRestaurants.get(position).getName());
 
-        TextView restaurantAddress = itemView.findViewById(R.id.restaurant_address);
-        restaurantAddress.setText(listOfRestaurants.get(position).getVicinity());
+        holder.restaurantAddress.setText(listOfRestaurants.get(position).getVicinity());
 
-        RatingBar ratingBar = itemView.findViewById(R.id.restaurant_rating);
         float getRatingOnThree = (float) (listOfRestaurants.get(position).getRating() / 1.66);
-        ratingBar.setRating(getRatingOnThree);
+        holder.ratingBar.setRating(getRatingOnThree);
 
-        TextView openingHour = itemView.findViewById(R.id.restaurant_opening_hours);
         if (listOfRestaurants.get(position).getOpeningHours() != null) {
             if (listOfRestaurants.get(position).getOpeningHours().isOpenNow()) {
-                openingHour.setText(R.string.Open_now);
+                holder.openingHour.setText(R.string.Open_now);
             } else {
-                openingHour.setText(R.string.Close_now);
+                holder.openingHour.setText(R.string.Close_now);
             }
         } else {
-            openingHour.setText(R.string.We_dont_know);
+            holder.openingHour.setText(R.string.We_dont_know);
         }
 
-        ImageView restaurantPic = itemView.findViewById(R.id.restaurant_pic);
         try {
             String base = "https://maps.googleapis.com/maps/api/place/photo?";
             String key = "key=" + BuildConfig.MAPS_API_KEY;
@@ -93,34 +88,31 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
             String maxW = "&maxwidth=157";
             String query = base + key + reference + maxH + maxW;
 
-            Glide.with(restaurantPic)
+            Glide.with(holder.restaurantPic)
                     .load(query)
                     .centerCrop()
-                    .into(restaurantPic);
+                    .into(holder.restaurantPic);
 
         } catch (Exception e) {
             Log.i("[THIERRY]", "Exception : " + e.getMessage());
         }
 
-        TextView restaurantDistance = itemView.findViewById(R.id.restaurant_distance);
         LatLng startLatLng = new LatLng(listOfRestaurants.get(position).getGeometry().getLocation().getLat(), listOfRestaurants.get(position).getGeometry().getLocation().getLng());
         LatLng endLatLng = new LatLng(MapViewFragment.myPosition.latitude, MapViewFragment.myPosition.longitude);
         int distance = (int) SphericalUtil.computeDistanceBetween(startLatLng, endLatLng);
         String theDistance = String.valueOf(distance);
         String m = "m";
-        restaurantDistance.setText(theDistance + m);
+        holder.restaurantDistance.setText(theDistance + m);
 
-        TextView numberOfCoworker = itemView.findViewById(R.id.number_of_coworker);
-        ImageView coworkerIcon = itemView.findViewById(R.id.coworker_icon);
         int n = 0;
         if (listOfUserWhoChoseWhereLunch != null) {
             for (int i = 0; i < listOfUserWhoChoseWhereLunch.size(); i++) {
-                if (listOfUserWhoChoseWhereLunch.get(i).getEatingPlaceId().equals(listOfRestaurants.get(position).getPlaceId())) {
+                if (listOfUserWhoChoseWhereLunch.get(i).getEatingPlaceId().equals(listOfRestaurants.get(holder.getAdapterPosition()).getPlaceId())) {
                     n = n + 1;
                     String start = "(";
                     String end = ")";
-                    numberOfCoworker.setText(MessageFormat.format("{0}{1}{2}", start, n, end));
-                    coworkerIcon.setVisibility(View.VISIBLE);
+                    holder.numberOfCoworker.setText(MessageFormat.format("{0}{1}{2}", start, n, end));
+                    holder.coworkerIcon.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -134,9 +126,25 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView nameOfRestaurant;
+        TextView restaurantAddress;
+        RatingBar ratingBar;
+        TextView openingHour;
+        ImageView restaurantPic;
+        TextView restaurantDistance;
+        TextView numberOfCoworker;
+        ImageView coworkerIcon;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+            nameOfRestaurant = itemView.findViewById(R.id.restaurant_name);
+            restaurantAddress = itemView.findViewById(R.id.restaurant_address);
+            ratingBar = itemView.findViewById(R.id.restaurant_rating);
+            openingHour = itemView.findViewById(R.id.restaurant_opening_hours);
+            restaurantPic = itemView.findViewById(R.id.restaurant_pic);
+            restaurantDistance = itemView.findViewById(R.id.restaurant_distance);
+            numberOfCoworker = itemView.findViewById(R.id.number_of_coworker);
+            coworkerIcon = itemView.findViewById(R.id.coworker_icon);
         }
     }
 }
