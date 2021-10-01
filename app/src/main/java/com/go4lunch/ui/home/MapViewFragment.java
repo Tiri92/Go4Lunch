@@ -113,39 +113,45 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setupObservers() {
-
-        mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<AutocompleteSearch>() {
+        mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<List<DetailSearch>>() {
             @Override
-            public void onChanged(AutocompleteSearch autocompleteSearch) {
-                for (int i = 0; i < autocompleteSearch.getPredictions().size(); i++) {
-                    String placeId = autocompleteSearch.getPredictions().get(i).getPlaceId();
-                    mapViewViewModel.callRestaurantDetail(placeId);
+            public void onChanged(List<DetailSearch> autocompleteSearch) {
+                mMap.clear();
+                for (DetailSearch detailSearch : autocompleteSearch) {
+                    LatLng restaurantPositionVac = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
+                            detailSearch.getResult().getGeometry().getLocation().getLng());
+                    String placeId = detailSearch.getResult().getPlaceId();
+                    String name = detailSearch.getResult().getName();
+                    mapViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+                        @Override
+                        public void onChanged(List<User> users) {
+                            MarkerOptions restaurantMarkerOptionsVac;
+                            if (isBookedOrNot(placeId, users)) {
+                                restaurantMarkerOptionsVac = new MarkerOptions()
+                                        .position(restaurantPositionVac)
+                                        .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
+                            } else {
+                                restaurantMarkerOptionsVac = new MarkerOptions()
+                                        .position(restaurantPositionVac)
+                                        .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
+                            }
+                            Marker restaurantMarkerVac = mMap.addMarker(restaurantMarkerOptionsVac);
+                            restaurantMarkerVac.setTag(placeId);
+                            restaurantMarkerVac.setTitle(name);
+                        }
+                    });
                 }
             }
         });
+    }
 
-        mMap.clear();
-        mapViewViewModel.getSearchDetailResultFromVM().observe(getViewLifecycleOwner(), new Observer<DetailSearch>() {
-            @Override
-            public void onChanged(DetailSearch detailSearch) {
-                String placeId = detailSearch.getResult().getPlaceId();
-                Marker restaurantMarkerVac;
-                MarkerOptions restaurantMarkerOptionsVac;
-
-                LatLng restaurantPositionVac = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
-                        detailSearch.getResult().getGeometry().getLocation().getLng());
-
-                restaurantMarkerOptionsVac = new MarkerOptions()
-                        .position(restaurantPositionVac)
-                        .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
-
-                if (myPosition != null & placeId != null & restaurantPositionVac != null) {
-                    restaurantMarkerVac = mMap.addMarker(restaurantMarkerOptionsVac);
-                    restaurantMarkerVac.setTag(placeId);
-                }
+    private boolean isBookedOrNot(String placeId, List<User> users) {
+        for (User myUser : users) {
+            if (placeId.equals(myUser.getEatingPlaceId())) {
+                return true;
             }
-        });
-
+        }
+        return false;
     }
 
     @Override
@@ -297,6 +303,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     int isBooked = 0;
     Marker restaurantMarker;
     MarkerOptions restaurantMarkerOptions;
+
     private void displayMarkerOnRestaurantPosition(List<ResultsItem> results) {
         mapViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override

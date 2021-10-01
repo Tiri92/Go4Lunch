@@ -5,8 +5,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.go4lunch.model.GooglePlaceService;
 import com.go4lunch.model.autocomplete.AutocompleteSearch;
+import com.go4lunch.model.autocomplete.PredictionsResultItem;
 import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.nearbysearch.NearbySearch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,9 +30,9 @@ public class GooglePlaceRepository {
         return detailSearchResult;
     }
 
-    private final MutableLiveData<AutocompleteSearch> autocompleteSearchResult = new MutableLiveData<>();
+    private final MutableLiveData<List<DetailSearch>> autocompleteSearchResult = new MutableLiveData<>();
 
-    public LiveData<AutocompleteSearch> getAutocompleteSearchResult() {
+    public LiveData<List<DetailSearch>> getAutocompleteSearchResult() {
         return autocompleteSearchResult;
     }
 
@@ -70,13 +74,35 @@ public class GooglePlaceRepository {
         });
     }
 
+    /**
+     * We start Autocomplete request and after we start a loop that iterates over each PredictionResultItem (5 restaurants) and we took their placeId for directly start
+     * DetailRequest in which thanks to a List of DetailSearch we will add the result of Detail request on the restaurant of Autocomplete on which we iterate, and to finish
+     * we set our LiveData autocompleteSearchResult who get result of Autocomplete request with last List of DetailSearch
+     */
     public void callAutocompleteResult(String position, String input) {
         Call<AutocompleteSearch> liveDataCall = googlePlaceService.getAutocompleteResult(position, input);
         liveDataCall.enqueue(new Callback<AutocompleteSearch>() {
             @Override
             public void onResponse(Call<AutocompleteSearch> call, Response<AutocompleteSearch> response) {
-                if (response.isSuccessful()) {
-                    autocompleteSearchResult.setValue(response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    List<DetailSearch> detailSearchList = new ArrayList<>();
+                    for (PredictionsResultItem prediction : response.body().getPredictions()) {
+                        Call<DetailSearch> liveDataCall = googlePlaceService.getRestaurantsDetails(prediction.getPlaceId());
+                        liveDataCall.enqueue(new Callback<DetailSearch>() {
+                            @Override
+                            public void onResponse(Call<DetailSearch> call, Response<DetailSearch> response) {
+                                if (response.isSuccessful()) {
+                                    detailSearchList.add(response.body());
+                                    autocompleteSearchResult.setValue(detailSearchList);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<DetailSearch> call, Throwable t) {
+
+                            }
+                        });
+                    }
                 }
             }
 
@@ -86,5 +112,6 @@ public class GooglePlaceRepository {
             }
         });
     }
+
 
 }

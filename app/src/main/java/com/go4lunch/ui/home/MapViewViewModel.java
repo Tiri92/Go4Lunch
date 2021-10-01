@@ -25,7 +25,7 @@ public class MapViewViewModel extends ViewModel {
         DI.getGooglePlaceRepository().callAutocompleteResult(position, input);
     }
 
-    public LiveData<AutocompleteSearch> getAutocompleteSearchResultFromVM() {
+    public LiveData<List<DetailSearch>> getAutocompleteSearchResultFromVM() {
         return DI.getGooglePlaceRepository().getAutocompleteSearchResult();
     }
 
