@@ -109,11 +109,16 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
             for (int i = 0; i < listOfUserWhoChoseWhereLunch.size(); i++) {
                 if (listOfUserWhoChoseWhereLunch.get(i).getEatingPlaceId().equals(listOfRestaurants.get(holder.getAdapterPosition()).getPlaceId())) {
                     n = n + 1;
-                    String start = "(";
-                    String end = ")";
-                    holder.numberOfCoworker.setText(MessageFormat.format("{0}{1}{2}", start, n, end));
-                    holder.coworkerIcon.setVisibility(View.VISIBLE);
                 }
+            }
+            if (n > 0) {
+                String start = "(";
+                String end = ")";
+                holder.numberOfCoworker.setText(MessageFormat.format("{0}{1}{2}", start, n, end));
+                holder.coworkerIcon.setVisibility(View.VISIBLE);
+            } else {
+                holder.numberOfCoworker.setText("");
+                holder.coworkerIcon.setVisibility(View.INVISIBLE);
             }
         }
 
