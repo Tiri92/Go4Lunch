@@ -29,6 +29,7 @@ public class WorkmatesFragment extends Fragment {
     private RecyclerView mRecyclerView;
     RecyclerView.Adapter<WorkmatesFragmentAdapter.ViewHolder> mAdapter;
     public WorkmatesFragmentViewModel workmatesFragmentViewModel;
+    List<User> mUsers = new ArrayList<>();
 
     @Nullable
     @org.jetbrains.annotations.Nullable
@@ -38,13 +39,16 @@ public class WorkmatesFragment extends Fragment {
         workmatesFragmentViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(WorkmatesFragmentViewModel.class);
         mRecyclerView = view.findViewById(R.id.workmates_fragment_recycler_view);
 
+        mAdapter = new WorkmatesFragmentAdapter(mUsers);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        mRecyclerView.setAdapter(mAdapter);
+
         workmatesFragmentViewModel.getListOfUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
-                Collections.sort(users);
-                mAdapter = new WorkmatesFragmentAdapter(users);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-                mRecyclerView.setAdapter(mAdapter);
+                mUsers.clear();
+                mUsers.addAll(users);
+                mAdapter.notifyDataSetChanged();
             }
         });
         return view;

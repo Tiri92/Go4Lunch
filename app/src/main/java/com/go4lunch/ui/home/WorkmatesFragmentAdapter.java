@@ -42,34 +42,35 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull WorkmatesFragmentAdapter.ViewHolder holder, int position) {
-        TextView username = itemView.findViewById(R.id.user_name);
         String space = " ";
-        if (listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId().equals(" ")) {
+        if (listOfUsers.get(position).getEatingPlaceId().equals(" ")) {
             String notDecided = "hasn't decided yet";
-            username.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-            username.setTextColor(Color.parseColor("#C6C6C6"));
-            username.setText(MessageFormat.format("{0}{1}{2}", listOfUsers.get(holder.getAdapterPosition()).getUsername(), space, notDecided));
+            holder.username.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+            holder.username.setTextColor(Color.parseColor("#C6C6C6"));
+            holder.username.setText(MessageFormat.format("{0}{1}{2}", listOfUsers.get(position).getUsername(), space, notDecided));
         } else {
             String isEating = "is eating in";
-            username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(holder.getAdapterPosition()).getUsername(), space, isEating, space, listOfUsers.get(position).getEatingPlace()));
-            username.setOnClickListener(new View.OnClickListener() {
+            holder.username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(position).getUsername(), space, isEating, space, listOfUsers.get(position).getEatingPlace()));
+            holder.username.setTextColor(Color.parseColor("#000000")); //TODO put same color and style than xlm and try without this line too
+            holder.username.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
-                    intent.putExtra("placeId", listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId());
-                    ActivityCompat.startActivity(v.getContext(), intent, null);
+                    if (!listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId().equals(" ")) {
+                        Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
+                        intent.putExtra("placeId", listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId()); //TODO add nameOfRestaurant in putExtra
+                        ActivityCompat.startActivity(v.getContext(), intent, null);
+                    }
                 }
             });
         }
 
-        ImageView userPic = itemView.findViewById(R.id.user_pic);
         try {
-            String query = listOfUsers.get(holder.getAdapterPosition()).getUrlPicture();
+            String query = listOfUsers.get(position).getUrlPicture();
 
-            Glide.with(userPic)
+            Glide.with(holder.userPic)
                     .load(query)
                     .circleCrop()
-                    .into(userPic);
+                    .into(holder.userPic);
 
         } catch (Exception e) {
             Log.i("[THIERRY]", "Exception : " + e.getMessage());
@@ -82,9 +83,13 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView username;
+        ImageView userPic;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+            username = itemView.findViewById(R.id.user_name);
+            userPic = itemView.findViewById(R.id.user_pic);
         }
     }
 }
