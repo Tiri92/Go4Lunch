@@ -82,6 +82,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     public static LatLng myPosition;
     public MapViewViewModel mapViewViewModel;
     private final List<User> listOfUserWhoChose = new ArrayList<>();
+    private final List<ResultsItem> listOfRestaurants = new ArrayList<>();
 
     private static final int LOCATION_REQUEST_INTERVAL_MS = 10_000;
     private static final float SMALLEST_DISPLACEMENT_THRESHOLD_METER = 25;
@@ -185,7 +186,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onViewDetachedFromWindow(View v) {
                 mMap.clear();
-                // TODO Display old markers on restaurants positions from nearbySearch request
+                mMap.addMarker(new MarkerOptions()
+                        .position(myPosition)
+                        .title("My position"));
+                displayMarkerOnRestaurantPosition(listOfRestaurants);
             }
         });
 
@@ -417,8 +421,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mapViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
             @Override
             public void onChanged(NearbySearch nearbySearch) {
+                listOfRestaurants.clear();
+                listOfRestaurants.addAll(nearbySearch.getResults());
                 displayMarkerOnRestaurantPosition(nearbySearch.getResults());
-
             }
         });
     }
