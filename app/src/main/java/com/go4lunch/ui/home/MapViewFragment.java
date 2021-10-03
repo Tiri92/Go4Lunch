@@ -66,6 +66,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -80,6 +81,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private LocationCallback locationCallback;
     public static LatLng myPosition;
     public MapViewViewModel mapViewViewModel;
+    private final List<User> listOfUserWhoChose = new ArrayList<>();
 
     private static final int LOCATION_REQUEST_INTERVAL_MS = 10_000;
     private static final float SMALLEST_DISPLACEMENT_THRESHOLD_METER = 25;
@@ -112,34 +114,31 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
-    private void setupObservers() {
+    private void setupObserver() {
+        mMap.clear();
         mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<List<DetailSearch>>() {
             @Override
             public void onChanged(List<DetailSearch> autocompleteSearch) {
-                mMap.clear();
                 for (DetailSearch detailSearch : autocompleteSearch) {
                     LatLng restaurantPositionVac = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
                             detailSearch.getResult().getGeometry().getLocation().getLng());
+
                     String placeId = detailSearch.getResult().getPlaceId();
                     String name = detailSearch.getResult().getName();
-                    mapViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
-                        @Override
-                        public void onChanged(List<User> users) {
-                            MarkerOptions restaurantMarkerOptionsVac;
-                            if (isBookedOrNot(placeId, users)) {
-                                restaurantMarkerOptionsVac = new MarkerOptions()
-                                        .position(restaurantPositionVac)
-                                        .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
-                            } else {
-                                restaurantMarkerOptionsVac = new MarkerOptions()
-                                        .position(restaurantPositionVac)
-                                        .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
-                            }
-                            Marker restaurantMarkerVac = mMap.addMarker(restaurantMarkerOptionsVac);
-                            restaurantMarkerVac.setTag(placeId);
-                            restaurantMarkerVac.setTitle(name);
-                        }
-                    });
+
+                    MarkerOptions restaurantMarkerOptionsVac;
+                    if (isBookedOrNot(placeId, listOfUserWhoChose)) {
+                        restaurantMarkerOptionsVac = new MarkerOptions()
+                                .position(restaurantPositionVac)
+                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
+                    } else {
+                        restaurantMarkerOptionsVac = new MarkerOptions()
+                                .position(restaurantPositionVac)
+                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
+                    }
+                    Marker restaurantMarkerVac = mMap.addMarker(restaurantMarkerOptionsVac);
+                    restaurantMarkerVac.setTag(placeId);
+                    restaurantMarkerVac.setTitle(name);
                 }
             }
         });
@@ -166,7 +165,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             public boolean onQueryTextSubmit(String query) {
                 if (myPosition != null) {
                     mapViewViewModel.callAutocompleteSearch(myPosition.latitude + "," + myPosition.longitude, query);
-                    setupObservers();
+                    setupObserver();
                 }
                 return false;
             }
@@ -177,13 +176,18 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        /*searchView.setOnCloseListener(new SearchView.OnCloseListener() { //TODO Not working
+        searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
-            public boolean onClose() {
-                mMap.clear();
-                return false;
+            public void onViewAttachedToWindow(View v) {
+
             }
-        });*/
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                mMap.clear();
+                // TODO Display old markers on restaurants positions from nearbySearch request
+            }
+        });
 
         super.onCreateOptionsMenu(menu, menuInflater);
     }
@@ -308,6 +312,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mapViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
+                listOfUserWhoChose.clear();
+                listOfUserWhoChose.addAll(users);
                 for (ResultsItem myRestaurant : results) {
                     LatLng restaurantPosition = new LatLng(myRestaurant.getGeometry().getLocation().getLat(),
                             myRestaurant.getGeometry().getLocation().getLng());
