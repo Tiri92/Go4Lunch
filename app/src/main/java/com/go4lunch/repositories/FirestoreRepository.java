@@ -204,7 +204,7 @@ public class FirestoreRepository {
         }
     }
 
-    // Upload UrlPicture TODO Understand, ask in email to Denis
+    // Upload UrlPicture TODO Understand look Denis Answer in email, and look the lesson about Firestore Storage OC
     public void uploadPhotoInFirebaseAndUpdateUrlPicture(Uri uri) {
         String uuid = UUID.randomUUID().toString();
         StorageReference mImageRef = FirebaseStorage.getInstance().getReference(uuid);
