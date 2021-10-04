@@ -43,11 +43,11 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.OnDat
 
         configureToolbar();
         currentUserId = chatActivityViewModel.getCurrentUserId();
-        configureRecyclerView();
         Intent intent = getIntent();
         userId = intent.getStringExtra(EXTRA_USER_ID);
         userName = intent.getStringExtra(EXTRA_USER_NAME);
         userPicUrl = intent.getStringExtra(EXTRA_USER_PIC);
+        configureRecyclerView();
 
         binding.sendBtn.setOnClickListener(v -> {
             if (!binding.editTextMessage.getText().toString().isEmpty()) {
