@@ -36,6 +36,9 @@
         <activity
             android:name=".ui.home.RestaurantDetailActivity"
             android:theme="@style/Theme.Go4Lunch.NoActionBar2" />
+        <activity
+            android:name=".ui.home.chat.ChatActivity"
+            android:theme="@style/Theme.Go4Lunch.NoActionBar2" />
 
     </application>
 

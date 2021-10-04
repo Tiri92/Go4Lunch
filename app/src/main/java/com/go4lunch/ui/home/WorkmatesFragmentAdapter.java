@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.go4lunch.R;
 import com.go4lunch.model.firestore.User;
+import com.go4lunch.ui.home.chat.ChatActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -81,6 +83,17 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
         } catch (Exception e) {
             Log.i("[THIERRY]", "Exception : " + e.getMessage());
         }
+
+        holder.messageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ChatActivity.class);
+                intent.putExtra("userId", listOfUsers.get(holder.getAdapterPosition()).getUid());
+                intent.putExtra("name", listOfUsers.get(holder.getAdapterPosition()).getUsername());
+                intent.putExtra("userPic", listOfUsers.get(holder.getAdapterPosition()).getUrlPicture());
+                ActivityCompat.startActivity(v.getContext(), intent, null);
+            }
+        });
     }
 
     @Override
@@ -127,11 +140,13 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView username;
         ImageView userPic;
+        ImageButton messageButton;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.user_name);
             userPic = itemView.findViewById(R.id.user_pic);
+            messageButton = itemView.findViewById(R.id.message_button);
         }
     }
 }
