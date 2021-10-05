@@ -32,8 +32,8 @@ public class ListViewFragment extends Fragment {
 
     public ListViewViewModel listViewViewModel;
     private RecyclerView mRecyclerView;
-    RecyclerView.Adapter<ListViewFragmentAdapter.ViewHolder> mAdapter;
-    RecyclerView.Adapter<ListViewFragmentAdapterVac.ViewHolder> mAdapterVac;
+    ListViewFragmentAdapter mAdapter;
+    ListViewFragmentAdapterVac mAdapterVac;
     private final List<ResultsItem> listOfRestaurant = new ArrayList<>();
     private final List<DetailSearch> listOfRestaurantVac = new ArrayList<>();
     public List<User> listOfUserWhoChose = new ArrayList<>();
