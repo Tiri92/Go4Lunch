@@ -1,4 +1,4 @@
-package com.go4lunch.ui.home.worker;
+package com.go4lunch.ui.home.workmanager;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

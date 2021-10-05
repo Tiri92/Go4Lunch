@@ -1,6 +1,5 @@
 package com.go4lunch.ui.home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -31,7 +30,7 @@ import com.go4lunch.R;
 import com.go4lunch.databinding.ActivityRestaurantDetailBinding;
 import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.firestore.User;
-import com.go4lunch.ui.home.worker.EatingPlaceNotificationWorker;
+import com.go4lunch.ui.home.workmanager.EatingPlaceNotificationWorker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
@@ -42,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
 
