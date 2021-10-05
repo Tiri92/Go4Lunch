@@ -1,5 +1,6 @@
 package com.go4lunch.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -19,6 +20,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
 import com.go4lunch.BuildConfig;
@@ -26,6 +31,7 @@ import com.go4lunch.R;
 import com.go4lunch.databinding.ActivityRestaurantDetailBinding;
 import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.firestore.User;
+import com.go4lunch.ui.home.worker.EatingPlaceNotificationWorker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
@@ -36,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
 
@@ -44,9 +51,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     List<String> listOfRestaurantsLiked;
     String placeId;
     String nameOfCurrentRestaurant;
+    String addressOfCurrentRestaurant;
 
     private RecyclerView mRecyclerView;
-    RecyclerView.Adapter<RestaurantDetailAdapter.ViewHolder> mAdapter;
+    RestaurantDetailAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         placeId = intent.getStringExtra("placeId");
         nameOfCurrentRestaurant = intent.getStringExtra("name");
+        addressOfCurrentRestaurant = intent.getStringExtra("address");
 
         restaurantDetailViewModel.getListOfUsersWhoChoseRestaurant().observe(this, new Observer<List<User>>() {
             @Override
@@ -138,13 +147,34 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                             restaurantDetailViewModel.updateEatingPlace(user.setEatingPlace(nameOfCurrentRestaurant));
                             showSnackBar(getString(R.string.choice_updated));
                         }
+                        this.notificationWorker();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull @NotNull Exception e) {
-                        showSnackBar(getString(R.string.error_chosen_restaurant));
+
+                    String nameOfUsers;
+
+                    private void notificationWorker() {
+                        restaurantDetailViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
+                            @Override
+                            public void onSuccess(User user) {
+                                nameOfUsers = user.getUsername();
+                            }
+                        });
+                        Data data = new Data.Builder()
+                                .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE, nameOfCurrentRestaurant)
+                                .putString(EatingPlaceNotificationWorker.USER_NAME, nameOfUsers)
+                                .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE_ID, placeId)
+                                .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE_ADDRESS, addressOfCurrentRestaurant)
+                                .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_MESSAGE_JOIN, getString(R.string.notification_joining))
+                                .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_TITLE, getString(R.string.notification_title))
+                                .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_MESSAGE, getString(R.string.notification_message))
+                                .build();
+                        OneTimeWorkRequest dailyWorkRequest = new OneTimeWorkRequest.Builder(EatingPlaceNotificationWorker.class)
+                                .setInputData(data)
+                                //.setInitialDelay(10, TimeUnit.MILLISECONDS) //TODO What it make ?
+                                .build();
+                        WorkManager.getInstance(getBaseContext()).enqueueUniqueWork(getString(R.string.like), ExistingWorkPolicy.REPLACE, dailyWorkRequest);
                     }
-                });
+                }).addOnFailureListener(e -> showSnackBar(getString(R.string.error_chosen_restaurant)));
             }
         });
 

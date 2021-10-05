@@ -59,6 +59,7 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
                 Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
                 intent.putExtra("placeId", listOfRestaurants.get(holder.getAdapterPosition()).getPlaceId());
                 intent.putExtra("name", listOfRestaurants.get(holder.getAdapterPosition()).getName());
+                intent.putExtra("address", listOfRestaurants.get(holder.getAdapterPosition()).getVicinity());
                 ActivityCompat.startActivity(v.getContext(), intent, null);
             }
         });
