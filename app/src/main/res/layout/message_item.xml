@@ -21,8 +21,7 @@
         <ImageView
             android:id="@+id/activity_chat_item_profile_container_profile_image"
             android:layout_width="50dip"
-            android:layout_height="50dip"
-            app:srcCompat="@drawable/fui_ic_googleg_color_24dp" />
+            android:layout_height="50dip" />
 
 
     </LinearLayout>

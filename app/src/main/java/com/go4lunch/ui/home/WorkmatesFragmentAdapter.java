@@ -90,7 +90,6 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
                 Intent intent = new Intent(v.getContext(), ChatActivity.class);
                 intent.putExtra("userId", listOfUsers.get(holder.getAdapterPosition()).getUid());
                 intent.putExtra("name", listOfUsers.get(holder.getAdapterPosition()).getUsername());
-                intent.putExtra("userPic", listOfUsers.get(holder.getAdapterPosition()).getUrlPicture());
                 ActivityCompat.startActivity(v.getContext(), intent, null);
             }
         });

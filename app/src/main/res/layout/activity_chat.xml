@@ -10,53 +10,21 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:text="Chat"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
-        <TextView
             android:id="@+id/pseudo_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:lines="1"
             android:textColor="@color/white"
             android:textSize="18sp"
-            tools:layout_editor_absoluteX="168dp"
-            tools:layout_editor_absoluteY="16dp" />
+            android:textStyle="bold|italic" />
+
     </androidx.appcompat.widget.Toolbar>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField_name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="5dp"
-        android:hint="Message"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/send_btn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/message_recycler_view">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/message_recycler_view"
@@ -72,22 +40,44 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:listitem="@layout/message_item" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outlinedTextField_name"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:hint="@string/message"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/send_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/message_recycler_view">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/send_btn"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/white_background"
-        android:text="Send"
-        android:textColor="@color/colorPrimary"
-        android:textColorHint="@color/colorPrimary"
+        android:drawableRight="@drawable/ic_baseline_send_24"
+        android:text="@string/send"
+        android:textColor="@color/orange"
+        android:textColorHint="@color/orange"
         app:backgroundTint="@null"
         app:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/outlinedTextField_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/outlinedTextField_name"
-        app:layout_constraintTop_toTopOf="@+id/outlinedTextField_name"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/outlinedTextField_name" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

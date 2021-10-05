@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.go4lunch.di.DI;
 import com.go4lunch.model.firestore.Message;
+import com.go4lunch.model.firestore.User;
 import com.go4lunch.repositories.ChatRepository;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.Query;
 
 public class ChatActivityViewModel extends ViewModel {
@@ -14,22 +16,20 @@ public class ChatActivityViewModel extends ViewModel {
         return ChatRepository.getPrivateChatRoomMessage(from, to);
     }
 
-    /**
-     * GET
-     **/
+    //GET
     public String getCurrentUserId() {
         return ChatRepository.getCurrentUserId();
     }
 
-    public String getCurrentUserUrlPic() {
-        return ChatRepository.getCurrentUserUrlPic();
+    public Task<User> getUserData() {
+        // Get the user from Firestore and cast it to a User model Object
+        return DI.getFirestoreRepository().getUserData().continueWith(task -> task.getResult().toObject(User.class));
     }
 
-    /**
-     * INSERT
-     **/
+    //INSERT
     public static void newMessage(Message newMessage) {
         ChatRepository.newMessage(newMessage);
     }
+
 
 }

@@ -41,16 +41,19 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.C
         messageContainer = holder.binding.activityChatItemMessageContainer;
         rootView = holder.binding.activityMentorChatItemRootView;
         profileContainer = holder.binding.activityChatItemProfileContainer;
+
         holder.binding.activityChatItemMessageContainerTextMessageContainerTextView.setText(model.getMessage());
         holder.binding.activityChatItemMessageContainerTextViewDate.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(model.getDate()));
+
         updateDesignDependingUser(model.getFrom().equals(currentUserId));
+
         Glide.with(holder.binding.activityChatItemProfileContainerProfileImage.getContext())
                 .load(model.getUrlPicFrom())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.binding.activityChatItemProfileContainerProfileImage);
     }
 
-    private void updateDesignDependingUser(Boolean isSender) {
+    private void updateDesignDependingUser(Boolean isSender) { //TODO Understand how it work
 
         // PROFILE CONTAINER
         RelativeLayout.LayoutParams paramsLayoutHeader = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

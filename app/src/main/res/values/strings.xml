@@ -64,5 +64,8 @@
     <string name="error_profile_picture_updated">Error, impossible to update your profile picture</string>
     <string name="search_a_restaurant">Search a restaurant</string>
     <string name="search_a_workmate">Search a workmate</string>
+    <string name="chat_with">Chat with</string>
+    <string name="message">Message</string>
+    <string name="send">Send</string>
 
 </resources>
