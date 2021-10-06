@@ -70,5 +70,6 @@
     <string name="notification_title">Don\’t forget your meal</string>
     <string name="notification_message">Today you eat at</string>
     <string name="notification_joining">This friends join you : </string>
+    <string name="notification">notification</string>
 
 </resources>

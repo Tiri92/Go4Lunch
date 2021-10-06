@@ -92,7 +92,7 @@ public class EatingPlaceNotificationWorker extends Worker {
 
     private void cleanEatingPlaceWorker(Context context) {
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(ClearEatingPlaceWorker.class)
-                .setInitialDelay(10, TimeUnit.HOURS)
+                .setInitialDelay(30, TimeUnit.MINUTES)
                 .build();
         WorkManager.getInstance(context).enqueueUniqueWork("clear", ExistingWorkPolicy.REPLACE, workRequest);
     }

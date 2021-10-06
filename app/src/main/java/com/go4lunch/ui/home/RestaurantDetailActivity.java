@@ -3,7 +3,9 @@ package com.go4lunch.ui.home;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.icu.util.Calendar;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
@@ -41,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class RestaurantDetailActivity extends AppCompatActivity {
 
@@ -130,36 +134,48 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 restaurantDetailViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onSuccess(User user) {
                         if (placeId.equals(user.getEatingPlaceId())) {
                             restaurantDetailViewModel.updateEatingPlaceId(" ");
                             restaurantDetailViewModel.updateEatingPlace(" ");
+                            WorkManager.getInstance(getBaseContext()).cancelUniqueWork(getString(R.string.notification));
                             showSnackBar(getString(R.string.choice_canceled));
                         } else if (user.getEatingPlaceId().equals(" ")) {
                             restaurantDetailViewModel.updateEatingPlaceId(user.setEatingPlaceId(placeId));
                             restaurantDetailViewModel.updateEatingPlace(user.setEatingPlace(nameOfCurrentRestaurant));
+                            this.notificationWorker();
                             showSnackBar(getString(R.string.success_chosen_restaurant));
                         } else if (!user.getEatingPlaceId().equals(placeId)) {
                             restaurantDetailViewModel.updateEatingPlaceId(user.setEatingPlaceId(placeId));
                             restaurantDetailViewModel.updateEatingPlace(user.setEatingPlace(nameOfCurrentRestaurant));
+                            WorkManager.getInstance(getBaseContext()).cancelUniqueWork(getString(R.string.notification));
+                            this.notificationWorker();
                             showSnackBar(getString(R.string.choice_updated));
                         }
-                        this.notificationWorker();
                     }
 
-                    String nameOfUsers;
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    public long getMillisecondsUntilAHours(int hours, int minutes){
+                        Calendar dueDate = Calendar.getInstance();
+                        Calendar currentDate = Calendar.getInstance();
+                        dueDate.set(Calendar.HOUR_OF_DAY, hours);
+                        dueDate.set(Calendar.MINUTE, minutes);
+                        dueDate.set(Calendar.SECOND, 0);
+                        if (dueDate.before(currentDate)) {
+                            dueDate.add(Calendar.HOUR_OF_DAY, 24);
+                        }
+                        return dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
+                    }
 
-                    private void notificationWorker() {
-                        restaurantDetailViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
-                            @Override
-                            public void onSuccess(User user) {
-                                nameOfUsers = user.getUsername();
-                            }
-                        });
+                    String fakeNameOfUsers;
+
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    private void notificationWorker() { //TODO When i call this in an if, it doesn't display notification if application is close
                         Data data = new Data.Builder()
                                 .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE, nameOfCurrentRestaurant)
-                                .putString(EatingPlaceNotificationWorker.USER_NAME, nameOfUsers)
+                                .putString(EatingPlaceNotificationWorker.USER_NAME, fakeNameOfUsers)
                                 .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE_ID, placeId)
                                 .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE_ADDRESS, addressOfCurrentRestaurant)
                                 .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_MESSAGE_JOIN, getString(R.string.notification_joining))
@@ -168,10 +184,11 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                                 .build();
                         OneTimeWorkRequest dailyWorkRequest = new OneTimeWorkRequest.Builder(EatingPlaceNotificationWorker.class)
                                 .setInputData(data)
-                                //.setInitialDelay(10, TimeUnit.MILLISECONDS) //TODO What it make ?
+                                .setInitialDelay(getMillisecondsUntilAHours(12, 0), TimeUnit.MILLISECONDS)
                                 .build();
-                        WorkManager.getInstance(getBaseContext()).enqueueUniqueWork(getString(R.string.like), ExistingWorkPolicy.REPLACE, dailyWorkRequest);
+                        WorkManager.getInstance(getBaseContext()).enqueueUniqueWork(getString(R.string.notification), ExistingWorkPolicy.REPLACE, dailyWorkRequest);
                     }
+
                 }).addOnFailureListener(e -> showSnackBar(getString(R.string.error_chosen_restaurant)));
             }
         });
