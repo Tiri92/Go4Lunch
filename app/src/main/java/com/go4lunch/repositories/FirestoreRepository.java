@@ -242,6 +242,23 @@ public class FirestoreRepository {
         }
     }
 
+    /**
+     * *** Update EatingPlace After Notification  ****
+     **/
+    private Task<Void> updateEatingPlaceNameAN(String uid, String eatingPlaceName) {
+        return getUsersCollection().document(uid).update("eatingPlace", eatingPlaceName);
+    }
+
+    private Task<Void> updateEatingPlaceIdAN(String uid, String eatingPlaceId) {
+        return getUsersCollection().document(uid).update("eatingPlaceId", eatingPlaceId);
+    }
+
+    public void updateEatingPlaceAN(String uId, String eatingPlaceName, String eatingPlaceId) {
+        this.updateEatingPlaceNameAN(uId, eatingPlaceName);
+        this.updateEatingPlaceIdAN(uId, eatingPlaceId);
+    }
+    /** ***************************** **/
+
     // Update ListOfRestaurantsLiked
     public Task<Void> updateListOfRestaurantsLiked(List<String> listOfRestaurantsLiked) {
         String uid = this.getCurrentUserId();

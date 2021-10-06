@@ -54,6 +54,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     String placeId;
     String nameOfCurrentRestaurant;
     String addressOfCurrentRestaurant;
+    String currentUsername;
 
     private RecyclerView mRecyclerView;
     RestaurantDetailAdapter mAdapter;
@@ -157,7 +158,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     }
 
                     @RequiresApi(api = Build.VERSION_CODES.N)
-                    public long getMillisecondsUntilAHours(int hours, int minutes){
+                    public long getMillisecondsUntilAHours(int hours, int minutes) {
                         Calendar dueDate = Calendar.getInstance();
                         Calendar currentDate = Calendar.getInstance();
                         dueDate.set(Calendar.HOUR_OF_DAY, hours);
@@ -169,24 +170,28 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                         return dueDate.getTimeInMillis() - currentDate.getTimeInMillis();
                     }
 
-                    String fakeNameOfUsers;
-
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     private void notificationWorker() { //TODO When i call this in an if, it doesn't display notification if application is close
-                        Data data = new Data.Builder()
-                                .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE, nameOfCurrentRestaurant)
-                                .putString(EatingPlaceNotificationWorker.USER_NAME, fakeNameOfUsers)
-                                .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE_ID, placeId)
-                                .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE_ADDRESS, addressOfCurrentRestaurant)
-                                .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_MESSAGE_JOIN, getString(R.string.notification_joining))
-                                .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_TITLE, getString(R.string.notification_title))
-                                .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_MESSAGE, getString(R.string.notification_message))
-                                .build();
-                        OneTimeWorkRequest dailyWorkRequest = new OneTimeWorkRequest.Builder(EatingPlaceNotificationWorker.class)
-                                .setInputData(data)
-                                .setInitialDelay(getMillisecondsUntilAHours(12, 0), TimeUnit.MILLISECONDS)
-                                .build();
-                        WorkManager.getInstance(getBaseContext()).enqueueUniqueWork(getString(R.string.notification), ExistingWorkPolicy.REPLACE, dailyWorkRequest);
+                       restaurantDetailViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
+                            @Override
+                            public void onSuccess(User user) {
+                                currentUsername = user.getUsername();
+                                Data data = new Data.Builder()
+                                        .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE, nameOfCurrentRestaurant)
+                                        .putString(EatingPlaceNotificationWorker.USER_NAME, currentUsername)
+                                        .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE_ID, placeId)
+                                        .putString(EatingPlaceNotificationWorker.KEY_EATING_PLACE_ADDRESS, addressOfCurrentRestaurant)
+                                        .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_MESSAGE_JOIN, getString(R.string.notification_joining))
+                                        .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_TITLE, getString(R.string.notification_title))
+                                        .putString(EatingPlaceNotificationWorker.KEY_NOTIFICATION_MESSAGE, getString(R.string.notification_message))
+                                        .build();
+                                OneTimeWorkRequest dailyWorkRequest = new OneTimeWorkRequest.Builder(EatingPlaceNotificationWorker.class)
+                                        .setInputData(data)
+                                        .setInitialDelay(getMillisecondsUntilAHours(12, 0), TimeUnit.MILLISECONDS)
+                                        .build();
+                                WorkManager.getInstance(getBaseContext()).enqueueUniqueWork(getString(R.string.notification), ExistingWorkPolicy.REPLACE, dailyWorkRequest);
+                            }
+                        });
                     }
 
                 }).addOnFailureListener(e -> showSnackBar(getString(R.string.error_chosen_restaurant)));

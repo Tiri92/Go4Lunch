@@ -16,6 +16,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.go4lunch.R;
+import com.go4lunch.di.DI;
 import com.go4lunch.model.firestore.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -49,8 +50,8 @@ public class EatingPlaceNotificationWorker extends Worker {
         String joiningMessage = data.getString(KEY_NOTIFICATION_MESSAGE_JOIN);
         String title = data.getString(KEY_NOTIFICATION_TITLE);
         String message = data.getString(KEY_NOTIFICATION_MESSAGE);
-        if (!eatingPlace.equals("none")) {
-            FirebaseFirestore.getInstance().collection("users").whereEqualTo("eatingPlaceId", eatingPlaceId).get().addOnCompleteListener(task -> {
+        if (!eatingPlace.equals(" ")) {
+            DI.getFirestoreRepository().getUsersCollection().whereEqualTo("eatingPlaceId", eatingPlaceId).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     List<User> users = task.getResult().toObjects(User.class);
                     if (users.size() > 1) {
@@ -92,7 +93,7 @@ public class EatingPlaceNotificationWorker extends Worker {
 
     private void cleanEatingPlaceWorker(Context context) {
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(ClearEatingPlaceWorker.class)
-                .setInitialDelay(30, TimeUnit.MINUTES)
+                .setInitialDelay(15, TimeUnit.MINUTES)
                 .build();
         WorkManager.getInstance(context).enqueueUniqueWork("clear", ExistingWorkPolicy.REPLACE, workRequest);
     }
