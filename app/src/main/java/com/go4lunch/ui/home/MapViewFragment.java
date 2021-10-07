@@ -313,47 +313,49 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     MarkerOptions restaurantMarkerOptions;
 
     private void displayMarkerOnRestaurantPosition(List<ResultsItem> results) {
-        mapViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
-            @Override
-            public void onChanged(List<User> users) {
-                listOfUserWhoChose.clear();
-                listOfUserWhoChose.addAll(users);
-                for (ResultsItem myRestaurant : results) {
-                    LatLng restaurantPosition = new LatLng(myRestaurant.getGeometry().getLocation().getLat(),
-                            myRestaurant.getGeometry().getLocation().getLng());
-                    isBooked = 0;
-                    for (User myUser : users) {
-                        if (myRestaurant.getPlaceId().equals(myUser.getEatingPlaceId())) {
-                            isBooked++;
-                        } else {
-                            Log.e("Nothing", "Nothing");
+        if (getView() != null) {
+            mapViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+                @Override
+                public void onChanged(List<User> users) {
+                    listOfUserWhoChose.clear();
+                    listOfUserWhoChose.addAll(users);
+                    for (ResultsItem myRestaurant : results) {
+                        LatLng restaurantPosition = new LatLng(myRestaurant.getGeometry().getLocation().getLat(),
+                                myRestaurant.getGeometry().getLocation().getLng());
+                        isBooked = 0;
+                        for (User myUser : users) {
+                            if (myRestaurant.getPlaceId().equals(myUser.getEatingPlaceId())) {
+                                isBooked++;
+                            } else {
+                                Log.e("Nothing", "Nothing");
+                            }
                         }
+                        if (isBooked != 0) {
+                            restaurantMarkerOptions = new MarkerOptions()
+                                    .position(restaurantPosition)
+                                    .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
+                        } else {
+                            restaurantMarkerOptions = new MarkerOptions()
+                                    .position(restaurantPosition)
+                                    .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
+                        }
+                        restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
+                        restaurantMarker.setTag(myRestaurant.getPlaceId());
+                        restaurantMarker.setTitle(myRestaurant.getName());
                     }
-                    if (isBooked != 0) {
-                        restaurantMarkerOptions = new MarkerOptions()
-                                .position(restaurantPosition)
-                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
-                    } else {
-                        restaurantMarkerOptions = new MarkerOptions()
-                                .position(restaurantPosition)
-                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
-                    }
-                    restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
-                    restaurantMarker.setTag(myRestaurant.getPlaceId());
-                    restaurantMarker.setTitle(myRestaurant.getName());
                 }
-            }
-        });
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
-                Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
-                intent.putExtra("placeId", marker.getTag().toString());
-                intent.putExtra("name", marker.getTitle());
-                ActivityCompat.startActivity(getContext(), intent, null);
-                return false;
-            }
-        });
+            });
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
+                    Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
+                    intent.putExtra("placeId", marker.getTag().toString());
+                    intent.putExtra("name", marker.getTitle());
+                    ActivityCompat.startActivity(getContext(), intent, null);
+                    return false;
+                }
+            });
+        }
     }
 
     private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
