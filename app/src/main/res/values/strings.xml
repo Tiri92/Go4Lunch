@@ -1,9 +1,9 @@
 <resources>
-    <string name="facebook_application_id">868316640559357</string>
-    <string name="fb_login_protocol_scheme">fb868316640559357</string>
-    <string name="navigation_header">Navigation header</string>
-    <string name="go4lunch_icon">Go4lunch icon</string>
-    <string name="app_name">Go4Lunch</string>
+    <string name="facebook_application_id" translatable="false">868316640559357</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb868316640559357</string>
+    <string name="navigation_header" translatable="false">Navigation header</string>
+    <string name="go4lunch_icon" translatable="false">Go4lunch icon</string>
+    <string name="app_name" translatable="false">Go4Lunch</string>
 
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="subtitle_login">Find a nice restaurant and invite your co-workers for lunch!</string>
@@ -71,5 +71,6 @@
     <string name="notification_message">Today you eat at</string>
     <string name="notification_joining">This friends join you : </string>
     <string name="notification">notification</string>
+    <string name="available_workmates">Available workmates</string>
 
 </resources>
