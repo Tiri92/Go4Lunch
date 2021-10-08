@@ -13,20 +13,20 @@
     <fragment
         android:id="@+id/nav_your_lunch"
         android:name="com.go4lunch.ui.main.LunchFragment"
-        android:label="YOUR LUNCH"
+        android:label="@string/your_lunch"
         tools:layout="@layout/nav_fragment_lunch" />
 
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.go4lunch.ui.main.SettingsFragment"
-        android:label="SETTINGS"
+        android:label="@string/settings"
         tools:layout="@layout/nav_fragment_settings"
          />
 
     <fragment
         android:id="@+id/nav_logout"
         android:name="com.go4lunch.ui.main.LogoutFragment"
-        android:label="LOGOUT"
+        android:label="@string/logout"
         tools:layout="@layout/nav_fragment_logout"
         />
 

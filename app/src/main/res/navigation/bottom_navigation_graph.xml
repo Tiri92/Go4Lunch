@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/nav_workmates"
         android:name="com.go4lunch.ui.home.WorkmatesFragment"
-        android:label="Available Workmates"
+        android:label="@string/available_workmates"
         tools:layout="@layout/fragment_workmates"
         />
 
