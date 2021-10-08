@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -47,6 +48,7 @@ public class WorkmatesFragment extends Fragment {
         workmatesFragmentViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(WorkmatesFragmentViewModel.class);
         mRecyclerView = view.findViewById(R.id.workmates_fragment_recycler_view);
         setHasOptionsMenu(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.available_workmates);
 
         mAdapter = new WorkmatesFragmentAdapter(mUsers, mUsersFull);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
 import android.widget.Toast;
@@ -104,6 +105,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         }
 
         setHasOptionsMenu(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.i_m_hungry));
 
         checkGpsState();
 
@@ -117,6 +119,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     private void setupObserver() {
         mMap.clear();
+        mMap.addMarker(new MarkerOptions()
+                .position(myPosition)
+                .title("My position"));
         mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<List<DetailSearch>>() {
             @Override
             public void onChanged(List<DetailSearch> autocompleteSearch) {
@@ -180,7 +185,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
-
             }
 
             @Override
@@ -348,10 +352,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
-                    Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
-                    intent.putExtra("placeId", marker.getTag().toString());
-                    intent.putExtra("name", marker.getTitle());
-                    ActivityCompat.startActivity(getContext(), intent, null);
+                    if (!marker.getTitle().equals("My position")) {
+                        Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
+                        intent.putExtra("placeId", marker.getTag().toString());
+                        intent.putExtra("name", marker.getTitle());
+                        ActivityCompat.startActivity(getContext(), intent, null);
+                    }
                     return false;
                 }
             });
@@ -383,12 +389,11 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Method called for move the camera to the user position on map after recuperate his location
      */
-    private void moveAndDisplayMyPosition() { //TODO make this marker non clickable
+    private void moveAndDisplayMyPosition() {
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
                 .position(myPosition)
                 .title("My position"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
         CameraPosition cameraPosition = new CameraPosition.Builder().
                 target(myPosition).
                 zoom(14).

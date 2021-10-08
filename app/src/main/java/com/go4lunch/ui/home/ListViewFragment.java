@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -44,6 +45,7 @@ public class ListViewFragment extends Fragment {
         mRecyclerView = root.findViewById(R.id.RecyclerView);
         listViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(ListViewViewModel.class);
         setHasOptionsMenu(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.i_m_hungry));
 
         mAdapter = new ListViewFragmentAdapter(listOfRestaurant, listOfUserWhoChose);
         mAdapterVac = new ListViewFragmentAdapterVac(listOfRestaurantVac, listOfUserWhoChose);

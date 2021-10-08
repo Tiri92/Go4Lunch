@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,6 +28,7 @@ public class LogoutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.nav_fragment_logout, container, false);
         logoutFragmentViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(LogoutFragmentViewModel.class);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.logout);
 
         // Logout popup
         new AlertDialog.Builder(requireContext())
