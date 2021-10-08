@@ -17,9 +17,10 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/update_username_button"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="88dp"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/background_button_email"
         android:drawableStart="@drawable/ic_baseline_update_24"
         android:drawablePadding="-40dp"
@@ -33,16 +34,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.91"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/setting_picture"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.110000014"
+        app:layout_constraintVertical_bias="0.16000003"
         tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/update_profile_picture_button"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
         android:layout_marginTop="70dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/background_button_email"
         android:drawableStart="@drawable/ic_baseline_add_a_photo_24"
         android:drawablePadding="-40dp"
@@ -55,15 +57,16 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.91"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/setting_picture"
         app:layout_constraintTop_toTopOf="@id/update_username_button"
         tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/delete_account_button"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
         android:layout_marginTop="70dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/background_button_email"
         android:drawableStart="@drawable/ic_baseline_delete_24"
         android:drawablePadding="-40dp"
@@ -76,7 +79,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.91"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/setting_picture"
         app:layout_constraintTop_toTopOf="@id/update_profile_picture_button"
         tools:ignore="RtlSymmetry" />
 
