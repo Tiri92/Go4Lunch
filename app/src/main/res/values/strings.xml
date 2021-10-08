@@ -72,5 +72,6 @@
     <string name="notification_joining">This friends join you : </string>
     <string name="notification">notification</string>
     <string name="available_workmates">Available workmates</string>
+    <string name="gps_already_enabled">GPS is already Enabled!</string>
 
 </resources>

@@ -216,7 +216,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         LocationManager locationManager = (LocationManager) getSystemService(requireActivity(), LocationManager.class);
 
         if (isGpsEnabled(locationManager)) {
-            Toast.makeText(getApplicationContext(), "GPS is already Enabled!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.gps_already_enabled), Toast.LENGTH_SHORT).show();
         } else {
             LocationRequest locationRequest = LocationRequest.create();
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
