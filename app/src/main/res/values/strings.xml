@@ -73,5 +73,6 @@
     <string name="notification">notification</string>
     <string name="available_workmates">Available workmates</string>
     <string name="gps_already_enabled">GPS is already Enabled!</string>
+    <string name="not_selected_eating_place">You have not selected an eating place yet!</string>
 
 </resources>
