@@ -83,15 +83,20 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         restaurantDetailViewModel.getListOfUsersWhoChoseRestaurant().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
-                List<User> sortedUserList = new ArrayList<>();
-                for (int i = 0; i < users.size(); i++) {
-                    if (users.get(i).getEatingPlaceId().equals(placeId)) {
-                        sortedUserList.add(users.get(i));
+                restaurantDetailViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
+                    @Override
+                    public void onSuccess(User myUser) {
+                        List<User> sortedUserList = new ArrayList<>();
+                        for (int i = 0; i < users.size(); i++) {
+                            if (users.get(i).getEatingPlaceId().equals(placeId) & !users.get(i).getUid().equals(myUser.getUid())) {
+                                sortedUserList.add(users.get(i));
+                            }
+                        }
+                        mAdapter = new RestaurantDetailAdapter(sortedUserList);
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+                        mRecyclerView.setAdapter(mAdapter);
                     }
-                }
-                mAdapter = new RestaurantDetailAdapter(sortedUserList);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-                mRecyclerView.setAdapter(mAdapter);
+                });
             }
         });
 
@@ -167,7 +172,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     }
 
                     private void notificationWorker() {
-                       restaurantDetailViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
+                        restaurantDetailViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
                             @Override
                             public void onSuccess(User user) {
                                 currentUsername = user.getUsername();
