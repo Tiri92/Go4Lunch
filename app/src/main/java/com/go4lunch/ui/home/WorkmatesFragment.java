@@ -1,7 +1,5 @@
 package com.go4lunch.ui.home;
 
-import static com.go4lunch.ui.home.MapViewFragment.myPosition;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,11 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.go4lunch.R;
 import com.go4lunch.model.firestore.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class WorkmatesFragment extends Fragment {
@@ -48,7 +46,7 @@ public class WorkmatesFragment extends Fragment {
         workmatesFragmentViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(WorkmatesFragmentViewModel.class);
         mRecyclerView = view.findViewById(R.id.workmates_fragment_recycler_view);
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.available_workmates);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.available_workmates);
 
         mAdapter = new WorkmatesFragmentAdapter(mUsers, mUsersFull);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -57,11 +55,22 @@ public class WorkmatesFragment extends Fragment {
         workmatesFragmentViewModel.getListOfUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
-                mUsers.clear();
-                mUsers.addAll(users);
-                mUsersFull.clear();
-                mUsersFull.addAll(users);
-                mAdapter.notifyDataSetChanged();
+                workmatesFragmentViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
+                    @Override
+                    public void onSuccess(User myUser) {
+                        for (User user : users) {
+                            if (user.getUid().equals(myUser.getUid())) {
+                                users.remove(user);
+                                break;
+                            }
+                        }
+                        mUsers.clear();
+                        mUsers.addAll(users);
+                        mUsersFull.clear();
+                        mUsersFull.addAll(users);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
         return view;
