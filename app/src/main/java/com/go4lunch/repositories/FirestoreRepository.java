@@ -4,15 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.firebase.ui.auth.AuthUI;
 import com.go4lunch.model.firestore.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,16 +19,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -99,15 +91,10 @@ public class FirestoreRepository {
 
             Task<DocumentSnapshot> userData = getUserData();
 
-            userData.addOnFailureListener(documentSnapshot -> {
-                this.getUsersCollection().document(uid).set(userToCreate);
-            }).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User user = documentSnapshot.toObject(User.class);
-                    if (user == null) {
-                        getUsersCollection().document(uid).set(userToCreate);
-                    }
+            userData.addOnFailureListener(documentSnapshot -> this.getUsersCollection().document(uid).set(userToCreate)).addOnSuccessListener(documentSnapshot -> {
+                User user1 = documentSnapshot.toObject(User.class);
+                if (user1 == null) {
+                    getUsersCollection().document(uid).set(userToCreate);
                 }
             });
         }
@@ -118,21 +105,18 @@ public class FirestoreRepository {
         getUsersCollection()
                 .orderBy("eatingPlace", Query.Direction.DESCENDING)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<User> allWorkMates = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<User> allWorkMates = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                User myUser = document.toObject(User.class);
+                            User myUser = document.toObject(User.class);
 
-                                allWorkMates.add(myUser);
-                            }
-                            listOfUsers.setValue(allWorkMates);
-                        } else {
-                            Log.e("FirestoreRepository", "method getAllUsers don't work" + task.getException());
+                            allWorkMates.add(myUser);
                         }
+                        listOfUsers.setValue(allWorkMates);
+                    } else {
+                        Log.e("FirestoreRepository", "method getAllUsers don't work" + task.getException());
                     }
                 });
     }
@@ -146,21 +130,18 @@ public class FirestoreRepository {
         getUsersCollection()
                 .whereNotEqualTo("eatingPlace", " ")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<User> allWorkMatesWhoChoseRestaurant = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<User> allWorkMatesWhoChoseRestaurant = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                User myUser = document.toObject(User.class);
+                            User myUser = document.toObject(User.class);
 
-                                allWorkMatesWhoChoseRestaurant.add(myUser);
-                            }
-                            listOfUsersWhoChoseRestaurant.setValue(allWorkMatesWhoChoseRestaurant);
-                        } else {
-                            Log.e("FirestoreRepository", "Error getting documents: ", task.getException());
+                            allWorkMatesWhoChoseRestaurant.add(myUser);
                         }
+                        listOfUsersWhoChoseRestaurant.setValue(allWorkMatesWhoChoseRestaurant);
+                    } else {
+                        Log.e("FirestoreRepository", "Error getting documents: ", task.getException());
                     }
                 });
     }
@@ -257,7 +238,10 @@ public class FirestoreRepository {
         this.updateEatingPlaceNameAN(uId, eatingPlaceName);
         this.updateEatingPlaceIdAN(uId, eatingPlaceId);
     }
-    /** ***************************** **/
+
+    /**
+     * ****************************
+     **/
 
     // Update ListOfRestaurantsLiked
     public Task<Void> updateListOfRestaurantsLiked(List<String> listOfRestaurantsLiked) {
@@ -273,5 +257,6 @@ public class FirestoreRepository {
     public Task<Void> deleteUserFromFirestore(String userId) {
         return getUsersCollection().document(userId).delete();
     }
+
 
 }
