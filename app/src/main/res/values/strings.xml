@@ -22,7 +22,7 @@
     <string name="map_view">Map View</string>
     <string name="Open_now">Open now</string>
     <string name="Close_now">Close now</string>
-    <string name="We_dont_know">We don\'t know, check on the restaurant website</string>
+    <string name="we_dont_know">We don\'t know, check on the restaurant website</string>
     <string name="website">WEBSITE</string>
     <string name="like">LIKE</string>
     <string name="call">CALL</string>
@@ -74,5 +74,4 @@
     <string name="available_workmates">Available workmates</string>
     <string name="gps_already_enabled">GPS is already Enabled!</string>
     <string name="not_selected_eating_place">You have not selected an eating place yet!</string>
-
 </resources>

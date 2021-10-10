@@ -66,7 +66,7 @@ public class ListViewFragmentAdapterVac extends RecyclerView.Adapter<ListViewFra
                 holder.openingHour.setText(R.string.Close_now);
             }
         } else {
-            holder.openingHour.setText(R.string.We_dont_know);
+            holder.openingHour.setText(R.string.we_dont_know);
         }
 
         try {
