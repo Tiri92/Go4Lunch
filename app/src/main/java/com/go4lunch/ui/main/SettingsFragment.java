@@ -23,10 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -77,55 +74,33 @@ public class SettingsFragment extends Fragment {
 
         // Delete button
         AppCompatButton deleteAccountButton = view.findViewById(R.id.delete_account_button);
-        deleteAccountButton.setOnClickListener(view -> {
-
-            new AlertDialog.Builder(requireContext())
-                    .setMessage(R.string.want_delete)
-                    .setPositiveButton(R.string.yes, (dialogInterface, i) ->
-                            settingsFragmentViewModel.deleteUser(requireContext())
-                                    .addOnSuccessListener(aVoid -> {
-                                                Toast.makeText(requireContext(), getString(R.string.account_deleted), Toast.LENGTH_SHORT).show();
-                                            }
-                                    ).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull @NotNull Exception e) {
-                                    Toast.makeText(requireContext(), getString(R.string.error_delete_account), Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                    )
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
-
-        });
+        deleteAccountButton.setOnClickListener(view -> new AlertDialog.Builder(requireContext())
+                .setMessage(R.string.want_delete)
+                .setPositiveButton(R.string.yes, (dialogInterface, i) ->
+                        settingsFragmentViewModel.deleteUser(requireContext())
+                                .addOnSuccessListener(aVoid -> Toast.makeText(requireContext(), getString(R.string.account_deleted), Toast.LENGTH_SHORT).show()
+                                ).addOnFailureListener(e -> Toast.makeText(requireContext(), getString(R.string.error_delete_account), Toast.LENGTH_SHORT).show())
+                )
+                .setNegativeButton(R.string.cancel, null)
+                .show());
 
         // Update profile picture button
         AppCompatButton updateProfilePictureButton = view.findViewById(R.id.update_profile_picture_button);
-        updateProfilePictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(openGalleryIntent, 1000);
-            }
+        updateProfilePictureButton.setOnClickListener(v -> {
+            Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(openGalleryIntent, 1000);
         });
 
-        /**
-         * Update username button, DialogChangeUserName
-         **/
+        /*
+          Update username button, DialogChangeUserName
+         */
         AppCompatButton updateUsernameButton = view.findViewById(R.id.update_username_button);
-        updateUsernameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showChangeUserNameDialog();
-            }
-        });
-
-    } // setupListeners finish here
+        updateUsernameButton.setOnClickListener(v -> showChangeUserNameDialog());
+    }
 
     private void showChangeUserNameDialog() {
         final AlertDialog dialog = getChangeUserNameDialog();
-
         dialog.show();
-
     }
 
     private void onPositiveButtonClick(DialogInterface dialogInterface) {
@@ -155,7 +130,6 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-
     @NonNull
     private AlertDialog getChangeUserNameDialog() {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(requireContext());
@@ -164,38 +138,18 @@ public class SettingsFragment extends Fragment {
         alertBuilder.setView(R.layout.dialog_change_username);
         alertBuilder.setPositiveButton(R.string.save, null);
         alertBuilder.setNegativeButton(R.string.cancel, null);
-        alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                dialog = null;
-            }
-        });
+        alertBuilder.setOnDismissListener(dialogInterface -> dialog = null);
 
         dialog = alertBuilder.create();
 
         // This instead of listener to positive button in order to avoid automatic dismiss
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        dialog.setOnShowListener(dialogInterface -> {
 
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
+            Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> onPositiveButtonClick(dialog));
 
-                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        onPositiveButtonClick(dialog);
-                    }
-                });
-
-                Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-                negativeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-            }
+            Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            negativeButton.setOnClickListener(v -> dialog.dismiss());
         });
 
         return dialog;
@@ -205,6 +159,7 @@ public class SettingsFragment extends Fragment {
     private void showSnackBar(String message) {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
     }
+
 
 }
 

@@ -13,4 +13,5 @@ public class LogoutFragmentViewModel extends ViewModel {
         return DI.getFirestoreRepository().logout(context);
     }
 
+
 }

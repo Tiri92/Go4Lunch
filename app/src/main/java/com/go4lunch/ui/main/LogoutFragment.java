@@ -33,9 +33,7 @@ public class LogoutFragment extends Fragment {
                 .setMessage(R.string.want_logout)
                 .setPositiveButton(R.string.yes, (dialogInterface, i) ->
                         logoutFragmentViewModel.logout(requireContext())
-                                .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(requireContext(), getString(R.string.successful_disconnection), Toast.LENGTH_SHORT).show();
-                                        }
+                                .addOnSuccessListener(aVoid -> Toast.makeText(requireContext(), getString(R.string.successful_disconnection), Toast.LENGTH_SHORT).show()
                                 )
                 )
                 .setNegativeButton(R.string.cancel, (dialog, which) -> requireActivity().onBackPressed())
