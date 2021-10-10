@@ -18,9 +18,6 @@ import androidx.work.WorkerParameters;
 import com.go4lunch.R;
 import com.go4lunch.di.DI;
 import com.go4lunch.model.firestore.User;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -54,30 +51,27 @@ public class EatingPlaceNotificationWorker extends Worker {
         String title = data.getString(KEY_NOTIFICATION_TITLE);
         String message = data.getString(KEY_NOTIFICATION_MESSAGE);
         if (!eatingPlace.equals(" ")) {
-            DI.getFirestoreRepository().getUserData().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    eatingPlaceIdFromDb = documentSnapshot.get("eatingPlaceId").toString();
-                    if (!eatingPlaceIdFromDb.equals(" ")) {
-                        DI.getFirestoreRepository().getUsersCollection().whereEqualTo("eatingPlaceId", eatingPlaceId).get().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                List<User> users = task.getResult().toObjects(User.class);
-                                if (users.size() > 1) {
-                                    String userList = "";
-                                    for (User user : users) {
-                                        if (!user.getUsername().equals(userName)) {
-                                            userList += " " + user.getUsername() + ",";
-                                        }
+            DI.getFirestoreRepository().getUserData().addOnSuccessListener(documentSnapshot -> {
+                eatingPlaceIdFromDb = documentSnapshot.get("eatingPlaceId").toString();
+                if (!eatingPlaceIdFromDb.equals(" ")) {
+                    DI.getFirestoreRepository().getUsersCollection().whereEqualTo("eatingPlaceId", eatingPlaceId).get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<User> users = task.getResult().toObjects(User.class);
+                            if (users.size() > 1) {
+                                String userList = "";
+                                for (User user : users) {
+                                    if (!user.getUsername().equals(userName)) {
+                                        userList += " " + user.getUsername() + ",";
                                     }
-                                    displayNotification(title, message + " " + eatingPlace + "\n" + eatingPlaceAddress + "\n" + joiningMessage + "\n" + removeLastChar(userList));
-                                } else {
-                                    displayNotification(title, message + " " + eatingPlace + "\n" + eatingPlaceAddress);
                                 }
+                                displayNotification(title, message + " " + eatingPlace + "\n" + eatingPlaceAddress + "\n" + joiningMessage + "\n" + removeLastChar(userList));
+                            } else {
+                                displayNotification(title, message + " " + eatingPlace + "\n" + eatingPlaceAddress);
                             }
-                        });
+                        }
+                    });
 
-                        cleanEatingPlaceWorker(context);
-                    }
+                    cleanEatingPlaceWorker(context);
                 }
             });
         }
