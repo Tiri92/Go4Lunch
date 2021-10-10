@@ -2,7 +2,6 @@ package com.go4lunch.ui.home.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,8 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.go4lunch.R;
 import com.go4lunch.databinding.ActivityChatBinding;
 import com.go4lunch.model.firestore.Message;
-import com.go4lunch.model.firestore.User;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -46,12 +43,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.OnDat
         userId = intent.getStringExtra(EXTRA_USER_ID);
         userName = intent.getStringExtra(EXTRA_USER_NAME);
         currentUserId = chatActivityViewModel.getCurrentUserId();
-        chatActivityViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
-            @Override
-            public void onSuccess(User user) {
-                currentUserPicUrl = user.getUrlPicture();
-            }
-        });
+        chatActivityViewModel.getUserData().addOnSuccessListener(user -> currentUserPicUrl = user.getUrlPicture());
 
         configureRecyclerView();
         configureToolbar();
@@ -65,7 +57,6 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.OnDat
                 binding.editTextMessage.setText("");
             }
         });
-
 
     }
 

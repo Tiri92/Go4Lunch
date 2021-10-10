@@ -21,29 +21,29 @@ public class ChatRepository {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }
 
-    public CollectionReference getUsersCollection() {
+    public static CollectionReference getUsersCollection() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME_USERS);
     }
 
     //Get message from FirestoreRecyclerOptions
-    public static FirestoreRecyclerOptions<Message> getPrivateChatRoomMessage(String from, String to) {
+    public FirestoreRecyclerOptions<Message> getPrivateChatRoomMessage(String from, String to) {
         Query query = getMessageCollection().whereIn("between", Arrays.asList(Arrays.asList(from, to), Arrays.asList(to, from))).orderBy("date", Query.Direction.ASCENDING);
         return new FirestoreRecyclerOptions.Builder<Message>()
                 .setQuery(query, Message.class)
                 .build();
     }
 
-    public static String getCurrentUserId() {
+    public String getCurrentUserId() {
         return firebaseAuth.getCurrentUser().getUid();
     }
 
     public Task<DocumentSnapshot> getUserData() {
         String uid = getCurrentUserId();
-        return this.getUsersCollection().document(uid).get();
+        return getUsersCollection().document(uid).get();
     }
 
     //Insert message in firestore
-    public static Task<Void> newMessage(Message newMessage) {
+    public Task<Void> newMessage(Message newMessage) {
         return getMessageCollection().document().set(newMessage);
     }
 

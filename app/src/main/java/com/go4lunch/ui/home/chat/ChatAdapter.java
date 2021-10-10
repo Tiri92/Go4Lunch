@@ -89,5 +89,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.C
             super(messageItemBinding.getRoot());
             binding = messageItemBinding;
         }
+
     }
+
+
 }
