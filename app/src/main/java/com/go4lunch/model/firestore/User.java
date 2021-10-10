@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 public class User implements Comparable<User> {
+
     private String uid;
     private String username;
     @Nullable
@@ -91,4 +92,6 @@ public class User implements Comparable<User> {
     public void setListOfRestaurantsLiked(List<String> listOfRestaurantsLiked) {
         this.listOfRestaurantsLiked = listOfRestaurantsLiked;
     }
+
+
 }
