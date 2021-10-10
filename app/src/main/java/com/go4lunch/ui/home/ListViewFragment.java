@@ -2,6 +2,7 @@ package com.go4lunch.ui.home;
 
 import static com.go4lunch.ui.home.MapViewFragment.myPosition;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.go4lunch.R;
 import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.firestore.User;
-import com.go4lunch.model.nearbysearch.NearbySearch;
 import com.go4lunch.model.nearbysearch.ResultsItem;
 
 import java.util.ArrayList;
@@ -39,42 +38,36 @@ public class ListViewFragment extends Fragment {
     private final List<DetailSearch> listOfRestaurantVac = new ArrayList<>();
     public List<User> listOfUserWhoChose = new ArrayList<>();
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_list_view, container, false);
         mRecyclerView = root.findViewById(R.id.RecyclerView);
         listViewViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(ListViewViewModel.class);
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.i_m_hungry));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.i_m_hungry));
 
         mAdapter = new ListViewFragmentAdapter(listOfRestaurant, listOfUserWhoChose);
         mAdapterVac = new ListViewFragmentAdapterVac(listOfRestaurantVac, listOfUserWhoChose);
         mRecyclerView.setAdapter(mAdapter);
-        listViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
-            @Override
-            public void onChanged(NearbySearch nearbySearch) {
-                listOfRestaurant.clear();
-                listOfRestaurant.addAll(nearbySearch.getResults());
+        listViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), nearbySearch -> {
+            listOfRestaurant.clear();
+            listOfRestaurant.addAll(nearbySearch.getResults());
+            mAdapter.notifyDataSetChanged();
+            listViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), users -> {
+                listOfUserWhoChose.clear();
+                listOfUserWhoChose.addAll(users);
                 mAdapter.notifyDataSetChanged();
-                listViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
-                    @Override
-                    public void onChanged(List<User> users) {
-                        listOfUserWhoChose.clear();
-                        listOfUserWhoChose.addAll(users);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
+            });
         });
 
         return root;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
-
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getString(R.string.search_a_restaurant));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -109,15 +102,11 @@ public class ListViewFragment extends Fragment {
     }
 
     private void setupObserver() {
-        listViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<List<DetailSearch>>() {
-            @Override
-            public void onChanged(List<DetailSearch> detailSearches) {
-                listOfRestaurantVac.clear();
-                listOfRestaurantVac.addAll(detailSearches);
-                mRecyclerView.setAdapter(mAdapterVac);
-            }
+        listViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), detailSearches -> {
+            listOfRestaurantVac.clear();
+            listOfRestaurantVac.addAll(detailSearches);
+            mRecyclerView.setAdapter(mAdapterVac);
         });
-
     }
 
 

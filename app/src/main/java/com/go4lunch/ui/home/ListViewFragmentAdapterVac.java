@@ -25,6 +25,7 @@ import java.text.MessageFormat;
 import java.util.List;
 
 public class ListViewFragmentAdapterVac extends RecyclerView.Adapter<ListViewFragmentAdapterVac.ViewHolder> {
+
     View itemView;
     private final List<DetailSearch> listOfRestaurantVac;
     private final List<User> listOfUserWhoChose;
@@ -38,20 +39,17 @@ public class ListViewFragmentAdapterVac extends RecyclerView.Adapter<ListViewFra
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_list_view_item, parent, false);
-        return new ListViewFragmentAdapterVac.ViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
-                intent.putExtra("placeId", listOfRestaurantVac.get(holder.getAdapterPosition()).getResult().getPlaceId());
-                intent.putExtra("name", listOfRestaurantVac.get(holder.getAdapterPosition()).getResult().getName());
-                ActivityCompat.startActivity(v.getContext(), intent, null);
-            }
+        itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
+            intent.putExtra("placeId", listOfRestaurantVac.get(holder.getAdapterPosition()).getResult().getPlaceId());
+            intent.putExtra("name", listOfRestaurantVac.get(holder.getAdapterPosition()).getResult().getName());
+            ActivityCompat.startActivity(v.getContext(), intent, null);
         });
 
         holder.nameOfRestaurant.setText(listOfRestaurantVac.get(position).getResult().getName());
@@ -113,7 +111,6 @@ public class ListViewFragmentAdapterVac extends RecyclerView.Adapter<ListViewFra
             }
         }
 
-
     }
 
     @Override
@@ -121,7 +118,7 @@ public class ListViewFragmentAdapterVac extends RecyclerView.Adapter<ListViewFra
         return listOfRestaurantVac.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameOfRestaurant;
         TextView restaurantAddress;
         RatingBar ratingBar;
@@ -143,4 +140,6 @@ public class ListViewFragmentAdapterVac extends RecyclerView.Adapter<ListViewFra
             coworkerIcon = itemView.findViewById(R.id.coworker_icon);
         }
     }
+
+
 }

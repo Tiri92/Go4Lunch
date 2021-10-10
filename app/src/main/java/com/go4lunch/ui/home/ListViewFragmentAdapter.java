@@ -2,7 +2,6 @@ package com.go4lunch.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +20,11 @@ import com.go4lunch.R;
 import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.ResultsItem;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.maps.android.SphericalUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.List;
 
 public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragmentAdapter.ViewHolder> {
@@ -53,15 +50,12 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
     @Override
     public void onBindViewHolder(@NonNull @NotNull ListViewFragmentAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
-                intent.putExtra("placeId", listOfRestaurants.get(holder.getAdapterPosition()).getPlaceId());
-                intent.putExtra("name", listOfRestaurants.get(holder.getAdapterPosition()).getName());
-                intent.putExtra("address", listOfRestaurants.get(holder.getAdapterPosition()).getVicinity());
-                ActivityCompat.startActivity(v.getContext(), intent, null);
-            }
+        itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
+            intent.putExtra("placeId", listOfRestaurants.get(holder.getAdapterPosition()).getPlaceId());
+            intent.putExtra("name", listOfRestaurants.get(holder.getAdapterPosition()).getName());
+            intent.putExtra("address", listOfRestaurants.get(holder.getAdapterPosition()).getVicinity());
+            ActivityCompat.startActivity(v.getContext(), intent, null);
         });
 
         holder.nameOfRestaurant.setText(listOfRestaurants.get(position).getName());
@@ -128,7 +122,6 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
     @Override
     public int getItemCount() {
         return listOfRestaurants.size();
-
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -153,4 +146,6 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
             coworkerIcon = itemView.findViewById(R.id.coworker_icon);
         }
     }
+
+
 }
