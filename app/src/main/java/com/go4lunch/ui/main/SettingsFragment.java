@@ -37,18 +37,15 @@ public class SettingsFragment extends Fragment {
     public AlertDialog dialog = null;
     public SettingsFragmentViewModel settingsFragmentViewModel;
 
-    private static final Pattern upperCaseLetter = //TODO Correct upperCaseLetter and maximumLetter Regex
-            Pattern.compile("^[A-Z]{1,}+[a-z]{1,}");
-
     private static final Pattern maximumLetter =
-            Pattern.compile("[a-zA-Z]{0,13}");
+            Pattern.compile("[a-zA-Z ]{0,15}");
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.nav_fragment_settings, container, false);
         settingsFragmentViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(SettingsFragmentViewModel.class);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.settings);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.settings);
         setupListeners();
         return view;
     }
@@ -142,10 +139,6 @@ public class SettingsFragment extends Fragment {
             // If the text field is empty
             if (newUserName.trim().isEmpty()) {
                 dialogEditText.setError(getString(R.string.cannot_be_empty));
-            }
-            // If it doesn't start with one upper case characters
-            else if (!upperCaseLetter.matcher(newUserName).matches()) {
-                dialogEditText.setError(getString(R.string.upper_case_letter));
             }
             // If the name is too long
             else if (!maximumLetter.matcher(newUserName).matches()) {
