@@ -1,5 +1,6 @@
 package com.go4lunch.ui.home;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.go4lunch.R;
 import com.go4lunch.model.firestore.User;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,19 +31,19 @@ import java.util.List;
 public class WorkmatesFragment extends Fragment {
 
     View view;
-    private RecyclerView mRecyclerView;
     WorkmatesFragmentAdapter mAdapter;
     public WorkmatesFragmentViewModel workmatesFragmentViewModel;
     List<User> mUsers = new ArrayList<>();
     List<User> mUsersFull = new ArrayList<>();
 
+    @SuppressLint("NotifyDataSetChanged")
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_workmates, container, false);
         workmatesFragmentViewModel = new ViewModelProvider((ViewModelStoreOwner) requireContext()).get(WorkmatesFragmentViewModel.class);
-        mRecyclerView = view.findViewById(R.id.workmates_fragment_recycler_view);
+        RecyclerView mRecyclerView = view.findViewById(R.id.workmates_fragment_recycler_view);
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.available_workmates);
 
@@ -52,35 +51,26 @@ public class WorkmatesFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         mRecyclerView.setAdapter(mAdapter);
 
-        workmatesFragmentViewModel.getListOfUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
-            @Override
-            public void onChanged(List<User> users) {
-                workmatesFragmentViewModel.getUserData().addOnSuccessListener(new OnSuccessListener<User>() {
-                    @Override
-                    public void onSuccess(User myUser) {
-                        for (User user : users) {
-                            if (user.getUid().equals(myUser.getUid())) {
-                                users.remove(user);
-                                break;
-                            }
-                        }
-                        mUsers.clear();
-                        mUsers.addAll(users);
-                        mUsersFull.clear();
-                        mUsersFull.addAll(users);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+        workmatesFragmentViewModel.getListOfUsers().observe(getViewLifecycleOwner(), users -> workmatesFragmentViewModel.getUserData().addOnSuccessListener(myUser -> {
+            for (User user : users) {
+                if (user.getUid().equals(myUser.getUid())) {
+                    users.remove(user);
+                    break;
+                }
             }
-        });
+            mUsers.clear();
+            mUsers.addAll(users);
+            mUsersFull.clear();
+            mUsersFull.addAll(users);
+            mAdapter.notifyDataSetChanged();
+        }));
         return view;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
-
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setQueryHint(getString(R.string.search_a_workmate));

@@ -1,5 +1,6 @@
 package com.go4lunch.ui.home;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -49,6 +50,7 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull WorkmatesFragmentAdapter.ViewHolder holder, int position) {
+
         String space = " ";
         if (listOfUsers.get(position).getEatingPlaceId().equals(" ")) {
             String notDecided = "hasn't decided yet";
@@ -59,15 +61,12 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
             String isEating = "is eating in";
             holder.username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(position).getUsername(), space, isEating, space, listOfUsers.get(position).getEatingPlace()));
             holder.username.setTextColor(Color.parseColor("#FF000000"));
-            holder.username.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId().equals(" ")) {
-                        Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
-                        intent.putExtra("placeId", listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId());
-                        intent.putExtra("name", listOfUsers.get(holder.getAdapterPosition()).getEatingPlace());
-                        ActivityCompat.startActivity(v.getContext(), intent, null);
-                    }
+            holder.username.setOnClickListener(v -> {
+                if (!listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId().equals(" ")) {
+                    Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
+                    intent.putExtra("placeId", listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId());
+                    intent.putExtra("name", listOfUsers.get(holder.getAdapterPosition()).getEatingPlace());
+                    ActivityCompat.startActivity(v.getContext(), intent, null);
                 }
             });
         }
@@ -84,15 +83,13 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
             Log.i("[THIERRY]", "Exception : " + e.getMessage());
         }
 
-        holder.messageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ChatActivity.class);
-                intent.putExtra("userId", listOfUsers.get(holder.getAdapterPosition()).getUid());
-                intent.putExtra("name", listOfUsers.get(holder.getAdapterPosition()).getUsername());
-                ActivityCompat.startActivity(v.getContext(), intent, null);
-            }
+        holder.messageButton.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ChatActivity.class);
+            intent.putExtra("userId", listOfUsers.get(holder.getAdapterPosition()).getUid());
+            intent.putExtra("name", listOfUsers.get(holder.getAdapterPosition()).getUsername());
+            ActivityCompat.startActivity(v.getContext(), intent, null);
         });
+
     }
 
     @Override
@@ -105,7 +102,7 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
         return listOfUsersFilter;
     }
 
-    private Filter listOfUsersFilter = new Filter() {
+    private final Filter listOfUsersFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<User> filteredList = new ArrayList<>();
@@ -128,11 +125,12 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
             return results;
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-        listOfUsers.clear();
-        listOfUsers.addAll((List) results.values);
-        notifyDataSetChanged();
+            listOfUsers.clear();
+            listOfUsers.addAll((List) results.values);
+            notifyDataSetChanged();
         }
     };
 
@@ -148,4 +146,6 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
             messageButton = itemView.findViewById(R.id.message_button);
         }
     }
+
+
 }
