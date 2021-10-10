@@ -58,14 +58,11 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
             Log.i("[THIERRY]", "Exception : " + e.getMessage());
         }
 
-        holder.messageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ChatActivity.class);
-                intent.putExtra("userId", listOfUsersWhoChoseRestaurant.get(holder.getAdapterPosition()).getUid());
-                intent.putExtra("name", listOfUsersWhoChoseRestaurant.get(holder.getAdapterPosition()).getUsername());
-                ActivityCompat.startActivity(v.getContext(), intent, null);
-            }
+        holder.messageButton.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ChatActivity.class);
+            intent.putExtra("userId", listOfUsersWhoChoseRestaurant.get(holder.getAdapterPosition()).getUid());
+            intent.putExtra("name", listOfUsersWhoChoseRestaurant.get(holder.getAdapterPosition()).getUsername());
+            ActivityCompat.startActivity(v.getContext(), intent, null);
         });
 
     }
@@ -87,4 +84,6 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
             messageButton = itemView.findViewById(R.id.message_button);
         }
     }
+
+
 }
