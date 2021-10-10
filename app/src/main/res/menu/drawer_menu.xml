@@ -6,23 +6,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
+            android:enabled="true"
             android:icon="@drawable/ic_baseline_map_view_24"
-            android:title="@string/map_view"
-            android:enabled="true"/>
+            android:title="@string/map_view" />
         <item
             android:id="@+id/nav_your_lunch"
+            android:enabled="true"
             android:icon="@drawable/ic_restaurant_menu_white_24dp"
-            android:title="@string/your_lunch"
-            android:enabled="true"/>
+            android:title="@string/your_lunch" />
         <item
             android:id="@+id/nav_settings"
+            android:enabled="true"
             android:icon="@drawable/ic_settings_white_24dp"
-            android:title="@string/settings"
-            android:enabled="true"/>
+            android:title="@string/settings" />
         <item
             android:id="@+id/nav_logout"
+            android:enabled="true"
             android:icon="@drawable/ic_power_white_24dp"
-            android:title="@string/logout"
-            android:enabled="true"/>
+            android:title="@string/logout" />
     </group>
 </menu>

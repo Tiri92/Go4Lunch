@@ -14,14 +14,12 @@
         android:id="@+id/nav_listView"
         android:name="com.go4lunch.ui.home.ListViewFragment"
         android:label="@string/i_m_hungry"
-        tools:layout="@layout/fragment_list_view"
-        />
+        tools:layout="@layout/fragment_list_view" />
 
     <fragment
         android:id="@+id/nav_workmates"
         android:name="com.go4lunch.ui.home.WorkmatesFragment"
         android:label="@string/available_workmates"
-        tools:layout="@layout/fragment_workmates"
-        />
+        tools:layout="@layout/fragment_workmates" />
 
 </navigation>

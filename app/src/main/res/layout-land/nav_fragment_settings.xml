@@ -13,7 +13,8 @@
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/setting1" />
+        app:srcCompat="@drawable/setting1"
+        tools:ignore="ContentDescription" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/update_username_button"

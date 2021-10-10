@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/go4lunch_background"
-    >
+    android:background="@drawable/go4lunch_background">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/go4lunch_sign_in"
         android:contentDescription="@string/go4lunch_icon"
+        android:src="@drawable/go4lunch_sign_in"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -42,7 +40,8 @@
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SmallSp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/email_button"
@@ -58,9 +57,9 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:text="@string/sign_in_with_email"
-        android:textSize="14sp"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view2"
@@ -77,12 +76,12 @@
         android:drawableStart="@drawable/logo_facebook"
         android:drawablePadding="-40dp"
         android:paddingStart="20dp"
-        android:paddingBottom="8dp"
         android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:text="@string/sign_in_with_facebook"
-        android:textSize="14sp"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_button"
@@ -102,9 +101,9 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:text="@string/sign_in_with_google"
-        android:textSize="14sp"
         android:textAllCaps="false"
         android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/facebook_button"
