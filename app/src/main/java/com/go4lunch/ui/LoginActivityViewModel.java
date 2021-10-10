@@ -11,4 +11,5 @@ public class LoginActivityViewModel extends ViewModel {
         DI.getFirestoreRepository().createUser();
     }
 
+
 }

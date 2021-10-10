@@ -7,8 +7,6 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -24,11 +22,6 @@ import com.go4lunch.databinding.ActivityMainBinding;
 import com.go4lunch.model.firestore.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import org.jetbrains.annotations.NotNull;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -57,56 +50,51 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
 
-        /**
-         * Set HeaderView text fields
-         **/
+        /*
+          Set HeaderView text fields
+         */
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         if (mainActivityViewModel.isCurrentUserLogged()) {
             mainActivityViewModel.getUserData().addOnSuccessListener(user -> {
                 // Set the data with the user information
-
                 FirebaseUser firebaseUser = mainActivityViewModel.getCurrentUser();
-                String userEmail = TextUtils.isEmpty(firebaseUser.getEmail()) ? getString(R.string.no_email_found) : firebaseUser.getEmail(); // Condition ternaire
+                String userEmail = TextUtils.isEmpty(firebaseUser.getEmail()) ? getString(R.string.no_email_found) : firebaseUser.getEmail(); // Ternary condition
                 TextView userEmailTextView = binding.navView.getHeaderView(0).findViewById(R.id.user_email_field);
                 userEmailTextView.setText(userEmail);
             });
-            mainActivityViewModel.getUserDataForUpdate().addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable @org.jetbrains.annotations.Nullable DocumentSnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-                    //Verify if value return information about the current user
-                    if (value == null)
-                        return;
-                    User user = value.toObject(User.class);
-                    if (user != null) {
-                        String username = TextUtils.isEmpty(user.getUsername()) ? getString(R.string.no_username_found) : user.getUsername(); // Condition ternaire
-                        TextView usernameTextView = binding.navView.getHeaderView(0).findViewById(R.id.username_field);
-                        usernameTextView.setText(username);
+            mainActivityViewModel.getUserDataForUpdate().addSnapshotListener((value, error) -> {
+                //Verify if value return information about the current user
+                if (value == null)
+                    return;
+                User user = value.toObject(User.class);
+                if (user != null) {
+                    String username = TextUtils.isEmpty(user.getUsername()) ? getString(R.string.no_username_found) : user.getUsername(); //  Ternary condition
+                    TextView usernameTextView = binding.navView.getHeaderView(0).findViewById(R.id.username_field);
+                    usernameTextView.setText(username);
 
-                        ImageView userPic = binding.navView.getHeaderView(0).findViewById(R.id.nav_header_imageview);
-                        try {
-                            String query = user.getUrlPicture();
+                    ImageView userPic = binding.navView.getHeaderView(0).findViewById(R.id.nav_header_imageview);
+                    try {
+                        String query = user.getUrlPicture();
 
-                            Glide.with(userPic)
-                                    .load(query)
-                                    .circleCrop()
-                                    .into(userPic);
+                        Glide.with(userPic)
+                                .load(query)
+                                .circleCrop()
+                                .into(userPic);
 
-                        } catch (Exception e) {
-                            Log.i("[THIERRY]", "Exception : " + e.getMessage());
-                        }
+                    } catch (Exception e) {
+                        Log.i("[THIERRY]", "Exception : " + e.getMessage());
                     }
                 }
             });
         }
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull @NotNull FirebaseAuth firebaseAuth) {
-                if (!mainActivityViewModel.isCurrentUserLogged()) {
-                    comeBackToLoginActivity();
-                }
+
+        authStateListener = firebaseAuth -> {
+            if (!mainActivityViewModel.isCurrentUserLogged()) {
+                comeBackToLoginActivity();
             }
         };
         FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
+
     }
 
     public void comeBackToLoginActivity() {
@@ -115,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.startActivity(this, intent, null);
         finish();
     }
+
+
 }
 
 

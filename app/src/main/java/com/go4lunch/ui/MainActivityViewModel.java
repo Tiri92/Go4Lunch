@@ -18,13 +18,14 @@ public class MainActivityViewModel extends ViewModel {
         return (this.getCurrentUser() != null);
     }
 
+    // Get the user from Firestore and cast it to a User model Object
     public Task<User> getUserData() {
-        // Get the user from Firestore and cast it to a User model Object
         return DI.getFirestoreRepository().getUserData().continueWith(task -> task.getResult().toObject(User.class));
     }
 
     public DocumentReference getUserDataForUpdate() {
         return DI.getFirestoreRepository().getUserDataForUpdate();
     }
+
 
 }

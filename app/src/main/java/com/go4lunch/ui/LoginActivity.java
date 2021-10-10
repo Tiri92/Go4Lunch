@@ -1,6 +1,5 @@
 package com.go4lunch.ui;
 
-import android.app.Application;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,15 +9,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
-import com.go4lunch.R;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.go4lunch.ui.home.RestaurantDetailViewModel;
-import com.go4lunch.ui.main.SettingsFragmentViewModel;
+import com.go4lunch.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
@@ -27,9 +23,7 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
 
     public LoginActivityViewModel loginActivityViewModel;
-
     private static final int RC_SIGN_IN = 123;
-
     private ConstraintLayout view;
 
     @Override
@@ -44,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startSignInActivity() {
-
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.FacebookBuilder().build(),
@@ -104,5 +97,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         finish();
     }
+
 
 }
