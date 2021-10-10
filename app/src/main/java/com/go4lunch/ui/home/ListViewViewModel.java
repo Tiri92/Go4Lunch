@@ -28,4 +28,5 @@ public class ListViewViewModel extends ViewModel {
         return DI.getGooglePlaceRepository().getAutocompleteSearchResult();
     }
 
+
 }

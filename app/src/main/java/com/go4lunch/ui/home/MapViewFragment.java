@@ -1,5 +1,8 @@
 package com.go4lunch.ui.home;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,27 +22,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
-import com.go4lunch.model.autocomplete.AutocompleteSearch;
 import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.firestore.User;
-import com.go4lunch.model.nearbysearch.NearbySearch;
 import com.go4lunch.model.nearbysearch.ResultsItem;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -61,19 +59,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static androidx.core.content.ContextCompat.getSystemService;
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 @SuppressLint("RestrictedApi")
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
@@ -115,6 +105,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         positionButtonListener(positionButton);
 
         return root;
+
     }
 
     private void setupObserver() {
@@ -122,30 +113,27 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mMap.addMarker(new MarkerOptions()
                 .position(myPosition)
                 .title("My position"));
-        mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<List<DetailSearch>>() {
-            @Override
-            public void onChanged(List<DetailSearch> autocompleteSearch) {
-                for (DetailSearch detailSearch : autocompleteSearch) {
-                    LatLng restaurantPositionVac = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
-                            detailSearch.getResult().getGeometry().getLocation().getLng());
+        mapViewViewModel.getAutocompleteSearchResultFromVM().observe(getViewLifecycleOwner(), autocompleteSearch -> {
+            for (DetailSearch detailSearch : autocompleteSearch) {
+                LatLng restaurantPositionVac = new LatLng(detailSearch.getResult().getGeometry().getLocation().getLat(),
+                        detailSearch.getResult().getGeometry().getLocation().getLng());
 
-                    String placeId = detailSearch.getResult().getPlaceId();
-                    String name = detailSearch.getResult().getName();
+                String placeId = detailSearch.getResult().getPlaceId();
+                String name = detailSearch.getResult().getName();
 
-                    MarkerOptions restaurantMarkerOptionsVac;
-                    if (isBookedOrNot(placeId, listOfUserWhoChose)) {
-                        restaurantMarkerOptionsVac = new MarkerOptions()
-                                .position(restaurantPositionVac)
-                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
-                    } else {
-                        restaurantMarkerOptionsVac = new MarkerOptions()
-                                .position(restaurantPositionVac)
-                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
-                    }
-                    Marker restaurantMarkerVac = mMap.addMarker(restaurantMarkerOptionsVac);
-                    restaurantMarkerVac.setTag(placeId);
-                    restaurantMarkerVac.setTitle(name);
+                MarkerOptions restaurantMarkerOptionsVac;
+                if (isBookedOrNot(placeId, listOfUserWhoChose)) {
+                    restaurantMarkerOptionsVac = new MarkerOptions()
+                            .position(restaurantPositionVac)
+                            .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
+                } else {
+                    restaurantMarkerOptionsVac = new MarkerOptions()
+                            .position(restaurantPositionVac)
+                            .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
                 }
+                Marker restaurantMarkerVac = mMap.addMarker(restaurantMarkerOptionsVac);
+                restaurantMarkerVac.setTag(placeId);
+                restaurantMarkerVac.setTitle(name);
             }
         });
     }
@@ -160,10 +148,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
-
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getString(R.string.search_a_restaurant));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -213,7 +200,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
      * In this method we ask the user for permission to activate geo-location to make startLocationRequest() work great
      */
     private void checkGpsState() {
-        LocationManager locationManager = (LocationManager) getSystemService(requireActivity(), LocationManager.class);
+        LocationManager locationManager = getSystemService(requireActivity(), LocationManager.class);
 
         if (isGpsEnabled(locationManager)) {
             Toast.makeText(getApplicationContext(), getString(R.string.gps_already_enabled), Toast.LENGTH_SHORT).show();
@@ -228,37 +215,34 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             Task<LocationSettingsResponse> task =
                     LocationServices.getSettingsClient(requireActivity()).checkLocationSettings(settingsBuilder.build());
 
-            task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-                @Override
-                public void onComplete(Task<LocationSettingsResponse> task) {
-                    try {
-                        LocationSettingsResponse response = task.getResult(ApiException.class);
-                        // All location settings are satisfied. The client can initialize location
-                        // requests here.
-                    } catch (ApiException exception) {
-                        switch (exception.getStatusCode()) {
-                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                // Location settings are not satisfied. But could be fixed by showing the
-                                // user a dialog.
-                                try {
-                                    // Cast to a resolvable exception.
-                                    ResolvableApiException resolvable = (ResolvableApiException) exception;
-                                    // Show the dialog by calling startResolutionForResult(),
-                                    // and check the result in onActivityResult().
-                                    resolvable.startResolutionForResult(
-                                            requireActivity(),
-                                            REQUEST_CHECK_SETTINGS);
-                                } catch (IntentSender.SendIntentException e) {
-                                    // Ignore the error.
-                                } catch (ClassCastException e) {
-                                    // Ignore, should be an impossible error.
-                                }
-                                break;
-                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                // Location settings are not satisfied. However, we have no way to fix the
-                                // settings so we won't show the dialog.
-                                break;
-                        }
+            task.addOnCompleteListener(task1 -> {
+                try {
+                    LocationSettingsResponse response = task1.getResult(ApiException.class);
+                    // All location settings are satisfied. The client can initialize location
+                    // requests here.
+                } catch (ApiException exception) {
+                    switch (exception.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be fixed by showing the
+                            // user a dialog.
+                            try {
+                                // Cast to a resolvable exception.
+                                ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                resolvable.startResolutionForResult(
+                                        requireActivity(),
+                                        REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            } catch (ClassCastException e) {
+                                // Ignore, should be an impossible error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have no way to fix the
+                            // settings so we won't show the dialog.
+                            break;
                     }
                 }
             });
@@ -308,8 +292,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     /**
      * Method called for display marker on restaurant position
-     *
-     * @param results
      */
 
     int isBooked = 0;
@@ -318,48 +300,42 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     private void displayMarkerOnRestaurantPosition(List<ResultsItem> results) {
         if (getView() != null) {
-            mapViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
-                @Override
-                public void onChanged(List<User> users) {
-                    listOfUserWhoChose.clear();
-                    listOfUserWhoChose.addAll(users);
-                    for (ResultsItem myRestaurant : results) {
-                        LatLng restaurantPosition = new LatLng(myRestaurant.getGeometry().getLocation().getLat(),
-                                myRestaurant.getGeometry().getLocation().getLng());
-                        isBooked = 0;
-                        for (User myUser : users) {
-                            if (myRestaurant.getPlaceId().equals(myUser.getEatingPlaceId())) {
-                                isBooked++;
-                            } else {
-                                Log.e("Nothing", "Nothing");
-                            }
-                        }
-                        if (isBooked != 0) {
-                            restaurantMarkerOptions = new MarkerOptions()
-                                    .position(restaurantPosition)
-                                    .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
+            mapViewViewModel.getListOfUsersWhoChoseRestaurant().observe(getViewLifecycleOwner(), users -> {
+                listOfUserWhoChose.clear();
+                listOfUserWhoChose.addAll(users);
+                for (ResultsItem myRestaurant : results) {
+                    LatLng restaurantPosition = new LatLng(myRestaurant.getGeometry().getLocation().getLat(),
+                            myRestaurant.getGeometry().getLocation().getLng());
+                    isBooked = 0;
+                    for (User myUser : users) {
+                        if (myRestaurant.getPlaceId().equals(myUser.getEatingPlaceId())) {
+                            isBooked++;
                         } else {
-                            restaurantMarkerOptions = new MarkerOptions()
-                                    .position(restaurantPosition)
-                                    .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
+                            Log.e("Nothing", "Nothing");
                         }
-                        restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
-                        restaurantMarker.setTag(myRestaurant.getPlaceId());
-                        restaurantMarker.setTitle(myRestaurant.getName());
                     }
+                    if (isBooked != 0) {
+                        restaurantMarkerOptions = new MarkerOptions()
+                                .position(restaurantPosition)
+                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_booked_restaurant_24));
+                    } else {
+                        restaurantMarkerOptions = new MarkerOptions()
+                                .position(restaurantPosition)
+                                .icon(BitmapFromVector(requireContext(), R.drawable.baseline_unreserved_restaurant_24));
+                    }
+                    restaurantMarker = mMap.addMarker(restaurantMarkerOptions);
+                    restaurantMarker.setTag(myRestaurant.getPlaceId());
+                    restaurantMarker.setTitle(myRestaurant.getName());
                 }
             });
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
-                    if (!marker.getTitle().equals("My position")) {
-                        Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
-                        intent.putExtra("placeId", marker.getTag().toString());
-                        intent.putExtra("name", marker.getTitle());
-                        ActivityCompat.startActivity(getContext(), intent, null);
-                    }
-                    return false;
+            mMap.setOnMarkerClickListener(marker -> {
+                if (!marker.getTitle().equals("My position")) {
+                    Intent intent = new Intent(getContext(), RestaurantDetailActivity.class);
+                    intent.putExtra("placeId", marker.getTag().toString());
+                    intent.putExtra("name", marker.getTitle());
+                    ActivityCompat.startActivity(getContext(), intent, null);
                 }
+                return false;
             });
         }
     }
@@ -404,13 +380,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
-     * Method for decide what we do when user accept or refuse permission
-     */
-    public boolean hasLocationPermission() {
-        return ContextCompat.checkSelfPermission(requireActivity().getApplication(), ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
-    }
-
-    /**
      * Callback called when GoogleMap is ready/created
      */
     @Override
@@ -425,72 +394,64 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         } else {
             moveAndDisplayMyPosition();
         }
-        mapViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), new Observer<NearbySearch>() {
-            @Override
-            public void onChanged(NearbySearch nearbySearch) {
-                listOfRestaurants.clear();
-                listOfRestaurants.addAll(nearbySearch.getResults());
-                displayMarkerOnRestaurantPosition(nearbySearch.getResults());
-            }
+        mapViewViewModel.getNearbySearchResultFromVM().observe(getViewLifecycleOwner(), nearbySearch -> {
+            listOfRestaurants.clear();
+            listOfRestaurants.addAll(nearbySearch.getResults());
+            displayMarkerOnRestaurantPosition(nearbySearch.getResults());
         });
     }
 
     private void positionButtonListener(FloatingActionButton positionButton) {
-        positionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LocationManager locationManager = (LocationManager) getSystemService(requireActivity(), LocationManager.class);
-                if (isGpsEnabled(locationManager) & myPosition != null) {
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
-                } else {
-                    LocationRequest locationRequest = LocationRequest.create();
-                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        positionButton.setOnClickListener(v -> {
+            LocationManager locationManager = getSystemService(requireActivity(), LocationManager.class);
+            if (isGpsEnabled(locationManager) & myPosition != null) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
+            } else {
+                LocationRequest locationRequest = LocationRequest.create();
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-                    LocationSettingsRequest.Builder settingsBuilder = new LocationSettingsRequest.Builder()
-                            .addLocationRequest(locationRequest);
-                    settingsBuilder.setAlwaysShow(true); //this displays dialog box like Google Maps with two buttons - OK and NO,THANKS
+                LocationSettingsRequest.Builder settingsBuilder = new LocationSettingsRequest.Builder()
+                        .addLocationRequest(locationRequest);
+                settingsBuilder.setAlwaysShow(true); //this displays dialog box like Google Maps with two buttons - OK and NO,THANKS
 
-                    Task<LocationSettingsResponse> task =
-                            LocationServices.getSettingsClient(requireActivity()).checkLocationSettings(settingsBuilder.build());
+                Task<LocationSettingsResponse> task =
+                        LocationServices.getSettingsClient(requireActivity()).checkLocationSettings(settingsBuilder.build());
 
-                    task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-                        @Override
-                        public void onComplete(Task<LocationSettingsResponse> task) {
-                            try {
-                                LocationSettingsResponse response = task.getResult(ApiException.class);
-                                // All location settings are satisfied. The client can initialize location
-                                // requests here.
-                            } catch (ApiException exception) {
-                                switch (exception.getStatusCode()) {
-                                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                        // Location settings are not satisfied. But could be fixed by showing the
-                                        // user a dialog.
-                                        try {
-                                            // Cast to a resolvable exception.
-                                            ResolvableApiException resolvable = (ResolvableApiException) exception;
-                                            // Show the dialog by calling startResolutionForResult(),
-                                            // and check the result in onActivityResult().
-                                            resolvable.startResolutionForResult(
-                                                    requireActivity(),
-                                                    REQUEST_CHECK_SETTINGS);
-                                        } catch (IntentSender.SendIntentException e) {
-                                            // Ignore the error.
-                                        } catch (ClassCastException e) {
-                                            // Ignore, should be an impossible error.
-                                        }
-                                        break;
-                                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                        // Location settings are not satisfied. However, we have no way to fix the
-                                        // settings so we won't show the dialog.
-                                        break;
+                task.addOnCompleteListener(task1 -> {
+                    try {
+                        LocationSettingsResponse response = task1.getResult(ApiException.class);
+                        // All location settings are satisfied. The client can initialize location
+                        // requests here.
+                    } catch (ApiException exception) {
+                        switch (exception.getStatusCode()) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                // Location settings are not satisfied. But could be fixed by showing the
+                                // user a dialog.
+                                try {
+                                    // Cast to a resolvable exception.
+                                    ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                    // Show the dialog by calling startResolutionForResult(),
+                                    // and check the result in onActivityResult().
+                                    resolvable.startResolutionForResult(
+                                            requireActivity(),
+                                            REQUEST_CHECK_SETTINGS);
+                                } catch (IntentSender.SendIntentException e) {
+                                    // Ignore the error.
+                                } catch (ClassCastException e) {
+                                    // Ignore, should be an impossible error.
                                 }
-                            }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                // Location settings are not satisfied. However, we have no way to fix the
+                                // settings so we won't show the dialog.
+                                break;
                         }
-                    });
-                }
+                    }
+                });
             }
         });
     }
+
 
 }
 
