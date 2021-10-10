@@ -36,9 +36,7 @@
     <string name="successful_disconnection">Successful disconnection</string>
     <string name="write_your_new_username_here">Write your new username here</string>
     <string name="cannot_be_empty">The field cannot be empty</string>
-    <string name="upper_case_letter">Start with one upper case letter</string>
     <string name="maximum_letters">Don\'t use more than 15 characters</string>
-    <string name="Logout">LOGOUT</string>
     <string name="delete_my_account">Delete my account</string>
     <string name="update_username">Update username</string>
     <string name="want_logout">Are you sure you want to logout ?</string>
@@ -74,4 +72,6 @@
     <string name="available_workmates">Available workmates</string>
     <string name="gps_already_enabled">GPS is already Enabled!</string>
     <string name="not_selected_eating_place">You have not selected an eating place yet!</string>
+    <string name="has_not_decided">hasn\'t decided yet</string>
+    <string name="is_eating_in">is eating in</string>
 </resources>
