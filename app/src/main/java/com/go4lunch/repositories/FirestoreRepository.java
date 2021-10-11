@@ -104,20 +104,17 @@ public class FirestoreRepository {
     public void getAllUsers() {
         getUsersCollection()
                 .orderBy("eatingPlace", Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<User> allWorkMates = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
+                .addSnapshotListener((value, error) -> {
+                    List<User> allWorkMates = new ArrayList<>();
+                    if (value != null) {
+                        for (DocumentSnapshot document : value.getDocuments()) {
 
                             User myUser = document.toObject(User.class);
 
                             allWorkMates.add(myUser);
                         }
-                        listOfUsers.setValue(allWorkMates);
-                    } else {
-                        Log.e("FirestoreRepository", "method getAllUsers don't work" + task.getException());
                     }
+                    listOfUsers.setValue(allWorkMates);
                 });
     }
 
