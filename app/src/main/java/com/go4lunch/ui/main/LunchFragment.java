@@ -39,24 +39,27 @@ public class LunchFragment extends Fragment {
             if (user.getEatingPlaceId().equals(" ")) {
                 Toast.makeText(requireContext(), getString(R.string.not_selected_eating_place), Toast.LENGTH_SHORT).show();
                 requireActivity().onBackPressed();
-
             } else {
                 lunchFragmentFragmentViewModel.callRestaurantDetail(eatingPlaceId);
                 Intent intent = new Intent(requireContext(), RestaurantDetailActivity.class);
                 intent.putExtra("placeId", eatingPlaceId);
                 intent.putExtra("name", eatingPlace);
                 ActivityCompat.startActivity(requireContext(), intent, null);
-
             }
         });
 
         AppCompatButton yourLunchButton = view.findViewById(R.id.your_lunch_button);
-        yourLunchButton.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), RestaurantDetailActivity.class);
-            intent.putExtra("placeId", eatingPlaceId);
-            intent.putExtra("name", eatingPlace);
-            ActivityCompat.startActivity(requireContext(), intent, null);
-        });
+        yourLunchButton.setOnClickListener(v -> lunchFragmentFragmentViewModel.getUserData().addOnSuccessListener(user -> {
+            if (user.getEatingPlaceId().equals(" ")) {
+                Toast.makeText(requireContext(), getString(R.string.not_selected_eating_place), Toast.LENGTH_SHORT).show();
+                requireActivity().onBackPressed();
+            } else {
+                Intent intent = new Intent(requireContext(), RestaurantDetailActivity.class);
+                intent.putExtra("placeId", eatingPlaceId);
+                intent.putExtra("name", eatingPlace);
+                ActivityCompat.startActivity(requireContext(), intent, null);
+            }
+        }));
 
         return view;
     }
