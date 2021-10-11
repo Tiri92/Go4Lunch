@@ -64,7 +64,7 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.OnDat
         String space = " ";
         setSupportActionBar(binding.toolbar);
         TextView mTitle = binding.toolbar.findViewById(R.id.pseudo_name);
-        mTitle.setText(MessageFormat.format("Chat with{0}{1}", space, userName));
+        mTitle.setText(MessageFormat.format("{0}{1}{2}", mTitle.getText().toString(), space, userName));
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayShowTitleEnabled(false);

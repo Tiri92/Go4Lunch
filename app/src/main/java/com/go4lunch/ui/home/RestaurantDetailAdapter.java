@@ -43,8 +43,9 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
     public void onBindViewHolder(@NonNull @NotNull RestaurantDetailAdapter.ViewHolder holder, int position) {
 
         String space = " ";
-        String isJoining = "is joining!";
-        holder.username.setText(String.format("%s%s%s", listOfUsersWhoChoseRestaurant.get(position).getUsername(), space, isJoining));
+        TextView isJoiningTextView = new TextView(itemView.getContext());
+        isJoiningTextView.setText(R.string.is_joining);
+        holder.username.setText(String.format("%s%s%s", listOfUsersWhoChoseRestaurant.get(position).getUsername(), space, isJoiningTextView.getText().toString()));
 
         try {
             String query = listOfUsersWhoChoseRestaurant.get(position).getUrlPicture();

@@ -53,13 +53,15 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
 
         String space = " ";
         if (listOfUsers.get(position).getEatingPlaceId().equals(" ")) {
-            String notDecided = "hasn't decided yet";
+            TextView notDecidedTextView = new TextView(itemView.getContext());
+            notDecidedTextView.setText(R.string.has_not_decided);
             holder.username.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
             holder.username.setTextColor(Color.parseColor("#C6C6C6"));
-            holder.username.setText(MessageFormat.format("{0}{1}{2}", listOfUsers.get(position).getUsername(), space, notDecided));
+            holder.username.setText(MessageFormat.format("{0}{1}{2}", listOfUsers.get(position).getUsername(), space, notDecidedTextView.getText().toString()));
         } else {
-            String isEating = "is eating in";
-            holder.username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(position).getUsername(), space, isEating, space, listOfUsers.get(position).getEatingPlace()));
+            TextView isEatingTextView = new TextView(itemView.getContext());
+            isEatingTextView.setText(R.string.is_eating_in);
+            holder.username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(position).getUsername(), space, isEatingTextView.getText().toString(), space, listOfUsers.get(position).getEatingPlace()));
             holder.username.setTextColor(Color.parseColor("#FF000000"));
             holder.username.setOnClickListener(v -> {
                 if (!listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId().equals(" ")) {
