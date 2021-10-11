@@ -2,7 +2,6 @@ package com.go4lunch.repositories;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -18,7 +17,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -126,20 +124,17 @@ public class FirestoreRepository {
     public void getUsersWhoChoseRestaurant() {
         getUsersCollection()
                 .whereNotEqualTo("eatingPlace", " ")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<User> allWorkMatesWhoChoseRestaurant = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
+                .addSnapshotListener((value, error) -> {
+                    List<User> allWorkMatesWhoChoseRestaurant = new ArrayList<>();
+                    if (value != null) {
+                        for (DocumentSnapshot documentSnapshot : value.getDocuments()) {
 
-                            User myUser = document.toObject(User.class);
+                            User myUser = documentSnapshot.toObject(User.class);
 
                             allWorkMatesWhoChoseRestaurant.add(myUser);
                         }
-                        listOfUsersWhoChoseRestaurant.setValue(allWorkMatesWhoChoseRestaurant);
-                    } else {
-                        Log.e("FirestoreRepository", "Error getting documents: ", task.getException());
                     }
+                    listOfUsersWhoChoseRestaurant.setValue(allWorkMatesWhoChoseRestaurant);
                 });
     }
 
