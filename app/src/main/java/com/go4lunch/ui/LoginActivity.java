@@ -34,7 +34,12 @@ public class LoginActivity extends AppCompatActivity {
         view = new ConstraintLayout(this);
         view.setBackgroundColor(Color.WHITE);
         setContentView(view);
-        startSignInActivity();
+        if (loginActivityViewModel.isCurrentUserLogged()) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        } else {
+            startSignInActivity();
+        }
     }
 
     private void startSignInActivity() {
