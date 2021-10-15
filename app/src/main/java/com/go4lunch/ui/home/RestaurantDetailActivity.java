@@ -96,18 +96,21 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
             ImageView restaurantPic = binding.restaurantDetailPic;
             try {
-                String base = "https://maps.googleapis.com/maps/api/place/photo?";
-                String key = "key=" + BuildConfig.MAPS_API_KEY;
-                String reference = "&photoreference=" + detailSearch.getResult().getPhotos().get(0).getPhotoReference();
-                String maxH = "&maxheight=157";
-                String maxW = "&maxwidth=157";
-                String query = base + key + reference + maxH + maxW;
+                if (detailSearch.getResult().getPhotos() != null) {
+                    String base = "https://maps.googleapis.com/maps/api/place/photo?";
+                    String key = "key=" + BuildConfig.MAPS_API_KEY;
+                    String reference = "&photoreference=" + detailSearch.getResult().getPhotos().get(0).getPhotoReference();
+                    String maxH = "&maxheight=157";
+                    String maxW = "&maxwidth=157";
+                    String query = base + key + reference + maxH + maxW;
 
-                Glide.with(restaurantPic)
-                        .load(query)
-                        .centerCrop()
-                        .into(restaurantPic);
-
+                    Glide.with(restaurantPic)
+                            .load(query)
+                            .centerCrop()
+                            .into(restaurantPic);
+                } else {
+                    restaurantPic.setImageResource(R.drawable.ic_baseline_no_photography_24);
+                }
             } catch (Exception e) {
                 Log.i("[THIERRY]", "Exception : " + e.getMessage());
             }

@@ -138,7 +138,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    private boolean isBookedOrNot(String placeId, List<User> users) {
+    public boolean isBookedOrNot(String placeId, List<User> users) {
         for (User myUser : users) {
             if (placeId.equals(myUser.getEatingPlaceId())) {
                 return true;

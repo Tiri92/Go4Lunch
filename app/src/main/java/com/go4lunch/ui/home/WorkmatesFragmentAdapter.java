@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,10 +65,10 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
             holder.username.setText(MessageFormat.format("{0}{1}{2}{3}{4}", listOfUsers.get(position).getUsername(), space, isEatingTextView.getText().toString(), space, listOfUsers.get(position).getEatingPlace()));
             holder.username.setTextColor(Color.parseColor("#FF000000"));
             holder.username.setOnClickListener(v -> {
-                if (!listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId().equals(" ")) {
+                if (!listOfUsers.get(holder.getBindingAdapterPosition()).getEatingPlaceId().equals(" ")) {
                     Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
-                    intent.putExtra("placeId", listOfUsers.get(holder.getAdapterPosition()).getEatingPlaceId());
-                    intent.putExtra("name", listOfUsers.get(holder.getAdapterPosition()).getEatingPlace());
+                    intent.putExtra("placeId", listOfUsers.get(holder.getBindingAdapterPosition()).getEatingPlaceId());
+                    intent.putExtra("name", listOfUsers.get(holder.getBindingAdapterPosition()).getEatingPlace());
                     ActivityCompat.startActivity(v.getContext(), intent, null);
                 }
             });
@@ -87,8 +88,8 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
 
         holder.messageButton.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ChatActivity.class);
-            intent.putExtra("userId", listOfUsers.get(holder.getAdapterPosition()).getUid());
-            intent.putExtra("name", listOfUsers.get(holder.getAdapterPosition()).getUsername());
+            intent.putExtra("userId", listOfUsers.get(holder.getBindingAdapterPosition()).getUid());
+            intent.putExtra("name", listOfUsers.get(holder.getBindingAdapterPosition()).getUsername());
             ActivityCompat.startActivity(v.getContext(), intent, null);
         });
 
@@ -107,23 +108,9 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
     private final Filter listOfUsersFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<User> filteredList = new ArrayList<>();
-
-            if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(listOfUsersFull);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
-
-                for (User user : listOfUsersFull) {
-                    if (user.getUsername().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(user);
-                    }
-                }
-            }
-
-            FilterResults results = new FilterResults();
+            List<User> filteredList = getFilterResults(constraint);
+            Filter.FilterResults results = new Filter.FilterResults();
             results.values = filteredList;
-
             return results;
         }
 
@@ -135,6 +122,25 @@ public class WorkmatesFragmentAdapter extends RecyclerView.Adapter<WorkmatesFrag
             notifyDataSetChanged();
         }
     };
+
+    @NonNull
+    @VisibleForTesting
+    public List<User> getFilterResults(CharSequence constraint) {
+        List<User> filteredList = new ArrayList<>();
+        if (constraint == null || constraint.length() == 0) {
+            filteredList.addAll(listOfUsersFull);
+        } else {
+            String filterPattern = constraint.toString().toLowerCase().trim();
+
+            for (User user : listOfUsersFull) {
+                if (user.getUsername().toLowerCase().contains(filterPattern)) {
+                    filteredList.add(user);
+                }
+            }
+        }
+
+        return filteredList;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView username;
