@@ -61,8 +61,8 @@ public class RestaurantDetailAdapter extends RecyclerView.Adapter<RestaurantDeta
 
         holder.messageButton.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ChatActivity.class);
-            intent.putExtra("userId", listOfUsersWhoChoseRestaurant.get(holder.getAdapterPosition()).getUid());
-            intent.putExtra("name", listOfUsersWhoChoseRestaurant.get(holder.getAdapterPosition()).getUsername());
+            intent.putExtra("userId", listOfUsersWhoChoseRestaurant.get(holder.getBindingAdapterPosition()).getUid());
+            intent.putExtra("name", listOfUsersWhoChoseRestaurant.get(holder.getBindingAdapterPosition()).getUsername());
             ActivityCompat.startActivity(v.getContext(), intent, null);
         });
 

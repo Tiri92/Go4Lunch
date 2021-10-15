@@ -47,8 +47,8 @@ public class ListViewFragmentAdapterVac extends RecyclerView.Adapter<ListViewFra
 
         itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), RestaurantDetailActivity.class);
-            intent.putExtra("placeId", listOfRestaurantVac.get(holder.getAdapterPosition()).getResult().getPlaceId());
-            intent.putExtra("name", listOfRestaurantVac.get(holder.getAdapterPosition()).getResult().getName());
+            intent.putExtra("placeId", listOfRestaurantVac.get(holder.getBindingAdapterPosition()).getResult().getPlaceId());
+            intent.putExtra("name", listOfRestaurantVac.get(holder.getBindingAdapterPosition()).getResult().getName());
             ActivityCompat.startActivity(v.getContext(), intent, null);
         });
 
@@ -96,7 +96,7 @@ public class ListViewFragmentAdapterVac extends RecyclerView.Adapter<ListViewFra
         int n = 0;
         if (listOfUserWhoChose != null) {
             for (int i = 0; i < listOfUserWhoChose.size(); i++) {
-                if (listOfUserWhoChose.get(i).getEatingPlaceId().equals(listOfRestaurantVac.get(holder.getAdapterPosition()).getResult().getPlaceId())) {
+                if (listOfUserWhoChose.get(i).getEatingPlaceId().equals(listOfRestaurantVac.get(holder.getBindingAdapterPosition()).getResult().getPlaceId())) {
                     n = n + 1;
                 }
             }
