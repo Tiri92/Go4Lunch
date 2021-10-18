@@ -75,26 +75,26 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.OnDat
      **/
     private void configureRecyclerView() {
         binding.messageRecyclerView.setHasFixedSize(true);
-        binding.messageRecyclerView.setLayoutManager(new LinearLayoutManager(this)); //TODO Understand this configuration of RecyclerView
+        binding.messageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new ChatAdapter(chatActivityViewModel.getPrivateChatMessage(currentUserId, userId), currentUserId, this);
         binding.messageRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
-    public void onStart() { //TODO Understand the listening on the adapter and the scrollToPosition
+    public void onStart() {
         super.onStart();
         mAdapter.startListening();
         binding.messageRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     @Override
-    public void onStop() { //TODO Understand the listening on the adapter
+    public void onStop() {
         super.onStop();
         mAdapter.stopListening();
     }
 
     @Override
-    public void onDataChanged() { //TODO Understand how this "Interface" work
+    public void onDataChanged() {
         binding.messageRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 

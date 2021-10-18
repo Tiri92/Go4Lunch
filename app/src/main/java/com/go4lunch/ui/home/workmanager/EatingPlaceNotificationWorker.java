@@ -91,7 +91,7 @@ public class EatingPlaceNotificationWorker extends Worker {
                 .setContentTitle(task)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(desc))
                 .setDefaults(Notification.DEFAULT_SOUND)
-                .setSmallIcon(R.mipmap.ic_launcher);
+                .setSmallIcon(R.mipmap.ic_launcher_custom_logo);
 
         manager.notify(1, builder.build());
     }

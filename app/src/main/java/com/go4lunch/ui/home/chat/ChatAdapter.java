@@ -53,7 +53,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.C
                 .into(holder.binding.activityChatItemProfileContainerProfileImage);
     }
 
-    private void updateDesignDependingUser(Boolean isSender) { //TODO Understand how it work
+    private void updateDesignDependingUser(Boolean isSender) {
 
         // PROFILE CONTAINER
         RelativeLayout.LayoutParams paramsLayoutHeader = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

@@ -11,6 +11,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -102,10 +103,12 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
 
     }
 
+    @VisibleForTesting
     public float getRatingOnThree(double rating) {
         return (float) (rating / 1.66);
     }
 
+    @VisibleForTesting
     public int getOpeningHoursText(ResultsItem restaurant) {
         if (restaurant.getOpeningHours() != null) {
             if (restaurant.getOpeningHours().isOpenNow()) {
@@ -118,6 +121,7 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
         }
     }
 
+    @VisibleForTesting
     public String getPhotoRequest(String photoReference) {
         String base = "https://maps.googleapis.com/maps/api/place/photo?";
         String key = "key=" + BuildConfig.MAPS_API_KEY;
@@ -127,6 +131,7 @@ public class ListViewFragmentAdapter extends RecyclerView.Adapter<ListViewFragme
         return base + key + reference + maxH + maxW;
     }
 
+    @VisibleForTesting
     public int getNumberOfReservations(String placeId, List<User> listOfUserWhoChose) {
         int n = 0;
         for (int i = 0; i < listOfUserWhoChose.size(); i++) {

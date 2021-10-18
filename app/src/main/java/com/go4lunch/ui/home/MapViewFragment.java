@@ -27,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
@@ -138,6 +139,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    @VisibleForTesting
     public boolean isBookedOrNot(String placeId, List<User> users) {
         for (User myUser : users) {
             if (placeId.equals(myUser.getEatingPlaceId())) {

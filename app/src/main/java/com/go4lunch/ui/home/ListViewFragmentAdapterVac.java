@@ -70,18 +70,21 @@ public class ListViewFragmentAdapterVac extends RecyclerView.Adapter<ListViewFra
         }
 
         try {
-            String base = "https://maps.googleapis.com/maps/api/place/photo?";
-            String key = "key=" + BuildConfig.MAPS_API_KEY;
-            String reference = "&photoreference=" + listOfRestaurantVac.get(position).getResult().getPhotos().get(0).getPhotoReference();
-            String maxH = "&maxheight=157";
-            String maxW = "&maxwidth=157";
-            String query = base + key + reference + maxH + maxW;
+            if (listOfRestaurantVac.get(position).getResult().getPhotos() != null) {
+                String base = "https://maps.googleapis.com/maps/api/place/photo?";
+                String key = "key=" + BuildConfig.MAPS_API_KEY;
+                String reference = "&photoreference=" + listOfRestaurantVac.get(position).getResult().getPhotos().get(0).getPhotoReference();
+                String maxH = "&maxheight=157";
+                String maxW = "&maxwidth=157";
+                String query = base + key + reference + maxH + maxW;
 
-            Glide.with(holder.restaurantPic)
-                    .load(query)
-                    .centerCrop()
-                    .into(holder.restaurantPic);
-
+                Glide.with(holder.restaurantPic)
+                        .load(query)
+                        .centerCrop()
+                        .into(holder.restaurantPic);
+            } else {
+                holder.restaurantPic.setImageResource(R.drawable.ic_baseline_no_photography_24);
+            }
         } catch (Exception e) {
             Log.i("[THIERRY]", "Exception : " + e.getMessage());
         }
