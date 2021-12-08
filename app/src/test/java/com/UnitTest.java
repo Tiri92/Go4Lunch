@@ -10,9 +10,9 @@ import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.OpeningHours;
 import com.go4lunch.model.nearbysearch.PhotosItem;
 import com.go4lunch.model.nearbysearch.ResultsItem;
-import com.go4lunch.ui.home.ListViewFragmentAdapter;
-import com.go4lunch.ui.home.MapViewFragment;
-import com.go4lunch.ui.home.WorkmatesFragmentAdapter;
+import com.go4lunch.ui.home.listviewfragment.ListViewFragmentAdapter;
+import com.go4lunch.ui.home.mapviewfragment.MapViewFragment;
+import com.go4lunch.ui.home.workmatesfragment.WorkmatesFragmentAdapter;
 
 import org.junit.Test;
 

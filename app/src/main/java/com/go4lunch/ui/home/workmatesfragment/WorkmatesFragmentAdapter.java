@@ -1,4 +1,4 @@
-package com.go4lunch.ui.home;
+package com.go4lunch.ui.home.workmatesfragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.go4lunch.R;
 import com.go4lunch.model.firestore.User;
 import com.go4lunch.ui.home.chat.ChatActivity;
+import com.go4lunch.ui.home.restaurantdetailactivity.RestaurantDetailActivity;
 
 import org.jetbrains.annotations.NotNull;
 

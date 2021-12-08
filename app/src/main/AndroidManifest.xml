@@ -34,7 +34,7 @@
             android:name=".ui.MainActivity"
             android:theme="@style/Theme.Go4Lunch.NoActionBar" />
         <activity
-            android:name=".ui.home.RestaurantDetailActivity"
+            android:name=".ui.home.restaurantdetailactivity.RestaurantDetailActivity"
             android:theme="@style/Theme.Go4Lunch.NoActionBar2" />
         <activity
             android:name=".ui.home.chat.ChatActivity"

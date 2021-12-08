@@ -1,4 +1,4 @@
-package com.go4lunch.ui.main;
+package com.go4lunch.ui.main.settingsfragment;
 
 import android.app.Activity;
 import android.content.DialogInterface;

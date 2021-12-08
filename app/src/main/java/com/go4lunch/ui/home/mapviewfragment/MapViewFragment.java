@@ -1,4 +1,4 @@
-package com.go4lunch.ui.home;
+package com.go4lunch.ui.home.mapviewfragment;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
@@ -40,6 +40,7 @@ import com.go4lunch.R;
 import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.ResultsItem;
+import com.go4lunch.ui.home.restaurantdetailactivity.RestaurantDetailActivity;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;

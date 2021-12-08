@@ -1,4 +1,4 @@
-package com.go4lunch.ui.home;
+package com.go4lunch.ui.home.listviewfragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -20,6 +20,8 @@ import com.go4lunch.BuildConfig;
 import com.go4lunch.R;
 import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.ResultsItem;
+import com.go4lunch.ui.home.mapviewfragment.MapViewFragment;
+import com.go4lunch.ui.home.restaurantdetailactivity.RestaurantDetailActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
 

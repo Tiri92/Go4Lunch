@@ -1,6 +1,6 @@
-package com.go4lunch.ui.home;
+package com.go4lunch.ui.home.listviewfragment;
 
-import static com.go4lunch.ui.home.MapViewFragment.myPosition;
+import static com.go4lunch.ui.home.mapviewfragment.MapViewFragment.myPosition;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import com.go4lunch.R;
 import com.go4lunch.model.details.DetailSearch;
 import com.go4lunch.model.firestore.User;
 import com.go4lunch.model.nearbysearch.ResultsItem;
+import com.go4lunch.ui.home.mapviewfragment.MapViewFragment;
 
 import java.util.ArrayList;
 import java.util.List;

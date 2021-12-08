@@ -1,4 +1,4 @@
-package com.go4lunch.ui.main;
+package com.go4lunch.ui.main.lunchfragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.go4lunch.R;
-import com.go4lunch.ui.home.RestaurantDetailActivity;
+import com.go4lunch.ui.home.restaurantdetailactivity.RestaurantDetailActivity;
 
 public class LunchFragment extends Fragment {
 

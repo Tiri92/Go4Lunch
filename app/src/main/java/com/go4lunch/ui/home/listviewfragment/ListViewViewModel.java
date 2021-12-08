@@ -1,4 +1,4 @@
-package com.go4lunch.ui.home;
+package com.go4lunch.ui.home.listviewfragment;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;

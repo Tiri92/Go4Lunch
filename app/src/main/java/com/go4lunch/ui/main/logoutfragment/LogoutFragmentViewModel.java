@@ -1,4 +1,4 @@
-package com.go4lunch.ui.main;
+package com.go4lunch.ui.main.logoutfragment;
 
 import android.content.Context;
 

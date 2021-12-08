@@ -1,4 +1,4 @@
-package com.go4lunch.ui.main;
+package com.go4lunch.ui.main.lunchfragment;
 
 import androidx.lifecycle.ViewModel;
 

@@ -1,4 +1,4 @@
-package com.go4lunch.ui.home;
+package com.go4lunch.ui.home.workmatesfragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

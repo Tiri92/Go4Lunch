@@ -1,4 +1,4 @@
-package com.go4lunch.ui.home;
+package com.go4lunch.ui.home.restaurantdetailactivity;
 
 import android.content.Intent;
 import android.util.Log;
