@@ -179,11 +179,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onViewDetachedFromWindow(View v) {
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions()
-                        .position(myPosition)
-                        .title("My position"));
-                displayMarkerOnRestaurantPosition(listOfRestaurants);
+                if (myPosition != null) {
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions()
+                            .position(myPosition)
+                            .title("My position"));
+                    displayMarkerOnRestaurantPosition(listOfRestaurants);
+                }
             }
         });
 
