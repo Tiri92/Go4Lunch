@@ -16,8 +16,8 @@ Vous pouvez à présent ouvrir le projet dans Android Studio.
 
 * [Retrofit for Android](https://square.github.io/retrofit/) - Retrofit for Android
 
-* [Firebase Authentification](https://firebase.google.com/) - Authentification
-* [Firebase Database](https://firebase.google.com/) - Base de données NoSQL
+* [Firebase Authentification](https://firebase.google.com/docs/auth/) - Authentification
+* [Firebase Firestore Database](https://firebase.google.com/docs/firestore/) - Base de données NoSQL
 
 * [Google Maps SDK for Android](https://developers.google.com/maps/documentation/android-sdk/start?hl=fr) - Google Maps Platform
 * [Google Places API](https://developers.google.com/maps/documentation/places/web-service/overview) - Google Places
