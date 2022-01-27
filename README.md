@@ -17,10 +17,10 @@ Vous pouvez à présent ouvrir le projet dans Android Studio.
 * [Retrofit for Android](https://square.github.io/retrofit/) - Retrofit for Android
 
 * [Firebase Authentification](https://firebase.google.com/) - Authentification
-* [Firebase Database](https://firebase.google.com/) - Base de donnée NoSQL
+* [Firebase Database](https://firebase.google.com/) - Base de données NoSQL
 
 * [Google Maps SDK for Android](https://developers.google.com/maps/documentation/android-sdk/start?hl=fr) - Google Maps Platform
-* [Google Places API](https://cloud.google.com/maps-platform/places?hl=fr) - Google Places
+* [Google Places API](https://developers.google.com/maps/documentation/places/web-service/overview) - Google Places
 * [Google Place Autocomplete](https://developers.google.com/maps/documentation/places/android-sdk/autocomplete#get_place_predictions_programmatically) - Place Autocomplete
 
 * [RoboPOJOGenerator](https://github.com/robohorse/RoboPOJOGenerator) - Json2Pojo
